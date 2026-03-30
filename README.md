@@ -8,7 +8,7 @@
 
 #### Jiayi He  (Test)  BUPT Student Number:2023213596  QM Student Number:231224723, Email:
 
-#### Bingyuan Huang (Game) BUPT Student Number:2023213597, QM Student Number:231224273, Email:
+#### Bingyuan Huang (Game) BUPT Student Number:2023213597, QM Student Number:231224273, Email:hby20050525@bupt.edu.cn
 
 #### Youkun Chen (Community)
 

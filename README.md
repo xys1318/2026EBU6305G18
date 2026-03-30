@@ -4,7 +4,7 @@
 ### Members:
 #### Youshen Xu （Homepage）BUPT Student Number:2023213594, QM Student Number:231224398, Email:xys1318@bupt.edu.cn
 
-#### Yufu Su  (Learning)  BUPT Student Number:2023213591  QM Student Number:231224114, Email:
+#### Yufu Su  (Learning)  BUPT Student Number:2023213591  QM Student Number:231224114, Email:suyufu@bupt.edu.cn
 
 #### Jiayi He  (Test)  BUPT Student Number:2023213596  QM Student Number:231224723, Email:hjy040413@bupt.com
 

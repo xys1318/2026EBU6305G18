@@ -10,6 +10,6 @@
 
 #### Bingyuan Huang (Game) BUPT Student Number:2023213597, QM Student Number:231224273, Email:hby20050525@bupt.edu.cn
 
-#### Youkun Chen (Community)
+#### Youkun Chen (Community) BUPT Student Number:2023213595, QM Student Number:231224985, Email:2023213595@bupt.edu.cn
 
 Assigned TA: Xingde Li

@@ -6,7 +6,7 @@
 
 #### Yufu Su  (Learning)  BUPT Student Number:2023213591  QM Student Number:231224114, Email:suyufu@bupt.edu.cn
 
-#### Jiayi He  (Test)  BUPT Student Number:2023213596  QM Student Number:231224723, Email:hjy040413@bupt.com
+#### Jiayi He  (Test)  BUPT Student Number:2023213596  QM Student Number:231224723, Email:hjy040413@bupt.edu.cn
 
 #### Bingyuan Huang (Game) BUPT Student Number:2023213597, QM Student Number:231224273, Email:hby20050525@bupt.edu.cn
 

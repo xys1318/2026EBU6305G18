@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game | 互动演示 - Colour Lab</title>
+  <title>Game | Interactive Demo - Colour Lab</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
@@ -513,99 +513,99 @@
   </nav>
 
   <div class="container">
-    <div class="breadcrumb">Home &gt; Game &gt; 互动演示</div>
+    <div class="breadcrumb">Home &gt; Game &gt; Interactive Demo</div>
 
     <section class="hero">
       <div class="section-label">Interactive Lab</div>
-      <h1 class="hero-title">游戏互动演示</h1>
-      <p class="hero-desc">通过三个小游戏巩固 RGB 混合、色域概念与十六进制色彩识别。实时反馈、可选音效与分步提示帮助你循序渐进。</p>
+      <h1 class="hero-title">Play &amp; Learn</h1>
+      <p class="hero-desc">Three mini-games for RGB mixing, color gamut ideas, and hex codes—with live feedback, optional sound, and step-by-step hints.</p>
       <div class="step-hint" id="globalHint" role="status" aria-live="polite">
         <div class="hint-icon" id="hintStepNum">1</div>
-        <p id="hintText">从左侧目录选择一个游戏，或向下滚动开始「RGB 调色大师」。</p>
+        <p id="hintText">Pick a game from the sidebar, or scroll down to start with RGB Color Master.</p>
       </div>
     </section>
 
     <div class="main-layout">
       <aside class="sidebar">
-        <h3 class="sidebar-title">游戏目录</h3>
+        <h3 class="sidebar-title">Games</h3>
         <ul class="catalog">
-          <li><a href="#game-rgb" class="active" data-hint-nav="rgb">1. RGB 调色大师</a></li>
-          <li><a href="#game-gamut" data-hint-nav="gamut">2. 色域大冒险</a></li>
-          <li><a href="#game-hex" data-hint-nav="hex">3. 十六进制速配</a></li>
+          <li><a href="#game-rgb" class="active" data-hint-nav="rgb">1. RGB Color Master</a></li>
+          <li><a href="#game-gamut" data-hint-nav="gamut">2. Gamut Quest</a></li>
+          <li><a href="#game-hex" data-hint-nav="hex">3. Hex Sprint</a></li>
         </ul>
       </aside>
 
       <main class="content">
         <section id="game-rgb" class="module">
-          <h2 class="module-title">游戏 1：RGB 调色大师</h2>
-          <p class="module-subtitle">拖动滑块混合颜色，尽量接近右侧目标色</p>
+          <h2 class="module-title">Game 1: RGB Color Master</h2>
+          <p class="module-subtitle">Drag the sliders to mix RGB and match the target swatch on the right</p>
           <div class="game-toolbar">
-            <label class="toggle-sound"><input type="checkbox" id="muteAll" checked> 静音（关闭全部音效）</label>
-            <span class="score-pill">本关得分：<span id="rgbScore">0</span></span>
-            <button type="button" class="btn btn-ghost" id="rgbNewTarget">新目标</button>
-            <button type="button" class="btn btn-primary" id="rgbCheck">校验匹配</button>
+            <label class="toggle-sound"><input type="checkbox" id="muteAll" checked> Mute (disable all sounds)</label>
+            <span class="score-pill">Score: <span id="rgbScore">0</span></span>
+            <button type="button" class="btn btn-ghost" id="rgbNewTarget">New target</button>
+            <button type="button" class="btn btn-primary" id="rgbCheck">Check match</button>
           </div>
           <div class="info-box" id="rgbFeedback">
-            <p>提示：观察下方「匹配度」进度条与色块差异；误差越小，得分越高。</p>
+            <p>Tip: watch the match bar and swatches—the closer you get, the higher your score when you check.</p>
           </div>
           <div class="rgb-stage">
             <div>
               <div class="swatch-panel" id="userSwatch" style="background: rgb(128,128,128);">
-                <div class="label">你的颜色 · <span id="userHex">#808080</span></div>
+                <div class="label">Your color · <span id="userHex">#808080</span></div>
               </div>
               <div class="slider-row">
-                <label><span>红 R</span><span id="rv">128</span></label>
+                <label><span>Red R</span><span id="rv">128</span></label>
                 <input type="range" id="r" min="0" max="255" value="128">
               </div>
               <div class="slider-row">
-                <label><span>绿 G</span><span id="gv">128</span></label>
+                <label><span>Green G</span><span id="gv">128</span></label>
                 <input type="range" id="g" min="0" max="255" value="128">
               </div>
               <div class="slider-row">
-                <label><span>蓝 B</span><span id="bv">128</span></label>
+                <label><span>Blue B</span><span id="bv">128</span></label>
                 <input type="range" id="b" min="0" max="255" value="128">
               </div>
-              <div class="match-meter" title="匹配度"><span id="matchBar"></span></div>
-              <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">匹配度：<strong id="matchPct">0</strong>%</p>
+              <div class="match-meter" title="Match"><span id="matchBar"></span></div>
+              <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">Match: <strong id="matchPct">0</strong>%</p>
             </div>
             <div>
               <div class="swatch-panel" id="targetSwatch" style="background: rgb(0,0,0);">
-                <div class="label">目标色 · <span id="targetHex">#000000</span></div>
+                <div class="label">Target · <span id="targetHex">#000000</span></div>
               </div>
-              <p style="margin-top:16px;font-size:15px;color:var(--text-muted);">目标 RGB：<strong id="targetRgb">0, 0, 0</strong></p>
+              <p style="margin-top:16px;font-size:15px;color:var(--text-muted);">Target RGB: <strong id="targetRgb">0, 0, 0</strong></p>
             </div>
           </div>
         </section>
 
         <section id="game-gamut" class="module">
-          <h2 class="module-title">游戏 2：色域大冒险</h2>
-          <p class="module-subtitle">区分 sRGB 与广色域（Display P3 示意），找出「超色域」示意色块</p>
+          <h2 class="module-title">Game 2: Gamut Quest</h2>
+          <p class="module-subtitle">Tell sRGB apart from wide gamut (Display P3 demo) and spot the “out of gamut” swatch</p>
           <div class="game-toolbar">
-            <span class="score-pill">连胜：<span id="gamutStreak">0</span></span>
-            <button type="button" class="btn btn-ghost" id="gamutNext">下一题</button>
+            <span class="score-pill">Streak: <span id="gamutStreak">0</span></span>
+            <button type="button" class="btn btn-ghost" id="gamutNext">Next question</button>
           </div>
           <div class="info-box" id="gamutExplain">
-            <p>在支持 Display P3 的屏幕上，广色域色块会更鲜艳；普通 sRGB 屏上差异可能不明显，此时请结合题面文字理解「色域三角」概念。</p>
+            <p>On a Display P3-capable screen, wide-gamut swatches can look more vivid; on plain sRGB they may look similar—use the question text to reason about gamut triangles.</p>
           </div>
           <p style="font-size:15px;color:var(--text-dark);margin-bottom:10px;font-weight:600;" id="gamutQuestion"></p>
           <div class="gamut-grid" id="gamutChoices"></div>
         </section>
 
         <section id="game-hex" class="module">
-          <h2 class="module-title">游戏 3：十六进制速配</h2>
-          <p class="module-subtitle">看色码选颜色 · 每题限时，连击加分</p>
+          <h2 class="module-title">Game 3: Hex Sprint</h2>
+          <p class="module-subtitle">Read the hex code, pick the swatch—timed rounds with combo bonuses</p>
           <div class="game-toolbar">
-            <span class="score-pill">得分：<span id="hexScore">0</span></span>
-            <span class="score-pill">连击：<span id="hexCombo">0</span></span>
-            <button type="button" class="btn btn-primary" id="hexStart">开始挑战</button>
-            <button type="button" class="btn btn-ghost" id="hexPause" disabled>暂停</button>
+            <span class="score-pill">Score: <span id="hexScore">0</span></span>
+            <span class="score-pill">Combo: <span id="hexCombo">0</span></span>
+            <button type="button" class="btn btn-primary" id="hexStart">Start</button>
+            <button type="button" class="btn btn-ghost" id="hexPause" disabled>Pause</button>
           </div>
           <div class="hex-bar">
             <div class="hex-code" id="hexPrompt">#------</div>
             <div class="timer-ring" id="hexTimer">10.0</div>
           </div>
           <div class="info-box">
-            <p id="hexHint">步骤：点击「开始挑战」，在倒计时结束前点选与色码一致的颜色方块。</p>
+            <p id="hexHint">Step: tap Start, then pick the swatch that matches the hex before the timer hits zero.</p>
           </div>
           <div class="hex-choices" id="hexChoices"></div>
         </section>
@@ -616,7 +616,7 @@
   <footer>
     <div class="footer-container">
       <div class="logo" style="color:var(--white);">Colour Lab</div>
-      <p class="footer-text">© 2026 Colour Lab | 互动演示 · 音效使用 Web Audio（需用户手势后更稳定）</p>
+      <p class="footer-text">© 2026 Colour Lab | Interactive demo · Sound via Web Audio (works best after a user gesture)</p>
     </div>
   </footer>
 
@@ -697,9 +697,9 @@
       document.querySelectorAll('.catalog a').forEach(function (x) { x.classList.remove('active'); });
       a.classList.add('active');
       var key = a.getAttribute('data-hint-nav');
-      if (key === 'rgb') setGlobalHint(1, 'RGB：先拖动三个滑块观察「你的颜色」变化，再对照目标色与匹配度。');
-      if (key === 'gamut') setGlobalHint(2, '色域：阅读题干，在四个色块中选出符合「广色域 / 超色域」描述的一项。');
-      if (key === 'hex') setGlobalHint(3, '十六进制：点击「开始挑战」，快速将色码与方块颜色对应起来。');
+      if (key === 'rgb') setGlobalHint(1, 'RGB: drag the three sliders to see how your color changes, then compare with the target and match %.');
+      if (key === 'gamut') setGlobalHint(2, 'Gamut: read the prompt and pick the swatch or line that fits “wide gamut” / “out of gamut”.');
+      if (key === 'hex') setGlobalHint(3, 'Hex: tap Start, then quickly match the code to the correct color tile.');
     });
   });
 
@@ -724,7 +724,7 @@
     document.getElementById('targetSwatch').style.background = 'rgb(' + target.r + ',' + target.g + ',' + target.b + ')';
     document.getElementById('targetHex').textContent = rgbToHex(target.r, target.g, target.b).toUpperCase();
     document.getElementById('targetRgb').textContent = target.r + ', ' + target.g + ', ' + target.b;
-    setGlobalHint(1, '新目标已生成：先调单一通道感受影响，再微调另外两路。');
+    setGlobalHint(1, 'New target: adjust one channel first to feel its effect, then fine-tune the other two.');
     updateRgbUi();
   }
 
@@ -758,10 +758,10 @@
     document.getElementById('matchBar').style.width = pct + '%';
 
     var fb = document.getElementById('rgbFeedback').querySelector('p');
-    if (pct >= 98) fb.textContent = '非常接近！可以尝试点击「校验匹配」锁定得分。';
-    else if (pct >= 90) fb.textContent = '已经很像了，微调某个通道试试。';
-    else if (pct >= 70) fb.textContent = '方向正确，注意明暗与色相差异。';
-    else fb.textContent = '提示：观察目标偏红/绿/蓝哪一侧，优先调整对应滑块。';
+    if (pct >= 98) fb.textContent = 'Extremely close—tap Check match to lock in points.';
+    else if (pct >= 90) fb.textContent = 'Very close—try nudging one channel slightly.';
+    else if (pct >= 70) fb.textContent = 'On the right track—watch lightness and hue gaps.';
+    else fb.textContent = 'Tip: see whether the target leans red, green, or blue and adjust that slider first.';
   }
 
   ['r', 'g', 'b'].forEach(function (id) {
@@ -786,14 +786,14 @@
     var fb = document.getElementById('rgbFeedback').querySelector('p');
     if (pct >= 95) {
       beepOk();
-      fb.textContent = '优秀！匹配度 ' + pct + '%，+' + add + ' 分。点击「新目标」继续练习。';
-      setGlobalHint(1, '完成一回合：继续挑战随机目标，训练对通道的直觉。');
+      fb.textContent = 'Excellent! Match ' + pct + '%, +' + add + ' pts. Tap New target for another round.';
+      setGlobalHint(1, 'Round complete—keep practising random targets to build channel intuition.');
     } else if (pct >= 85) {
       playTone(740, 0.1, 'sine', 0.08);
-      fb.textContent = '不错（' + pct + '%），+' + add + ' 分。再微调滑块可以更高。';
+      fb.textContent = 'Nice (' + pct + '%), +' + add + ' pts. A little more tweaking could push it higher.';
     } else {
       beepBad();
-      fb.textContent = '当前 ' + pct + '%，+' + add + ' 分。对照目标 RGB 与色块差异继续调整。';
+      fb.textContent = 'Currently ' + pct + '%, +' + add + ' pts. Compare your RGB to the target swatch and keep adjusting.';
     }
   });
 
@@ -816,9 +816,9 @@
     var mode = modes[Math.floor(Math.random() * modes.length)];
 
     if (mode === 'pickOog') {
-      q.textContent = '哪一块是「广色域（Display P3）坐标」示意，在普通 sRGB 编码下会被裁剪或映射？';
+      q.textContent = 'Which swatch represents a Display P3-style coordinate that plain sRGB encoding would clip or gamut-map?';
       gamutCorrectIndex = Math.floor(Math.random() * 4);
-      var labels = ['sRGB 青', 'sRGB 品红', 'P3 高饱和绿（示意）', 'sRGB 黄'];
+      var labels = ['sRGB cyan', 'sRGB magenta', 'P3 saturated green (demo)', 'sRGB yellow'];
       var styles = [
         'background-color: rgb(0,255,255);',
         'background-color: rgb(255,0,200);',
@@ -838,15 +838,15 @@
         box.appendChild(card);
       }
     } else if (mode === 'whichWider') {
-      q.textContent = '以下哪一句描述是正确的？';
+      q.textContent = 'Which of the following statements is true?';
       gamutCorrectIndex = Math.floor(Math.random() * 4);
       var allOpts = [
-        'sRGB 三角完全包含 Display P3 的全部颜色',
-        '广色域显示器在相同比特深度下可呈现更高饱和度的部分颜色',
-        '所有网页色默认使用 Rec.2020 编码',
-        '色域越大，文件体积一定越大'
+        'The sRGB triangle fully contains every color in Display P3',
+        'Wide-gamut displays can show higher chroma for some colors at the same bit depth',
+        'All web colors default to Rec. 2020 encoding',
+        'A larger gamut always means larger file sizes'
       ];
-      var correctText = '广色域显示器在相同比特深度下可呈现更高饱和度的部分颜色';
+      var correctText = 'Wide-gamut displays can show higher chroma for some colors at the same bit depth';
       var wrongs = allOpts.filter(function (o) { return o !== correctText; });
       var texts = [];
       var wi = 0;
@@ -863,7 +863,7 @@
         box.appendChild(c3);
       }
     } else {
-      q.textContent = '哪一块颜色 **一定** 落在标准 8-bit sRGB 立方体内（通道值 0–255）？';
+      q.textContent = 'Which swatch **must** lie inside the standard 8-bit sRGB cube (channel values 0–255)?';
       gamutCorrectIndex = Math.floor(Math.random() * 4);
       var safe = 'background-color: rgb(120, 180, 90);';
       var fakePool = [
@@ -879,7 +879,7 @@
         c4.className = 'gamut-card';
         c4.dataset.idx = String(n);
         var st = n === gamutCorrectIndex ? safe : fakePool[fi++];
-        c4.innerHTML = '<div class="gamut-swatch" style="' + st + '"></div><div style="font-size:13px;font-weight:600;">选项 ' + (n + 1) + '</div>';
+        c4.innerHTML = '<div class="gamut-swatch" style="' + st + '"></div><div style="font-size:13px;font-weight:600;">Option ' + (n + 1) + '</div>';
         if (n === gamutCorrectIndex) c4.dataset.answer = '1';
         box.appendChild(c4);
       }
@@ -891,8 +891,8 @@
 
     document.getElementById('gamutExplain').querySelector('p').textContent =
       supportsP3()
-        ? '检测到浏览器支持 P3 颜色：第二关「P3 高饱和绿」与其他 sRGB 色块对比会更明显。'
-        : '当前环境以 sRGB 为主显示：请结合文字理解「编码范围」与「设备色域」差异。';
+        ? 'This browser supports P3 colors—the “P3 saturated green” swatch should stand out more from sRGB blocks when visible.'
+        : 'This view is mostly sRGB—use the copy to reason about encoding range vs device gamut.';
   }
 
   function onGamutPick(e) {
@@ -906,12 +906,12 @@
       card.classList.add('selected');
       gamutStreak++;
       beepOk();
-      setGlobalHint(2, '答对了！色域题：留意「编码可表示」与「设备可显示」是两件事。');
+      setGlobalHint(2, 'Correct! Remember: what encodings can represent and what a display can show are different problems.');
     } else {
       card.classList.add('wrong');
       gamutStreak = 0;
       beepBad();
-      setGlobalHint(2, '再试一次：绿色轮廓标出的是本题正确项，可点「下一题」。');
+      setGlobalHint(2, 'Not quite—the green border marks the correct answer. Tap Next question to continue.');
     }
     document.getElementById('gamutStreak').textContent = String(gamutStreak);
     document.querySelectorAll('#gamutChoices .gamut-card').forEach(function (c) {
@@ -922,7 +922,7 @@
   document.getElementById('gamutNext').addEventListener('click', function () {
     buildGamutRound();
     beepTick();
-    setGlobalHint(2, '新题目已生成：先读题干，再观察色块或文字选项。');
+    setGlobalHint(2, 'New question: read the prompt first, then inspect swatches or text choices.');
   });
 
   buildGamutRound();
@@ -978,7 +978,7 @@
       var rgb = hexToRgb(hx);
       el.style.background = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
       el.dataset.hex = hx;
-      el.setAttribute('aria-label', '颜色 ' + hx.toUpperCase());
+      el.setAttribute('aria-label', 'Color ' + hx.toUpperCase());
       el.addEventListener('click', onHexPick);
       host.appendChild(el);
     });
@@ -999,13 +999,13 @@
       hexScore += bonus;
       btn.classList.add('flash-ok');
       beepOk();
-      document.getElementById('hexHint').textContent = '正确！+' + bonus + ' 分（含连击加成）。下一题即将开始…';
+      document.getElementById('hexHint').textContent = 'Correct! +' + bonus + ' pts (combo bonus). Next question loading...';
     } else {
       hexCombo = 0;
       btn.classList.add('flash-bad');
       beepBad();
       hexScore = Math.max(0, hexScore - 15);
-      document.getElementById('hexHint').textContent = '误差较大，连击重置。再仔细观察通道差异。';
+      document.getElementById('hexHint').textContent = 'Way off—combo reset. Look again at which channels differ.';
     }
     document.getElementById('hexScore').textContent = String(hexScore);
     document.getElementById('hexCombo').textContent = String(hexCombo);
@@ -1027,7 +1027,7 @@
       document.getElementById('hexScore').textContent = String(hexScore);
       document.getElementById('hexCombo').textContent = '0';
       beepBad();
-      document.getElementById('hexHint').textContent = '时间到！连击清零，进入下一题。';
+      document.getElementById('hexHint').textContent = 'Time is up—combo reset. Moving to the next question.';
       buildHexRound();
       hexDeadline = performance.now() + hexTime * 1000;
       hexLastWholeSecond = -1;
@@ -1055,7 +1055,7 @@
     hexLastWholeSecond = -1;
     cancelAnimationFrame(hexRaf);
     hexRaf = requestAnimationFrame(hexLoop);
-    setGlobalHint(3, '进行中：余光扫色码三段（RR GG BB），先锁定最大通道再排除选项。');
+    setGlobalHint(3, 'Live: read the hex as RR GG BB, spot the strongest channel, then eliminate wrong tiles.');
     beepOk();
   });
 
@@ -1063,12 +1063,12 @@
     hexRunning = false;
     cancelAnimationFrame(hexRaf);
     document.getElementById('hexPause').disabled = true;
-    document.getElementById('hexHint').textContent = '已暂停。再次点击「开始挑战」继续。';
-    setGlobalHint(3, '暂停：休息一下，回顾色码与 RGB 的对应关系。');
+    document.getElementById('hexHint').textContent = 'Paused. Tap Start again to continue.';
+    setGlobalHint(3, 'Paused—take a breath and review how hex maps to RGB.');
     beepTick();
   });
 
-  setGlobalHint(1, '欢迎：从「RGB 调色大师」开始，或从左侧目录切换游戏。');
+  setGlobalHint(1, 'Welcome—start with RGB Color Master, or switch games in the sidebar.');
 })();
   </script>
 </body>

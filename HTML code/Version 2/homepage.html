@@ -633,10 +633,20 @@
         .colour-swatch-row { display: flex; gap: 10px; }
         .colour-swatch {
             flex: 1; height: 64px; border-radius: var(--radius-sm);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.25s ease,
+                        outline 0.15s ease;
+            cursor: crosshair;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
         }
-        .colour-swatch:hover { transform: scaleY(1.15); }
+        .colour-swatch:hover {
+            transform: scaleY(1.18) translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            outline: 2px solid rgba(255,255,255,0.6);
+            z-index: 2;
+            position: relative;
+        }
         .swatch-row-1 .s1 { background: #ff0000; }
         .swatch-row-1 .s2 { background: #ff6600; }
         .swatch-row-1 .s3 { background: #ffcc00; }
@@ -667,6 +677,81 @@
         .demo-code-block .token-val { color: #50fa7b; }
         .demo-code-block .token-str { color: #f1fa8c; }
         .demo-code-block .token-num { color: #bd93f9; }
+
+        /* ================================ */
+        /* Swatch Floating Tooltip           */
+        /* ================================ */
+        .swatch-tooltip {
+            position: fixed;
+            z-index: 500;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(6px) scale(0.96);
+            transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .swatch-tooltip.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .swatch-tooltip-inner {
+            background: #1a1a2e;
+            border-radius: 14px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06);
+            overflow: hidden;
+            min-width: 220px;
+        }
+        .swatch-tooltip-preview {
+            width: 100%;
+            height: 56px;
+            position: relative;
+        }
+        .swatch-tooltip-preview-shine {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+        }
+        .swatch-tooltip-body {
+            padding: 14px 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .swatch-tooltip-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .stt-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 4px;
+            min-width: 42px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .stt-badge-hex  { background: rgba(139,233,253,0.15); color: #8be9fd; }
+        .stt-badge-rgb  { background: rgba(80,250,123,0.15);  color: #50fa7b; }
+        .stt-badge-cmyk { background: rgba(255,184,108,0.15); color: #ffb86c; }
+        .stt-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12.5px;
+            color: #f8f8f2;
+            letter-spacing: 0.3px;
+        }
+        /* Tooltip arrow */
+        .swatch-tooltip-inner::after {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #1a1a2e;
+        }
 
         /* ================================ */
         /* Courses Section                   */
@@ -1186,46 +1271,60 @@
                 <div class="reveal-left">
                     <div class="section-label">Interactive Preview</div>
                     <h2 class="section-title" style="font-size:32px;">Explore the Colour Spectrum</h2>
-                    <p class="section-subtitle" style="text-align:left; margin:0 0 24px; font-size:16px;">Hover over any swatch to see how saturation levels create a cohesive palette. Our learning modules teach you to build these systems from scratch.</p>
+                    <p class="section-subtitle" style="text-align:left; margin:0 0 24px; font-size:16px;">Hover over any swatch to instantly see its <strong>HEX</strong>, <strong>RGB</strong>, and <strong>CMYK</strong> values — the three colour encoding systems you'll master in our courses. Notice how the same colour translates differently across screen and print models.</p>
                     <div class="demo-code-block">
-                        <div class="token-comment">/* RGB Colour Model */</div>
-                        <div><span class="token-key">red</span>:   <span class="token-str">rgb(</span><span class="token-num">255</span>, <span class="token-num">0</span>, <span class="token-num">0</span><span class="token-str">)</span>  →  <span class="token-val">#FF0000</span></div>
-                        <div><span class="token-key">green</span>: <span class="token-str">rgb(</span><span class="token-num">0</span>, <span class="token-num">204</span>, <span class="token-num">68</span><span class="token-str">)</span> →  <span class="token-val">#00CC44</span></div>
-                        <div><span class="token-key">blue</span>:  <span class="token-str">rgb(</span><span class="token-num">0</span>, <span class="token-num">102</span>, <span class="token-num">255</span><span class="token-str">)</span>→  <span class="token-val">#0066FF</span></div>
+                        <div class="token-comment">/* — HEX  (Web / CSS) ————————— */</div>
+                        <div><span class="token-key">red</span>:    <span class="token-val">#FF0000</span></div>
+                        <div><span class="token-key">orange</span>: <span class="token-val">#FF6600</span></div>
+                        <div><span class="token-key">blue</span>:   <span class="token-val">#0066FF</span></div>
                         <br>
-                        <div class="token-comment">/* HSL — Hue, Saturation, Lightness */</div>
-                        <div><span class="token-key">hsl</span>(<span class="token-num">0</span>, <span class="token-num">100%</span>, <span class="token-num">50%</span>)  →  <span class="token-val">Pure Red</span></div>
-                        <div><span class="token-key">hsl</span>(<span class="token-num">0</span>, <span class="token-num">100%</span>, <span class="token-num">80%</span>)  →  <span class="token-val">Light Red</span></div>
-                        <div><span class="token-key">hsl</span>(<span class="token-num">0</span>, <span class="token-num">100%</span>, <span class="token-num">30%</span>)  →  <span class="token-val">Dark Red</span></div>
+                        <div class="token-comment">/* — RGB  (Screen / Additive) —— */</div>
+                        <div><span class="token-key">red</span>:    <span class="token-str">rgb(</span><span class="token-num">255</span>, <span class="token-num">0</span>, <span class="token-num">0</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">orange</span>: <span class="token-str">rgb(</span><span class="token-num">255</span>, <span class="token-num">102</span>, <span class="token-num">0</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">blue</span>:   <span class="token-str">rgb(</span><span class="token-num">0</span>, <span class="token-num">102</span>, <span class="token-num">255</span><span class="token-str">)</span></div>
+                        <br>
+                        <div class="token-comment">/* — CMYK (Print / Subtractive) — */</div>
+                        <div><span class="token-key">red</span>:    <span class="token-str">cmyk(</span><span class="token-num">0%</span>, <span class="token-num">100%</span>, <span class="token-num">100%</span>, <span class="token-num">0%</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">orange</span>: <span class="token-str">cmyk(</span><span class="token-num">0%</span>, <span class="token-num">60%</span>, <span class="token-num">100%</span>, <span class="token-num">0%</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">blue</span>:   <span class="token-str">cmyk(</span><span class="token-num">100%</span>, <span class="token-num">60%</span>, <span class="token-num">0%</span>, <span class="token-num">0%</span><span class="token-str">)</span></div>
                     </div>
                 </div>
                 <div class="demo-visual reveal-right">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Saturated</span>
+                    </div>
                     <div class="colour-swatch-row swatch-row-1">
-                        <div class="colour-swatch s1" title="#FF0000"></div>
-                        <div class="colour-swatch s2" title="#FF6600"></div>
-                        <div class="colour-swatch s3" title="#FFCC00"></div>
-                        <div class="colour-swatch s4" title="#00CC44"></div>
-                        <div class="colour-swatch s5" title="#0066FF"></div>
-                        <div class="colour-swatch s6" title="#9900FF"></div>
+                        <div class="colour-swatch s1" data-hex="#FF0000" data-r="255" data-g="0"   data-b="0"></div>
+                        <div class="colour-swatch s2" data-hex="#FF6600" data-r="255" data-g="102" data-b="0"></div>
+                        <div class="colour-swatch s3" data-hex="#FFCC00" data-r="255" data-g="204" data-b="0"></div>
+                        <div class="colour-swatch s4" data-hex="#00CC44" data-r="0"   data-g="204" data-b="68"></div>
+                        <div class="colour-swatch s5" data-hex="#0066FF" data-r="0"   data-g="102" data-b="255"></div>
+                        <div class="colour-swatch s6" data-hex="#9900FF" data-r="153" data-g="0"   data-b="255"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 8px;">
+                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Light Tints</span>
                     </div>
                     <div class="colour-swatch-row swatch-row-2">
-                        <div class="colour-swatch s1" title="#FFCCCC"></div>
-                        <div class="colour-swatch s2" title="#FFD9B9"></div>
-                        <div class="colour-swatch s3" title="#FFFACD"></div>
-                        <div class="colour-swatch s4" title="#C8F7D6"></div>
-                        <div class="colour-swatch s5" title="#CCE0FF"></div>
-                        <div class="colour-swatch s6" title="#E0CCFF"></div>
+                        <div class="colour-swatch s1" data-hex="#FFCCCC" data-r="255" data-g="204" data-b="204"></div>
+                        <div class="colour-swatch s2" data-hex="#FFD9B9" data-r="255" data-g="217" data-b="185"></div>
+                        <div class="colour-swatch s3" data-hex="#FFFACD" data-r="255" data-g="250" data-b="205"></div>
+                        <div class="colour-swatch s4" data-hex="#C8F7D6" data-r="200" data-g="247" data-b="214"></div>
+                        <div class="colour-swatch s5" data-hex="#CCE0FF" data-r="204" data-g="224" data-b="255"></div>
+                        <div class="colour-swatch s6" data-hex="#E0CCFF" data-r="224" data-g="204" data-b="255"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 8px;">
+                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Dark Shades</span>
                     </div>
                     <div class="colour-swatch-row swatch-row-3">
-                        <div class="colour-swatch s1" title="#800000"></div>
-                        <div class="colour-swatch s2" title="#804000"></div>
-                        <div class="colour-swatch s3" title="#806600"></div>
-                        <div class="colour-swatch s4" title="#006622"></div>
-                        <div class="colour-swatch s5" title="#003380"></div>
-                        <div class="colour-swatch s6" title="#4D0080"></div>
+                        <div class="colour-swatch s1" data-hex="#800000" data-r="128" data-g="0"   data-b="0"></div>
+                        <div class="colour-swatch s2" data-hex="#804000" data-r="128" data-g="64"  data-b="0"></div>
+                        <div class="colour-swatch s3" data-hex="#806600" data-r="128" data-g="102" data-b="0"></div>
+                        <div class="colour-swatch s4" data-hex="#006622" data-r="0"   data-g="102" data-b="34"></div>
+                        <div class="colour-swatch s5" data-hex="#003380" data-r="0"   data-g="51"  data-b="128"></div>
+                        <div class="colour-swatch s6" data-hex="#4D0080" data-r="77"  data-g="0"   data-b="128"></div>
                     </div>
-                    <div id="swatchTooltip" style="height:36px; display:flex; align-items:center; padding:0 4px; font-size:13px; color:var(--text-light); font-family:monospace; transition: var(--transition);">
-                        Hover a swatch to see its hex value ↑
+                    <div id="swatchTooltipBar" style="height:36px; display:flex; align-items:center; padding:0 4px; font-size:13px; color:var(--text-light); font-family:monospace; transition: var(--transition);">
+                        Hover a swatch to see its colour codes ↑
                     </div>
                 </div>
             </div>
@@ -1398,6 +1497,31 @@
             </form>
         </div>
     </section>
+
+    <!-- ======================== -->
+    <!-- Swatch Floating Tooltip   -->
+    <!-- ======================== -->
+    <div class="swatch-tooltip" id="swatchTooltip">
+        <div class="swatch-tooltip-inner" style="position:relative;">
+            <div class="swatch-tooltip-preview" id="tooltipPreview">
+                <div class="swatch-tooltip-preview-shine"></div>
+            </div>
+            <div class="swatch-tooltip-body">
+                <div class="swatch-tooltip-row">
+                    <span class="stt-badge stt-badge-hex">HEX</span>
+                    <span class="stt-value" id="tooltipHex">#FF0000</span>
+                </div>
+                <div class="swatch-tooltip-row">
+                    <span class="stt-badge stt-badge-rgb">RGB</span>
+                    <span class="stt-value" id="tooltipRgb">rgb(255, 0, 0)</span>
+                </div>
+                <div class="swatch-tooltip-row">
+                    <span class="stt-badge stt-badge-cmyk">CMYK</span>
+                    <span class="stt-value" id="tooltipCmyk">0%, 100%, 100%, 0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ======================== -->
     <!-- Footer                    -->
@@ -1597,20 +1721,85 @@
         });
 
         /* ============================================ */
-        /* 7. Colour swatch tooltip                      */
+        /* 7. Colour swatch tooltip — HEX / RGB / CMYK  */
         /* ============================================ */
-        const swatches = document.querySelectorAll('.colour-swatch');
-        const tooltip = document.getElementById('swatchTooltip');
-        swatches.forEach(s => {
-            s.addEventListener('mouseenter', () => {
-                const hex = s.title;
-                const bg = getComputedStyle(s).backgroundColor;
-                tooltip.innerHTML = `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${bg};margin-right:8px;vertical-align:middle;"></span><strong>${hex}</strong>`;
+        (function() {
+            const swatches    = document.querySelectorAll('.colour-swatch');
+            const tooltip     = document.getElementById('swatchTooltip');
+            const preview     = document.getElementById('tooltipPreview');
+            const elHex       = document.getElementById('tooltipHex');
+            const elRgb       = document.getElementById('tooltipRgb');
+            const elCmyk      = document.getElementById('tooltipCmyk');
+            const tooltipBar  = document.getElementById('swatchTooltipBar');
+            const OFFSET      = 14; // px gap between cursor and tooltip
+
+            /* RGB → CMYK conversion */
+            function rgbToCmyk(r, g, b) {
+                const rp = r / 255, gp = g / 255, bp = b / 255;
+                const k  = 1 - Math.max(rp, gp, bp);
+                if (k === 1) return { c: 0, m: 0, y: 0, k: 100 };
+                const c = (1 - rp - k) / (1 - k);
+                const m = (1 - gp - k) / (1 - k);
+                const y = (1 - bp - k) / (1 - k);
+                return {
+                    c: Math.round(c * 100),
+                    m: Math.round(m * 100),
+                    y: Math.round(y * 100),
+                    k: Math.round(k * 100)
+                };
+            }
+
+            /* Position tooltip near cursor, keeping it within viewport */
+            function positionTooltip(e) {
+                const tw = tooltip.offsetWidth  || 230;
+                const th = tooltip.offsetHeight || 160;
+                let left = e.clientX + OFFSET;
+                let top  = e.clientY - th / 2;
+
+                // Right-edge clamp
+                if (left + tw > window.innerWidth - 8) {
+                    left = e.clientX - tw - OFFSET;
+                }
+                // Top/bottom clamp
+                top = Math.max(8, Math.min(top, window.innerHeight - th - 8));
+
+                tooltip.style.left = left + 'px';
+                tooltip.style.top  = top  + 'px';
+            }
+
+            swatches.forEach(s => {
+                s.addEventListener('mouseenter', (e) => {
+                    const r   = parseInt(s.dataset.r, 10);
+                    const g   = parseInt(s.dataset.g, 10);
+                    const b   = parseInt(s.dataset.b, 10);
+                    const hex = s.dataset.hex;
+                    const cmyk = rgbToCmyk(r, g, b);
+
+                    /* Update tooltip content */
+                    preview.style.background = hex;
+                    elHex.textContent  = hex;
+                    elRgb.textContent  = `rgb(${r}, ${g}, ${b})`;
+                    elCmyk.textContent = `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%`;
+
+                    /* Update bottom bar */
+                    tooltipBar.innerHTML =
+                        `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${hex};margin-right:8px;vertical-align:middle;box-shadow:0 0 0 1px rgba(0,0,0,.08);"></span>` +
+                        `<strong style="color:var(--text);">${hex}</strong>` +
+                        `<span style="margin-left:10px;color:var(--text-muted);">rgb(${r},${g},${b})</span>` +
+                        `<span style="margin-left:10px;color:var(--text-muted);">cmyk(${cmyk.c}%,${cmyk.m}%,${cmyk.y}%,${cmyk.k}%)</span>`;
+
+                    positionTooltip(e);
+                    tooltip.classList.add('show');
+                });
+
+                s.addEventListener('mousemove', positionTooltip);
+
+                s.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('show');
+                    tooltipBar.innerHTML = 'Hover a swatch to see its colour codes ↑';
+                });
             });
-            s.addEventListener('mouseleave', () => {
-                tooltip.textContent = 'Hover a swatch to see its hex value ↑';
-            });
-        });
+        })();
 
         /* ============================================ */
         /* 8. Animated counter for hero stats            */

@@ -241,10 +241,11 @@
     .module {
       background: var(--white);
       border-radius: var(--radius-base);
-      padding: 36px;
+      padding: 24px 36px;
       box-shadow: var(--shadow-soft);
       transition: var(--transition);
       scroll-margin-top: 140px;
+      margin-bottom: 20px;
     }
 
     .module:hover {
@@ -252,26 +253,79 @@
       box-shadow: var(--shadow-hover);
     }
 
+    .module-header {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+    }
+
     .module-title {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       color: var(--text-dark);
-      margin-bottom: 20px;
+      margin-bottom: 8px;
       line-height: 1.2;
     }
 
     .module-subtitle {
       font-size: 16px;
       color: var(--text-muted);
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       font-style: italic;
+    }
+
+    .expand-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .expand-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.1);
+    }
+
+    .expand-btn.active {
+      transform: rotate(45deg);
+    }
+
+    .module-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-top: 0;
+    }
+
+    .module-content.active {
+      max-height: 2000px;
+      padding-top: 20px;
+      transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .module-text {
       font-size: 16px;
-      color: var(--text-muted);
+      color: var(--text-dark);
       line-height: 1.7;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+
+    .module-text:first-of-type {
+      margin-top: 8px;
     }
 
     .module-list {
@@ -281,9 +335,10 @@
 
     .module-list li {
       font-size: 16px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
       line-height: 1.6;
+      padding: 2px 0;
     }
 
     .color-grid {
@@ -462,96 +517,164 @@
 
         <!-- Module 1 -->
         <section id="module1" class="module">
-          <h2 class="module-title">1. Color Vision & Fundamental Properties</h2>
-          <p class="module-subtitle">The biological and physical basis of digital color encoding</p>
-          <p class="module-text">Color is not an inherent property of objects—it is a perceptual response to visible light wavelengths (400–700 nm) detected by the human eye. The retina contains three types of cone cells sensitive to long (red), medium (green), and short (blue) wavelengths, forming the Tristimulus Theory of Color Vision.</p>
-          <ul class="module-list">
-            <li><strong>Hue</strong>: Dominant wavelength, defines the color name (red, blue, green).</li>
-            <li><strong>Saturation</strong>: Purity of a color; 100% = no white light mixture, 0% = grayscale.</li>
-            <li><strong>Brightness/Value</strong>: Perceived light intensity emitted or reflected by a surface.</li>
-            <li><strong>Metamers</strong>: Different light spectra that produce identical color perception—critical for encoding.</li>
-          </ul>
-          <div class="info-box">
-            <p>Color encoding translates human perception into numerical values that computers, screens, and printers can interpret and reproduce accurately.</p>
+          <div class="module-header">
+            <h2 class="module-title">1. Color Vision & Fundamental Properties</h2>
+            <p class="module-subtitle">The biological and physical basis of digital color encoding</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text">Color is not an inherent property of objects—it is a perceptual response to visible light wavelengths (400–700 nm) detected by the human eye. The retina contains three types of cone cells sensitive to long (red), medium (green), and short (blue) wavelengths, forming the Tristimulus Theory of Color Vision.</p>
+            <ul class="module-list">
+              <li><strong>Hue</strong>: Dominant wavelength, defines the color name (red, blue, green).</li>
+              <li><strong>Saturation</strong>: Purity of a color; 100% = no white light mixture, 0% = grayscale.</li>
+              <li><strong>Brightness/Value</strong>: Perceived light intensity emitted or reflected by a surface.</li>
+              <li><strong>Metamers</strong>: Different light spectra that produce identical color perception—critical for encoding.</li>
+              <li><strong>Cone Response Curves</strong>: Scientific measurement of how human cone cells respond to different wavelengths.</li>
+              <li><strong>Color Constancy</strong>: The ability to perceive consistent colors under different lighting conditions.</li>
+            </ul>
+            <div class="info-box">
+              <p>Color encoding translates human perception into numerical values that computers, screens, and printers can interpret and reproduce accurately. The CIE 1931 color space was the first standardized model based on human color perception.</p>
+            </div>
+            <p class="module-text">The human eye can distinguish approximately 10 million different colors, while digital systems must encode this vast range using finite numerical values. This encoding process involves sampling the continuous spectrum of visible light into discrete values that can be stored and transmitted.</p>
           </div>
         </section>
 
         <!-- Module 2 -->
         <section id="module2" class="module">
-          <h2 class="module-title">2. RGB Additive Color Encoding</h2>
-          <p class="module-subtitle">The universal standard for digital displays and screens</p>
-          <p class="module-text">RGB is an additive model where Red, Green, and Blue light are combined to create all colors. It is the foundation of all digital display systems (monitors, phones, TVs).</p>
-          <ul class="module-list">
-            <li>Encoding format: (R, G, B) with 0–255 per channel (8-bit per channel, 24-bit total color depth).</li>
-            <li>(0, 0, 0) = Black; (255, 255, 255) = White; (255, 0, 0) = Pure Red.</li>
-            <li>Color depth: 8-bit = 16.7 million colors; 10-bit = 1.07 billion colors for professional use.</li>
-            <li>Grayscale conversion: L = 0.299R + 0.587G + 0.114B (standard luminance formula).</li>
-          </ul>
-          <div class="color-grid">
-            <div class="color-card" style="background: rgb(255,0,0);">RGB(255,0,0)</div>
-            <div class="color-card" style="background: rgb(0,255,0);">RGB(0,255,0)</div>
-            <div class="color-card" style="background: rgb(0,0,255);">RGB(0,0,255)</div>
-            <div class="color-card" style="background: rgb(255,255,255); color:#000;">RGB(255,255,255)</div>
+          <div class="module-header">
+            <h2 class="module-title">2. RGB Additive Color Encoding</h2>
+            <p class="module-subtitle">The universal standard for digital displays and screens</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text">RGB is an additive model where Red, Green, and Blue light are combined to create all colors. It is the foundation of all digital display systems (monitors, phones, TVs).</p>
+            <ul class="module-list">
+              <li>Encoding format: (R, G, B) with 0–255 per channel (8-bit per channel, 24-bit total color depth).</li>
+              <li>(0, 0, 0) = Black; (255, 255, 255) = White; (255, 0, 0) = Pure Red.</li>
+              <li>Color depth: 8-bit = 16.7 million colors; 10-bit = 1.07 billion colors for professional use.</li>
+              <li>Grayscale conversion: L = 0.299R + 0.587G + 0.114B (standard luminance formula).</li>
+              <li>Gamma correction: Non-linear encoding to match human perception of brightness.</li>
+              <li>Color gamuts: sRGB (standard), Adobe RGB (wider), DCI-P3 (cinema), Rec. 2020 (UHD).</li>
+            </ul>
+            <div class="color-grid">
+              <div class="color-card" style="background: rgb(255,0,0);">RGB(255,0,0)</div>
+              <div class="color-card" style="background: rgb(0,255,0);">RGB(0,255,0)</div>
+              <div class="color-card" style="background: rgb(0,0,255);">RGB(0,0,255)</div>
+              <div class="color-card" style="background: rgb(255,255,255); color:#000;">RGB(255,255,255)</div>
+              <div class="color-card" style="background: rgb(255,255,0); color:#000;">RGB(255,255,0)</div>
+              <div class="color-card" style="background: rgb(0,255,255); color:#000;">RGB(0,255,255)</div>
+              <div class="color-card" style="background: rgb(255,0,255);">RGB(255,0,255)</div>
+              <div class="color-card" style="background: rgb(128,128,128); color:#fff;">RGB(128,128,128)</div>
+            </div>
+            <div class="info-box">
+              <p>RGB encoding is used in all digital displays because it directly corresponds to how LCD, OLED, and LED screens generate light. Each pixel contains red, green, and blue sub-pixels that combine to create the perceived color.</p>
+            </div>
+            <p class="module-text">Modern displays use advanced RGB techniques like quantum dots and HDR to extend the color gamut and dynamic range, providing more realistic and vibrant images. Professional workflows often use 10-bit or higher color depth to preserve quality during editing and post-production.</p>
           </div>
         </section>
 
         <!-- Module 3 -->
         <section id="module3" class="module">
-          <h2 class="module-title">3. CMYK Subtractive Color Encoding</h2>
-          <p class="module-subtitle">Industrial standard for printing and physical media</p>
-          <p class="module-text">CMYK is a subtractive model used for printing, where inks absorb light instead of emitting it. Cyan, Magenta, and Yellow are the primary subtractive colors, and Black (Key/K) is added to produce true black.</p>
-          <ul class="module-list">
-            <li>Encoding logic: C = 1 - R, M = 1 - G, Y = 1 - B (in normalized values).</li>
-            <li>K channel: Eliminates muddy dark grays and saves ink in printing systems.</li>
-            <li>Used for: Books, posters, packaging, and all physical printed color media.</li>
-            <li>RGB→CMYK conversion requires gamut mapping for accurate color reproduction.</li>
-          </ul>
-          <div class="info-box">
-            <p>CMYK has a smaller color gamut than RGB—some bright digital colors cannot be printed accurately.</p>
+          <div class="module-header">
+            <h2 class="module-title">3. CMYK Subtractive Color Encoding</h2>
+            <p class="module-subtitle">Industrial standard for printing and physical media</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text">CMYK is a subtractive model used for printing, where inks absorb light instead of emitting it. Cyan, Magenta, and Yellow are the primary subtractive colors, and Black (Key/K) is added to produce true black.</p>
+            <ul class="module-list">
+              <li>Encoding logic: C = 1 - R, M = 1 - G, Y = 1 - B (in normalized values).</li>
+              <li>K channel: Eliminates muddy dark grays and saves ink in printing systems.</li>
+              <li>Used for: Books, posters, packaging, and all physical printed color media.</li>
+              <li>RGB→CMYK conversion requires gamut mapping for accurate color reproduction.</li>
+              <li>Printing resolution: DPI (dots per inch) determines print quality and color accuracy.</li>
+              <li>Spot colors: Special inks used for corporate logos and specific color requirements.</li>
+            </ul>
+            <div class="color-grid">
+              <div class="color-card" style="background: cyan;">Cyan</div>
+              <div class="color-card" style="background: magenta;">Magenta</div>
+              <div class="color-card" style="background: yellow;">Yellow</div>
+              <div class="color-card" style="background: black;">Black</div>
+            </div>
+            <div class="info-box">
+              <p>CMYK has a smaller color gamut than RGB—some bright digital colors cannot be printed accurately. This is why professional designers use color management systems to ensure consistent results across devices.</p>
+            </div>
+            <p class="module-text">Modern printing technologies like offset lithography, digital printing, and flexography all use CMYK encoding. The K channel is particularly important for text and fine details, as it provides crisp, clean black reproduction that would be difficult to achieve with just cyan, magenta, and yellow inks.</p>
           </div>
         </section>
 
         <!-- Module 4 -->
         <section id="module4" class="module">
-          <h2 class="module-title">4. HSV Perceptual Color Encoding</h2>
-          <p class="module-subtitle">Human-centered encoding for design and editing</p>
-          <p class="module-text">HSV (Hue, Saturation, Value) is a perceptual model that matches how humans naturally select and adjust colors, widely used in design software (Photoshop, Figma).</p>
-          <ul class="module-list">
-            <li>Hue: 0°–360° on a color wheel (0°=red, 120°=green, 240°=blue).</li>
-            <li>Saturation: 0%–100% (color purity, 0% = grayscale).</li>
-            <li>Value: 0%–100% (brightness, 0% = black).</li>
-            <li>Intuitive for artists: Adjust hue for color, saturation for vibrancy, value for lightness.</li>
-          </ul>
+          <div class="module-header">
+            <h2 class="module-title">4. HSV Perceptual Color Encoding</h2>
+            <p class="module-subtitle">Human-centered encoding for design and editing</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text">HSV (Hue, Saturation, Value) is a perceptual model that matches how humans naturally select and adjust colors, widely used in design software (Photoshop, Figma).</p>
+            <ul class="module-list">
+              <li>Hue: 0°–360° on a color wheel (0°=red, 120°=green, 240°=blue).</li>
+              <li>Saturation: 0%–100% (color purity, 0% = grayscale).</li>
+              <li>Value: 0%–100% (brightness, 0% = black).</li>
+              <li>Intuitive for artists: Adjust hue for color, saturation for vibrancy, value for lightness.</li>
+              <li>Color harmonies: Easily create complementary, analogous, and triadic color schemes.</li>
+              <li>Color selection: Simplifies the process of choosing colors that work well together.</li>
+            </ul>
+            <div class="info-box">
+              <p>HSV is particularly useful for UI/UX design, digital art, and any context where designers need to make intuitive color decisions without dealing with the technical complexities of RGB values.</p>
+            </div>
+            <p class="module-text">HSV is often visualized as a color wheel with saturation and value as axes, making it easy to understand color relationships. This model is also known as HSB (Hue, Saturation, Brightness) in some software applications, though the underlying principles are identical.</p>
+          </div>
         </section>
 
         <!-- Module 5 -->
         <section id="module5" class="module">
-          <h2 class="module-title">5. YUV/YCbCr Encoding</h2>
-          <p class="module-subtitle">Efficient encoding for image & video compression</p>
-          <p class="module-text">YUV/YCbCr separates luminance (brightness) and chrominance (color) to enable efficient multimedia compression. Human eyes are far more sensitive to brightness than color, allowing chrominance data to be reduced.</p>
-          <ul class="module-list">
-            <li>Y: Luminance (brightness signal, full resolution).</li>
-            <li>U/Cb, V/Cr: Chrominance (color difference signals, reduced resolution).</li>
-            <li>YCbCr is the digital version used in JPEG, PNG, MPEG, and all video compression standards.</li>
-            <li>RGB→YCbCr conversion uses standardized matrix formulas for digital media.</li>
-          </ul>
-          <div class="info-box">
-            <p>YCbCr encoding is the reason image/video compression can reduce file size with minimal visible quality loss.</p>
+          <div class="module-header">
+            <h2 class="module-title">5. YUV/YCbCr Encoding</h2>
+            <p class="module-subtitle">Efficient encoding for image & video compression</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text">YUV/YCbCr separates luminance (brightness) and chrominance (color) to enable efficient multimedia compression. Human eyes are far more sensitive to brightness than color, allowing chrominance data to be reduced.</p>
+            <ul class="module-list">
+              <li>Y: Luminance (brightness signal, full resolution).</li>
+              <li>U/Cb, V/Cr: Chrominance (color difference signals, reduced resolution).</li>
+              <li>YCbCr is the digital version used in JPEG, PNG, MPEG, and all video compression standards.</li>
+              <li>RGB→YCbCr conversion uses standardized matrix formulas for digital media.</li>
+              <li>Chroma subsampling: 4:2:0, 4:2:2, 4:4:4 ratios determine color resolution.</li>
+              <li>Compression efficiency: Up to 50% file size reduction with minimal quality loss.</li>
+            </ul>
+            <div class="info-box">
+              <p>YCbCr encoding is the reason image/video compression can reduce file size with minimal visible quality loss. The human eye's reduced sensitivity to color detail allows for aggressive chrominance compression.</p>
+            </div>
+            <p class="module-text">Modern video codecs like H.264, H.265, and AV1 rely heavily on YCbCr encoding for efficient compression. Chroma subsampling (4:2:0) is the standard for most video content, providing a good balance between quality and file size. Professional workflows often use 4:2:2 or 4:4:4 for higher quality requirements.</p>
           </div>
         </section>
 
         <!-- Module 6 -->
         <section id="module6" class="module">
-          <h2 class="module-title">6. Advanced Color Encoding</h2>
-          <p class="module-subtitle">Professional gamuts, high dynamic range & industry standards</p>
-          <p class="module-text">Modern systems use extended color encoding for professional workflows, high dynamic range (HDR), and cross-device consistency.</p>
-          <ul class="module-list">
-            <li>CIE XYZ/CIELAB: Device-independent encoding for professional color management.</li>
-            <li>HDR Encoding: Rec. 2020 gamut & 10–12 bit depth for high-brightness displays.</li>
-            <li>Color Gamut: The range of colors a device can reproduce (sRGB, Adobe RGB, DCI-P3).</li>
-            <li>Metadata: Embedded encoding data to ensure consistent color across screens and printers.</li>
-          </ul>
-          <p class="module-text">Understanding advanced encoding is essential for multimedia production, UI/UX design, and professional media workflows.</p>
+          <div class="module-header">
+            <h2 class="module-title">6. Advanced Color Encoding</h2>
+            <p class="module-subtitle">Professional gamuts, high dynamic range & industry standards</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text">Modern systems use extended color encoding for professional workflows, high dynamic range (HDR), and cross-device consistency.</p>
+            <ul class="module-list">
+              <li>CIE XYZ/CIELAB: Device-independent encoding for professional color management.</li>
+              <li>HDR Encoding: Rec. 2020 gamut & 10–12 bit depth for high-brightness displays.</li>
+              <li>Color Gamut: The range of colors a device can reproduce (sRGB, Adobe RGB, DCI-P3).</li>
+              <li>Metadata: Embedded encoding data to ensure consistent color across screens and printers.</li>
+              <li>Wide Color Gamut (WCG): Extended color spaces for more vibrant, realistic colors.</li>
+              <li>Color Management Systems (CMS): Ensure consistent color reproduction across devices.</li>
+              <li>ICC Profiles: Standardized color profiles for different devices and workflows.</li>
+            </ul>
+            <div class="info-box">
+              <p>Professional color encoding is essential for industries like filmmaking, photography, and graphic design where color accuracy and consistency are critical.</p>
+            </div>
+            <p class="module-text">HDR10 and Dolby Vision are popular HDR encoding standards that provide higher brightness levels and more detailed color information. These technologies are becoming increasingly important in streaming services, gaming, and home theater systems.</p>
+            <p class="module-text">Understanding advanced color encoding principles is crucial for modern multimedia professionals, as it enables them to create content that looks consistent and visually appealing across a wide range of devices and display technologies.</p>
+          </div>
         </section>
       </main>
     </div>
@@ -564,5 +687,78 @@
       <p class="footer-text">© 2026 Colour Lab | EBU6305 Interactive Media Design | Inclusive & Accessible Design</p>
     </div>
   </footer>
+
+  <script>
+    // Font size adjustment functionality
+    // 字体大小调节功能
+    const fontButtons = document.querySelectorAll('.font-btn');
+    let currentFontSize = 16; // Base font size in pixels
+    
+    fontButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        if (this.textContent === 'A-') {
+          if (currentFontSize > 12) {
+            currentFontSize -= 2;
+          }
+        } else if (this.textContent === 'A+') {
+          if (currentFontSize < 24) {
+            currentFontSize += 2;
+          }
+        } else if (this.textContent === 'A') {
+          currentFontSize = 16; // Reset to default
+        }
+        
+        // Apply font size to content elements
+        document.querySelectorAll('.module-text, .module-list li').forEach(element => {
+          element.style.fontSize = currentFontSize + 'px';
+        });
+      });
+    });
+
+    // Expandable modules functionality
+    // 可展开模块功能
+    const moduleHeaders = document.querySelectorAll('.module-header');
+    const expandButtons = document.querySelectorAll('.expand-btn');
+    const moduleContents = document.querySelectorAll('.module-content');
+    const catalogItems = document.querySelectorAll('.catalog a');
+    
+    // Toggle module content when header or expand button is clicked
+    moduleHeaders.forEach((header, index) => {
+      header.addEventListener('click', function() {
+        // Toggle the current module
+        moduleContents[index].classList.toggle('active');
+        expandButtons[index].classList.toggle('active');
+      });
+    });
+    
+    // Make expand buttons toggle content when clicked
+    expandButtons.forEach((button, index) => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        // Toggle the current module
+        moduleContents[index].classList.toggle('active');
+        expandButtons[index].classList.toggle('active');
+      });
+    });
+    
+    // Catalog navigation functionality
+    // 目录导航功能
+    catalogItems.forEach((item, index) => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Update active state in catalog
+        catalogItems.forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Expand the corresponding module
+        moduleContents[index].classList.add('active');
+        expandButtons[index].classList.add('active');
+        
+        // Scroll to the module
+        document.querySelectorAll('.module')[index].scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>

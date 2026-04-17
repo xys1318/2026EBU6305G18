@@ -581,9 +581,15 @@
     };
 
     const baseRank = [
-      { name: "RGB_Pro", score: 2560 }, { name: "Alice", score: 3000 }, { name: "Bob", score: 2800 },
-      { name: "Charlie", score: 2500 }, { name: "David", score: 2200 }, { name: "Eve", score: 2000 },
-      { name: "Frank", score: 1800 }, { name: "Grace", score: 1600 }, { name: "Henry", score: 1400 }
+      { name: "RGB_Pro", score: 2560 },
+      { name: "Alice", score: 3000 },
+      { name: "Bob", score: 2800 },
+      { name: "Charlie", score: 2500 },
+      { name: "David", score: 2200 },
+      { name: "Eve", score: 2000 },
+      { name: "Frank", score: 1800 },
+      { name: "Grace", score: 1600 },
+      { name: "Henry", score: 1400 }
     ];
     function renderRank() {
       const list = [...baseRank, { name: "You", score: userData.points }];
@@ -683,7 +689,9 @@
 
     document.getElementById("historyBtn").onclick = () => {
       let h = "";
-      tips.forEach((t) => { h += `<div>${t}</div>`; });
+      tips.forEach((t) => {
+        h += `<div>${t}</div>`;
+      });
       document.getElementById("historyList").innerHTML = h;
       document.getElementById("historyModal").style.display = "block";
     };

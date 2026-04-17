@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Colour Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --primary-light: #e8f0fe;
+      --text: #1a1a2e;
+      --text-light: #6b7280;
+      --bg-alt: #f8f9fc;
+      --border: #e5e7eb;
+      --shadow: 0 4px 24px rgba(0,0,0,0.06);
+      --radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body { font-family: var(--font); background: var(--bg-alt); color: var(--text); line-height: 1.65; }
+    a { text-decoration: none; color: inherit; }
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 16px 0;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+    .navbar .wrap {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 20px; font-weight: 800; color: var(--text);
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+      position: relative;
+    }
+    .nav-logo-icon::after {
+      content: ''; position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+    }
+    .nav-menu { display: flex; gap: 4px; list-style: none; flex-wrap: wrap; }
+    .nav-menu a {
+      padding: 8px 16px; font-size: 14px; font-weight: 500;
+      color: var(--text-light); border-radius: 50px; transition: var(--transition);
+    }
+    .nav-menu a:hover, .nav-menu a.active { color: var(--primary); background: var(--primary-light); }
+    main { max-width: 720px; margin: 0 auto; padding: 120px 24px 80px; }
+    .card {
+      background: #fff; border-radius: var(--radius); padding: 40px;
+      box-shadow: var(--shadow); border: 1px solid var(--border);
+    }
+    h1 {
+      font-size: 36px; font-weight: 800; margin-bottom: 16px;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    p { color: var(--text-light); margin-bottom: 16px; font-size: 16px; }
+    .back { margin-top: 28px; }
+    .back a {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 600; color: var(--primary); font-size: 15px;
+    }
+    .back a:hover { color: var(--primary-dark); }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="wrap">
+      <a href="homepage.html" class="nav-logo">
+        <span class="nav-logo-icon" aria-hidden="true"></span>
+        Colour Lab
+      </a>
+      <ul class="nav-menu">
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="Learning.html">Theory</a></li>
+        <li><a href="Game.html">Practice</a></li>
+        <li><a href="community page.html">Community</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+    <div class="card">
+      <h1>About Colour Lab</h1>
+      <p>Colour Lab is a small static prototype for learning colour encoding: theory modules, interactive games, a quick knowledge check, and a lightweight community board.</p>
+      <p>This page is a simple hub so the main site navigation always lands somewhere meaningful. Use the menu above to explore Learning, Game, Test, or Community.</p>
+      <p class="back"><a href="homepage.html">← Back to home</a></p>
+    </div>
+  </main>
+</body>
+</html>

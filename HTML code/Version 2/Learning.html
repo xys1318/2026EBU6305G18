@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning | Color Encoding - Colour Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --primary-light: #e8f0fe;
+      --secondary-purple: #764ba2;
+      --secondary-coral: #ff6b6b;
+      --bg-light: #f8f9fc;
+      --bg-dark: #0f0f1a;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.1);
+      --radius-base: 12px;
+      --radius-small: 8px;
+      --radius-pill: 50px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navbar - Frosted Glass */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow-soft);
+      z-index: 1000;
+      padding: 16px 24px;
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .nav-menu a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary-dark);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: var(--text-dark);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      margin-top: 120px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 60px 0;
+      position: relative;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .color-wheel {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(red, orange, yellow, lime, cyan, blue, magenta, red);
+      margin: 0 auto;
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      margin-bottom: 80px;
+    }
+
+    /* Sidebar - Catalog */
+    .sidebar {
+      position: sticky;
+      top: 120px;
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      height: fit-content;
+      transition: var(--transition);
+    }
+
+    .sidebar:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .catalog {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .catalog a {
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: var(--radius-small);
+      transition: var(--transition);
+      display: block;
+    }
+
+    .catalog a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .catalog a.active {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    /* Content Section */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .module {
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      scroll-margin-top: 140px;
+    }
+
+    .module:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .module-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .module-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .module-text {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .module-list {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .module-list li {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .color-card {
+      height: 80px;
+      border-radius: var(--radius-small);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 14px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .info-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: var(--radius-small);
+      margin: 20px 0;
+    }
+
+    .info-box p {
+      font-size: 15px;
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    /* Font Control */
+    .font-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .font-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-pill);
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .font-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-dark);
+      padding: 60px 24px;
+      color: var(--white);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+      }
+      .hero-title {
+        font-size: 44px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .hero-title {
+        font-size: 36px;
+      }
+      .color-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .module {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .color-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 28px;
+      }
+      .module-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">Colour Lab</a>
+      <ul class="nav-menu">
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="Learning.html" class="active">Learning</a></li>
+        <li><a href="Game.html">Game</a></li>
+        <li><a href="color-test page.html">Test</a></li>
+        <li><a href="community page.html">Community</a></li>
+      </ul>
+      <button class="hamburger">☰</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">Home > Learning > Color Encoding</div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="section-label">Comprehensive Learning Module</div>
+      <h1 class="hero-title">Color Encoding</h1>
+      <p class="hero-desc">Master the core principles, mathematical models, and industrial standards of digital color encoding for images, video, and multimedia systems.</p>
+      <div class="color-wheel"></div>
+    </section>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Sidebar Catalog -->
+      <aside class="sidebar">
+        <h3 class="sidebar-title">Learning Catalog</h3>
+        <ul class="catalog">
+          <li><a href="#module1">1. Color Vision Basics</a></li>
+          <li><a href="#module2">2. RGB Additive Encoding</a></li>
+          <li><a href="#module3">3. CMYK Subtractive Encoding</a></li>
+          <li><a href="#module4">4. HSV Perceptual Encoding</a></li>
+          <li><a href="#module5">5. YUV/YCbCr Encoding</a></li>
+          <li><a href="#module6">6. Advanced Encoding</a></li>
+        </ul>
+      </aside>
+
+      <!-- Content -->
+      <main class="content">
+        <!-- Font Control -->
+        <div class="font-controls">
+          <span>Font Size:</span>
+          <button class="font-btn">A-</button>
+          <button class="font-btn">A</button>
+          <button class="font-btn">A+</button>
+        </div>
+
+        <!-- Module 1 -->
+        <section id="module1" class="module">
+          <h2 class="module-title">1. Color Vision & Fundamental Properties</h2>
+          <p class="module-subtitle">The biological and physical basis of digital color encoding</p>
+          <p class="module-text">Color is not an inherent property of objects—it is a perceptual response to visible light wavelengths (400–700 nm) detected by the human eye. The retina contains three types of cone cells sensitive to long (red), medium (green), and short (blue) wavelengths, forming the Tristimulus Theory of Color Vision.</p>
+          <ul class="module-list">
+            <li><strong>Hue</strong>: Dominant wavelength, defines the color name (red, blue, green).</li>
+            <li><strong>Saturation</strong>: Purity of a color; 100% = no white light mixture, 0% = grayscale.</li>
+            <li><strong>Brightness/Value</strong>: Perceived light intensity emitted or reflected by a surface.</li>
+            <li><strong>Metamers</strong>: Different light spectra that produce identical color perception—critical for encoding.</li>
+          </ul>
+          <div class="info-box">
+            <p>Color encoding translates human perception into numerical values that computers, screens, and printers can interpret and reproduce accurately.</p>
+          </div>
+        </section>
+
+        <!-- Module 2 -->
+        <section id="module2" class="module">
+          <h2 class="module-title">2. RGB Additive Color Encoding</h2>
+          <p class="module-subtitle">The universal standard for digital displays and screens</p>
+          <p class="module-text">RGB is an additive model where Red, Green, and Blue light are combined to create all colors. It is the foundation of all digital display systems (monitors, phones, TVs).</p>
+          <ul class="module-list">
+            <li>Encoding format: (R, G, B) with 0–255 per channel (8-bit per channel, 24-bit total color depth).</li>
+            <li>(0, 0, 0) = Black; (255, 255, 255) = White; (255, 0, 0) = Pure Red.</li>
+            <li>Color depth: 8-bit = 16.7 million colors; 10-bit = 1.07 billion colors for professional use.</li>
+            <li>Grayscale conversion: L = 0.299R + 0.587G + 0.114B (standard luminance formula).</li>
+          </ul>
+          <div class="color-grid">
+            <div class="color-card" style="background: rgb(255,0,0);">RGB(255,0,0)</div>
+            <div class="color-card" style="background: rgb(0,255,0);">RGB(0,255,0)</div>
+            <div class="color-card" style="background: rgb(0,0,255);">RGB(0,0,255)</div>
+            <div class="color-card" style="background: rgb(255,255,255); color:#000;">RGB(255,255,255)</div>
+          </div>
+        </section>
+
+        <!-- Module 3 -->
+        <section id="module3" class="module">
+          <h2 class="module-title">3. CMYK Subtractive Color Encoding</h2>
+          <p class="module-subtitle">Industrial standard for printing and physical media</p>
+          <p class="module-text">CMYK is a subtractive model used for printing, where inks absorb light instead of emitting it. Cyan, Magenta, and Yellow are the primary subtractive colors, and Black (Key/K) is added to produce true black.</p>
+          <ul class="module-list">
+            <li>Encoding logic: C = 1 - R, M = 1 - G, Y = 1 - B (in normalized values).</li>
+            <li>K channel: Eliminates muddy dark grays and saves ink in printing systems.</li>
+            <li>Used for: Books, posters, packaging, and all physical printed color media.</li>
+            <li>RGB→CMYK conversion requires gamut mapping for accurate color reproduction.</li>
+          </ul>
+          <div class="info-box">
+            <p>CMYK has a smaller color gamut than RGB—some bright digital colors cannot be printed accurately.</p>
+          </div>
+        </section>
+
+        <!-- Module 4 -->
+        <section id="module4" class="module">
+          <h2 class="module-title">4. HSV Perceptual Color Encoding</h2>
+          <p class="module-subtitle">Human-centered encoding for design and editing</p>
+          <p class="module-text">HSV (Hue, Saturation, Value) is a perceptual model that matches how humans naturally select and adjust colors, widely used in design software (Photoshop, Figma).</p>
+          <ul class="module-list">
+            <li>Hue: 0°–360° on a color wheel (0°=red, 120°=green, 240°=blue).</li>
+            <li>Saturation: 0%–100% (color purity, 0% = grayscale).</li>
+            <li>Value: 0%–100% (brightness, 0% = black).</li>
+            <li>Intuitive for artists: Adjust hue for color, saturation for vibrancy, value for lightness.</li>
+          </ul>
+        </section>
+
+        <!-- Module 5 -->
+        <section id="module5" class="module">
+          <h2 class="module-title">5. YUV/YCbCr Encoding</h2>
+          <p class="module-subtitle">Efficient encoding for image & video compression</p>
+          <p class="module-text">YUV/YCbCr separates luminance (brightness) and chrominance (color) to enable efficient multimedia compression. Human eyes are far more sensitive to brightness than color, allowing chrominance data to be reduced.</p>
+          <ul class="module-list">
+            <li>Y: Luminance (brightness signal, full resolution).</li>
+            <li>U/Cb, V/Cr: Chrominance (color difference signals, reduced resolution).</li>
+            <li>YCbCr is the digital version used in JPEG, PNG, MPEG, and all video compression standards.</li>
+            <li>RGB→YCbCr conversion uses standardized matrix formulas for digital media.</li>
+          </ul>
+          <div class="info-box">
+            <p>YCbCr encoding is the reason image/video compression can reduce file size with minimal visible quality loss.</p>
+          </div>
+        </section>
+
+        <!-- Module 6 -->
+        <section id="module6" class="module">
+          <h2 class="module-title">6. Advanced Color Encoding</h2>
+          <p class="module-subtitle">Professional gamuts, high dynamic range & industry standards</p>
+          <p class="module-text">Modern systems use extended color encoding for professional workflows, high dynamic range (HDR), and cross-device consistency.</p>
+          <ul class="module-list">
+            <li>CIE XYZ/CIELAB: Device-independent encoding for professional color management.</li>
+            <li>HDR Encoding: Rec. 2020 gamut & 10–12 bit depth for high-brightness displays.</li>
+            <li>Color Gamut: The range of colors a device can reproduce (sRGB, Adobe RGB, DCI-P3).</li>
+            <li>Metadata: Embedded encoding data to ensure consistent color across screens and printers.</li>
+          </ul>
+          <p class="module-text">Understanding advanced encoding is essential for multimedia production, UI/UX design, and professional media workflows.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="logo" style="color:var(--white);">Colour Lab</div>
+      <p class="footer-text">© 2026 Colour Lab | EBU6305 Interactive Media Design | Inclusive & Accessible Design</p>
+    </div>
+  </footer>
+</body>
+</html>

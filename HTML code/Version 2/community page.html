@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community | Colour Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --primary-light: #e8f0fe;
+      --secondary-purple: #764ba2;
+      --secondary-coral: #ff6b6b;
+      --bg-light: #f8f9fc;
+      --bg-dark: #0f0f1a;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.1);
+      --radius-base: 12px;
+      --radius-small: 8px;
+      --radius-pill: 50px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow-soft);
+      z-index: 1000;
+      padding: 16px 24px;
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .nav-menu a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary-dark);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .breadcrumb {
+      margin-top: 120px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .hero {
+      padding: 40px 0 48px;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .community-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 32px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+      min-height: 320px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-dark);
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #avatar,
+    #tipAvatar {
+      border-radius: 50%;
+      margin-bottom: 16px;
+      width: 112px;
+      height: 112px;
+      object-fit: cover;
+      border: 3px solid var(--primary-light);
+      box-shadow: var(--shadow-soft);
+    }
+
+    #tipAvatar {
+      width: 88px;
+      height: 88px;
+    }
+
+    .profile p,
+    .tip #tipText {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin: 10px 0;
+    }
+
+    .profile #username {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    button {
+      font-family: inherit;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 11px 20px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: var(--transition);
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    #rankList div {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    #rankList div:last-child {
+      border-bottom: none;
+    }
+
+    #workGallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .work-item {
+      background: var(--bg-light);
+      padding: 12px;
+      border-radius: var(--radius-small);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .work-item:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .work-item img {
+      border-radius: var(--radius-small);
+    }
+
+    .tip p {
+      font-size: 16px;
+      line-height: 1.65;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+
+    .back-wrap {
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    a.homeBtn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    a.homeBtn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(15, 15, 26, 0.45);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: var(--white);
+      margin: 8vh auto;
+      padding: 28px 32px;
+      border-radius: var(--radius-base);
+      width: 90%;
+      max-width: 500px;
+      position: relative;
+      color: var(--text-dark);
+      box-shadow: var(--shadow-hover);
+      border: 1px solid var(--border);
+    }
+
+    .work-modal-content {
+      max-width: 900px;
+    }
+
+    .favorites-modal-content,
+    .history-modal-content {
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-content h3 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      padding-right: 36px;
+    }
+
+    .close-btn {
+      color: var(--text-light);
+      float: right;
+      font-size: 26px;
+      font-weight: 300;
+      line-height: 1;
+      cursor: pointer;
+      margin: -4px -8px 0 0;
+    }
+
+    .close-btn:hover {
+      color: var(--text-dark);
+    }
+
+    .modal-content label {
+      display: block;
+      margin: 14px 0 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--radius-small);
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text-dark);
+      font-size: 15px;
+      font-family: inherit;
+    }
+
+    .modal-content input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+
+    #favoritesList div,
+    #historyList div {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    #favoritesList div:last-child,
+    #historyList div:last-child {
+      border-bottom: none;
+    }
+
+    .delete-tip-btn {
+      background: var(--secondary-coral) !important;
+      margin-top: 10px;
+    }
+
+    .delete-tip-btn:hover {
+      background: #e85555 !important;
+    }
+
+    #clearFavoritesBtn {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .community-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .hero-title {
+        font-size: 32px;
+      }
+
+      #workGallery {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">Colour Lab</a>
+      <ul class="nav-menu">
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="Learning.html">Learning</a></li>
+        <li><a href="Game.html">Game</a></li>
+        <li><a href="color-test page.html">Test</a></li>
+        <li><a href="community page.html" class="active">Community</a></li>
+      </ul>
+      <button type="button" class="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="breadcrumb">Home &gt; Community</div>
+
+    <section class="hero">
+      <div class="section-label">Connect &amp; share</div>
+      <h1 class="hero-title">Community</h1>
+      <p class="hero-desc">Profile, leaderboard, featured colour work, and daily tips—same look and feel as the rest of Colour Lab.</p>
+    </section>
+
+    <div class="community-grid">
+      <div class="card profile">
+        <h2>My Profile</h2>
+        <img id="avatar" src="https://picsum.photos/seed/avatar/120/120" alt="Avatar">
+        <p id="username">Color Learner</p>
+        <p>Level: <span id="level">3</span></p>
+        <p>Points: <span id="points">1280</span></p>
+        <button type="button" id="editBtn">Edit Profile</button>
+        <button type="button" id="favoritesBtn">My Saved Tips</button>
+      </div>
+
+      <div class="card rank">
+        <h2>Global Leaderboard</h2>
+        <div id="rankList"></div>
+      </div>
+
+      <div class="card works">
+        <h2>Excellent Works</h2>
+        <div id="workGallery"></div>
+      </div>
+
+      <div class="card tip">
+        <h2>Daily Color Tips</h2>
+        <img id="tipAvatar" src="https://picsum.photos/seed/tip/80/80" alt="Tip">
+        <p id="tipText">Loading...</p>
+        <button type="button" id="saveTipBtn">Save This Tip</button>
+        <button type="button" id="historyBtn">View Past Tips</button>
+      </div>
+    </div>
+
+    <div class="back-wrap">
+      <a href="homepage.html" class="homeBtn">Back to Home</a>
+    </div>
+  </div>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" role="button" tabindex="0">&times;</span>
+      <h3>Edit Profile</h3>
+      <label for="newUsername">Username</label>
+      <input type="text" id="newUsername" autocomplete="username">
+      <div id="levelInputGroup"><label for="newLevel">Level</label><input type="number" id="newLevel"></div>
+      <div id="pointsInputGroup"><label for="newPoints">Points</label><input type="number" id="newPoints"></div>
+      <button type="button" id="saveEditBtn">Save Changes</button>
+    </div>
+  </div>
+
+  <div id="workModal" class="modal">
+    <div class="modal-content work-modal-content">
+      <span class="close-btn" role="button" tabindex="0">&times;</span>
+      <h3 id="workModalTitle"></h3>
+      <img id="workModalImg" alt="" style="width:100%;border-radius:8px;margin:15px 0">
+      <p id="workModalDesc" style="color:var(--text-muted);font-size:15px;"></p>
+    </div>
+  </div>
+
+  <div id="favoritesModal" class="modal">
+    <div class="modal-content favorites-modal-content">
+      <span class="close-btn" role="button" tabindex="0">&times;</span>
+      <h3>My Saved Tips</h3>
+      <div id="favoritesList"></div>
+      <button type="button" id="clearFavoritesBtn">Clear All</button>
+    </div>
+  </div>
+
+  <div id="historyModal" class="modal">
+    <div class="modal-content history-modal-content">
+      <span class="close-btn" role="button" tabindex="0">&times;</span>
+      <h3>All Tips</h3>
+      <div id="historyList"></div>
+    </div>
+  </div>
+
+  <script>
+    function safeJsonParse(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const v = JSON.parse(raw);
+        return v && typeof v === "object" ? v : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    const defaultUser = { username: "Color Learner", level: 3, points: 1280 };
+    let userData = safeJsonParse("colorMasterUser", defaultUser);
+    if (typeof userData.username !== "string") userData.username = defaultUser.username;
+    if (typeof userData.level !== "number") userData.level = defaultUser.level;
+    if (typeof userData.points !== "number") userData.points = defaultUser.points;
+
+    function initProfile() {
+      document.getElementById("username").textContent = userData.username;
+      document.getElementById("level").textContent = userData.level;
+      document.getElementById("points").textContent = userData.points;
+    }
+    initProfile();
+
+    const editModal = document.getElementById("editModal");
+    document.getElementById("editBtn").onclick = () => {
+      document.getElementById("newUsername").value = userData.username;
+      document.getElementById("levelInputGroup").style.display = "none";
+      document.getElementById("pointsInputGroup").style.display = "none";
+      editModal.style.display = "block";
+    };
+    document.querySelector("#editModal .close-btn").onclick = () => { editModal.style.display = "none"; };
+    document.getElementById("saveEditBtn").onclick = () => {
+      const u = document.getElementById("newUsername").value.trim();
+      if (u) {
+        userData.username = u;
+        localStorage.setItem("colorMasterUser", JSON.stringify(userData));
+        initProfile();
+        editModal.style.display = "none";
+        alert("Updated!");
+      }
+    };
+
+    const baseRank = [
+      { name: "RGB_Pro", score: 2560 }, { name: "Alice", score: 3000 }, { name: "Bob", score: 2800 },
+      { name: "Charlie", score: 2500 }, { name: "David", score: 2200 }, { name: "Eve", score: 2000 },
+      { name: "Frank", score: 1800 }, { name: "Grace", score: 1600 }, { name: "Henry", score: 1400 }
+    ];
+    function renderRank() {
+      const list = [...baseRank, { name: "You", score: userData.points }];
+      list.sort((a, b) => b.score - a.score);
+      let html = "";
+      list.forEach((it, i) => {
+        const you = it.name === "You" ? "color:#1a73e8;font-weight:700" : "";
+        html += `<div style="${you}">${i + 1}. ${it.name} — ${it.score} pts</div>`;
+      });
+      document.getElementById("rankList").innerHTML = html;
+    }
+    renderRank();
+
+    const works = [
+      { name: "Gradient Poster", img: "https://picsum.photos/seed/gradient/800/600", desc: "Color design." },
+      { name: "Color Palette", img: "https://picsum.photos/seed/palette/800/600", desc: "Pro palette." },
+      { name: "RGB Test Chart", img: "https://picsum.photos/seed/rgb/800/600", desc: "Screen test." },
+      { name: "sRGB Illustration", img: "https://picsum.photos/seed/srgb/800/600", desc: "Web standard." }
+    ];
+    function renderWorks() {
+      const g = document.getElementById("workGallery");
+      let h = "";
+      works.forEach((w, i) => {
+        h += `<div class="work-item" data-i="${i}"><img src="${w.img}" alt="" style="width:100%;margin-bottom:8px"><p>${w.name}</p></div>`;
+      });
+      g.innerHTML = h;
+      document.querySelectorAll(".work-item").forEach((el) => {
+        el.onclick = () => {
+          const w = works[el.dataset.i];
+          document.getElementById("workModalImg").src = w.img;
+          document.getElementById("workModalTitle").textContent = w.name;
+          document.getElementById("workModalDesc").textContent = w.desc;
+          document.getElementById("workModal").style.display = "block";
+        };
+      });
+    }
+    renderWorks();
+    document.querySelector("#workModal .close-btn").onclick = () => { document.getElementById("workModal").style.display = "none"; };
+
+    const tips = [
+      "sRGB is the standard for web screens.",
+      "CMYK is used for printing, not screens.",
+      "High contrast improves readability.",
+      "Wide Gamut shows more vibrant colors.",
+      "Color temperature changes image perception."
+    ];
+    function showTip() {
+      const d = new Date().getDate();
+      document.getElementById("tipText").textContent = tips[d % tips.length];
+    }
+    showTip();
+
+    document.getElementById("saveTipBtn").onclick = () => {
+      const t = document.getElementById("tipText").textContent;
+      let s = safeJsonParse("savedColorTips", []);
+      if (!Array.isArray(s)) s = [];
+      if (!s.includes(t)) {
+        s.push(t);
+        localStorage.setItem("savedColorTips", JSON.stringify(s));
+        alert("Saved!");
+      } else alert("Already saved!");
+    };
+
+    const favModal = document.getElementById("favoritesModal");
+    document.getElementById("favoritesBtn").onclick = () => {
+      let s = safeJsonParse("savedColorTips", []);
+      if (!Array.isArray(s)) s = [];
+      const l = document.getElementById("favoritesList");
+      if (s.length === 0) {
+        l.innerHTML = "<p>No saved tips yet!</p>";
+        favModal.style.display = "block";
+        return;
+      }
+      let h = "";
+      s.forEach((t, i) => {
+        h += `<div><p>${t}</p><button type="button" class="delete-tip-btn" data-i="${i}">Delete</button></div>`;
+      });
+      l.innerHTML = h;
+      document.querySelectorAll(".delete-tip-btn").forEach((b) => {
+        b.onclick = () => {
+          let arr = safeJsonParse("savedColorTips", []);
+          if (!Array.isArray(arr)) arr = [];
+          arr.splice(Number(b.dataset.i), 1);
+          localStorage.setItem("savedColorTips", JSON.stringify(arr));
+          document.getElementById("favoritesBtn").onclick();
+        };
+      });
+      favModal.style.display = "block";
+    };
+    document.querySelector("#favoritesModal .close-btn").onclick = () => { favModal.style.display = "none"; };
+    document.getElementById("clearFavoritesBtn").onclick = () => {
+      if (confirm("Clear all?")) {
+        localStorage.removeItem("savedColorTips");
+        document.getElementById("favoritesBtn").onclick();
+      }
+    };
+
+    document.getElementById("historyBtn").onclick = () => {
+      let h = "";
+      tips.forEach((t) => { h += `<div>${t}</div>`; });
+      document.getElementById("historyList").innerHTML = h;
+      document.getElementById("historyModal").style.display = "block";
+    };
+    document.querySelector("#historyModal .close-btn").onclick = () => { document.getElementById("historyModal").style.display = "none"; };
+
+    window.updateUserPoints = (p) => {
+      userData.points = p;
+      userData.level = Math.floor(p / 1000) + 1;
+      localStorage.setItem("colorMasterUser", JSON.stringify(userData));
+      initProfile();
+      renderRank();
+    };
+
+    document.querySelectorAll(".modal").forEach((m) => {
+      m.addEventListener("click", (e) => {
+        if (e.target === m) m.style.display = "none";
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game | Interactive Demo - Colour Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --primary-light: #e8f0fe;
+      --secondary-purple: #764ba2;
+      --secondary-coral: #ff6b6b;
+      --bg-light: #f8f9fc;
+      --bg-dark: #0f0f1a;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.1);
+      --radius-base: 12px;
+      --radius-small: 8px;
+      --radius-pill: 50px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --success: #10b981;
+      --warn: #f59e0b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow-soft);
+      z-index: 1000;
+      padding: 16px 24px;
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-decoration: none; }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .nav-menu a.active { color: var(--primary); font-weight: 600; }
+    .nav-menu a:hover { color: var(--primary-dark); }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: var(--text-dark);
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .breadcrumb {
+      margin-top: 120px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .hero {
+      padding: 48px 0 40px;
+      position: relative;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    .step-hint {
+      max-width: 720px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--primary-light), #fff);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-base);
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: var(--shadow-soft);
+      text-align: left;
+    }
+
+    .step-hint .hint-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-small);
+      background: var(--primary);
+      color: var(--white);
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-hint p { font-size: 15px; color: var(--primary-dark); font-weight: 500; }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      margin-bottom: 80px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 120px;
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      height: fit-content;
+      transition: var(--transition);
+    }
+
+    .sidebar:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .catalog { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+    .catalog a {
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: var(--radius-small);
+      transition: var(--transition);
+      display: block;
+    }
+
+    .catalog a:hover { background: var(--primary-light); color: var(--primary); }
+    .catalog a.active { background: var(--primary); color: var(--white); }
+
+    .content { display: flex; flex-direction: column; gap: 40px; }
+
+    .module {
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      scroll-margin-top: 140px;
+    }
+
+    .module:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .module-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .module-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      font-style: italic;
+    }
+
+    .game-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .toggle-sound {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-muted);
+      user-select: none;
+    }
+
+    .toggle-sound input { width: 16px; height: 16px; accent-color: var(--primary); }
+
+    .btn {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    .btn-ghost:hover { background: #dbeafe; }
+    .btn:focus-visible,
+    .gamut-card:focus-visible,
+    .hex-choice:focus-visible,
+    .catalog a:focus-visible,
+    summary:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .info-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 14px 18px;
+      border-radius: var(--radius-small);
+      margin: 16px 0;
+    }
+
+    .info-box p { font-size: 14px; color: var(--primary-dark); font-weight: 500; }
+
+    .rgb-stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .rgb-stage { grid-template-columns: 1fr; }
+    }
+
+    .swatch-panel {
+      border-radius: var(--radius-base);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      min-height: 160px;
+      position: relative;
+    }
+
+    .swatch-panel .label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.92);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .slider-row { margin: 14px 0; }
+
+    .slider-row label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+    }
+
+    .match-meter {
+      margin-top: 12px;
+      height: 10px;
+      border-radius: 6px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .match-meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--secondary-coral), var(--success));
+      transition: width 0.15s ease-out;
+    }
+
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-light);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .rgb-history {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-small);
+      background: var(--bg-light);
+      overflow: hidden;
+    }
+
+    .rgb-history summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      user-select: none;
+    }
+
+    .rgb-history-content {
+      border-top: 1px solid var(--border);
+      padding: 10px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rgb-round-note {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .rgb-history-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-dark);
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .rgb-history-list li {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-small);
+      padding: 8px 10px;
+    }
+
+    .gamut-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .gamut-grid { grid-template-columns: 1fr; }
+    }
+
+    .gamut-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-base);
+      padding: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      background: var(--bg-light);
+    }
+
+    .gamut-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .gamut-card.selected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+    .gamut-card.correct { border-color: var(--success); }
+    .gamut-card.wrong { border-color: var(--secondary-coral); }
+
+    .gamut-swatch {
+      height: 72px;
+      border-radius: var(--radius-small);
+      margin-bottom: 10px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+    }
+
+    .hex-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .hex-code {
+      font-family: ui-monospace, monospace;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-dark);
+    }
+
+    .timer-ring {
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--primary);
+      min-width: 52px;
+      text-align: center;
+    }
+
+    .timer-ring.warn { color: var(--warn); }
+    .timer-ring.danger { color: var(--secondary-coral); }
+
+    .hex-choices {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .hex-choices { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .hex-choice {
+      aspect-ratio: 1;
+      border-radius: var(--radius-base);
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hex-choice:hover { transform: scale(1.03); border-color: var(--primary-light); }
+    .hex-choice.flash-ok { animation: flashOk 0.45s ease; }
+    .hex-choice.flash-bad { animation: flashBad 0.45s ease; }
+
+    @keyframes flashOk {
+      0%, 100% { box-shadow: var(--shadow-soft); }
+      40% { box-shadow: 0 0 0 4px var(--success), 0 8px 24px rgba(16,185,129,0.35); }
+    }
+
+    @keyframes flashBad {
+      0%, 100% { box-shadow: var(--shadow-soft); }
+      40% { box-shadow: 0 0 0 4px var(--secondary-coral), 0 8px 24px rgba(255,107,107,0.35); }
+    }
+
+    footer {
+      background: var(--bg-dark);
+      padding: 60px 24px;
+      color: var(--white);
+    }
+
+    .footer-container { max-width: 1200px; margin: 0 auto; text-align: center; }
+    .footer-text { font-size: 14px; color: var(--text-light); margin-top: 16px; }
+
+    @media (max-width: 1024px) {
+      .main-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .hero-title { font-size: 40px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu { display: none; }
+      .hamburger { display: block; }
+      .hero-title { font-size: 32px; }
+      .module { padding: 24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @supports (color: color(display-p3 1 1 1)) {
+      .p3-note { display: inline; }
+    }
+
+    .p3-note { display: none; font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">Colour Lab</a>
+      <ul class="nav-menu">
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="Learning.html">Learning</a></li>
+        <li><a href="Game.html" class="active">Game</a></li>
+        <li><a href="color-test page.html">Test</a></li>
+        <li><a href="community page.html">Community</a></li>
+      </ul>
+      <button type="button" class="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="breadcrumb">Home &gt; Game &gt; Interactive Demo</div>
+
+    <section class="hero">
+      <div class="section-label">Interactive Lab</div>
+      <h1 class="hero-title">Play &amp; Learn</h1>
+      <p class="hero-desc">Three mini-games for RGB mixing, color gamut ideas, and hex codes—with live feedback, optional sound, and step-by-step hints.</p>
+      <div class="step-hint" id="globalHint" role="status" aria-live="polite">
+        <div class="hint-icon" id="hintStepNum">1</div>
+        <p id="hintText">Pick a game from the sidebar, or scroll down to start with RGB Color Master.</p>
+      </div>
+    </section>
+
+    <div class="main-layout">
+      <aside class="sidebar">
+        <h3 class="sidebar-title">Games</h3>
+        <ul class="catalog">
+          <li><a href="#game-rgb" class="active" data-hint-nav="rgb">1. RGB Color Master</a></li>
+          <li><a href="#game-gamut" data-hint-nav="gamut">2. Gamut Quest</a></li>
+          <li><a href="#game-hex" data-hint-nav="hex">3. Hex Sprint</a></li>
+        </ul>
+      </aside>
+
+      <main class="content">
+        <section id="game-rgb" class="module">
+          <h2 class="module-title">Game 1: RGB Color Master</h2>
+          <p class="module-subtitle">Drag the sliders to mix RGB and match the target swatch on the right</p>
+          <div class="game-toolbar">
+            <label class="toggle-sound"><input type="checkbox" id="muteAll" checked> Mute (disable all sounds)</label>
+            <span class="score-pill">Score: <span id="rgbScore" aria-live="polite">0</span></span>
+            <span class="score-pill">Round: <span id="rgbRound">1</span></span>
+            <span class="score-pill">Progress: <span id="rgbRoundProgress">0/5</span></span>
+            <button type="button" class="btn btn-ghost" id="rgbNewTarget">New target</button>
+            <button type="button" class="btn btn-primary" id="rgbCheck">Check match</button>
+          </div>
+          <div class="info-box" id="rgbFeedback">
+            <p>Tip: watch the match bar and swatches—the closer you get, the higher your score when you check.</p>
+          </div>
+          <details class="rgb-history" id="rgbHistoryWrap">
+            <summary>View history</summary>
+            <div class="rgb-history-content">
+              <p class="rgb-round-note" id="rgbRoundSummary">Every 5 checks count as one round. No completed rounds yet.</p>
+              <ul class="rgb-history-list" id="rgbHistoryList">
+                <li id="rgbHistoryEmpty">No records yet. Complete your first check to start tracking.</li>
+              </ul>
+            </div>
+          </details>
+          <div class="rgb-stage">
+            <div>
+              <div class="swatch-panel" id="userSwatch" style="background: rgb(128,128,128);">
+                <div class="label">Your color · <span id="userHex">#808080</span></div>
+              </div>
+              <div class="slider-row">
+                <label><span>Red R</span><span id="rv">128</span></label>
+                <input type="range" id="r" min="0" max="255" value="128">
+              </div>
+              <div class="slider-row">
+                <label><span>Green G</span><span id="gv">128</span></label>
+                <input type="range" id="g" min="0" max="255" value="128">
+              </div>
+              <div class="slider-row">
+                <label><span>Blue B</span><span id="bv">128</span></label>
+                <input type="range" id="b" min="0" max="255" value="128">
+              </div>
+              <div class="match-meter" title="Match"><span id="matchBar"></span></div>
+              <p style="margin-top:8px;font-size:13px;color:var(--text-muted);">Match: <strong id="matchPct">0</strong>%</p>
+            </div>
+            <div>
+              <div class="swatch-panel" id="targetSwatch" style="background: rgb(0,0,0);">
+                <div class="label">Target · <span id="targetHex">#000000</span></div>
+              </div>
+              <p style="margin-top:16px;font-size:15px;color:var(--text-muted);">Target RGB: <strong id="targetRgb">0, 0, 0</strong></p>
+            </div>
+          </div>
+        </section>
+
+        <section id="game-gamut" class="module">
+          <h2 class="module-title">Game 2: Gamut Quest</h2>
+          <p class="module-subtitle">Tell sRGB apart from wide gamut (Display P3 demo) and spot the “out of gamut” swatch</p>
+          <div class="game-toolbar">
+            <span class="score-pill">Streak: <span id="gamutStreak" aria-live="polite">0</span></span>
+            <button type="button" class="btn btn-ghost" id="gamutNext">Next question</button>
+          </div>
+          <div class="info-box" id="gamutExplain">
+            <p>On a Display P3-capable screen, wide-gamut swatches can look more vivid; on plain sRGB they may look similar—use the question text to reason about gamut triangles.</p>
+          </div>
+          <p style="font-size:15px;color:var(--text-dark);margin-bottom:10px;font-weight:600;" id="gamutQuestion"></p>
+          <div class="gamut-grid" id="gamutChoices"></div>
+        </section>
+
+        <section id="game-hex" class="module">
+          <h2 class="module-title">Game 3: Hex Sprint</h2>
+          <p class="module-subtitle">Read the hex code, pick the swatch—timed rounds with combo bonuses</p>
+          <div class="game-toolbar">
+            <span class="score-pill">Score: <span id="hexScore" aria-live="polite">0</span></span>
+            <span class="score-pill">Combo: <span id="hexCombo" aria-live="polite">0</span></span>
+            <button type="button" class="btn btn-primary" id="hexStart">Start</button>
+            <button type="button" class="btn btn-ghost" id="hexPause" disabled>Pause</button>
+          </div>
+          <div class="hex-bar">
+            <div class="hex-code" id="hexPrompt">#------</div>
+            <div class="timer-ring" id="hexTimer" role="status" aria-live="polite">10.0</div>
+          </div>
+          <div class="info-box">
+            <p id="hexHint">Step: tap Start, then pick the swatch that matches the hex before the timer hits zero.</p>
+          </div>
+          <div class="hex-choices" id="hexChoices"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="logo" style="color:var(--white);">Colour Lab</div>
+      <p class="footer-text">© 2026 Colour Lab | Interactive demo · Sound via Web Audio (works best after a user gesture)</p>
+    </div>
+  </footer>
+
+  <script>
+(function () {
+  const maxRgbDist = Math.sqrt(255 * 255 * 3);
+  const STORAGE_KEY = 'colourLabGameV1State';
+
+  const state = {
+    muted: true,
+    audioCtx: null,
+    lastSliderBeep: 0
+  };
+
+  function loadPersistedState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function savePersistedState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        muted: state.muted,
+        rgbScore: rgbScore,
+        rgbAttempts: rgbAttempts,
+        rgbRoundIndex: rgbRoundIndex,
+        rgbRoundScores: rgbRoundScores,
+        rgbRoundMatchSum: rgbRoundMatchSum,
+        rgbHistory: rgbHistory,
+        rgbRoundsCompleted: rgbRoundsCompleted,
+        gamutStreak: gamutStreak,
+        hexScore: hexScore,
+        hexCombo: hexCombo
+      }));
+    } catch (e) {}
+  }
+
+  function ensureAudio() {
+    if (!state.audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) state.audioCtx = new AC();
+    }
+    return state.audioCtx;
+  }
+
+  function playTone(freq, duration, type, gainVal) {
+    if (state.muted) return;
+    const ctx = ensureAudio();
+    if (!ctx || ctx.state === 'closed') return;
+    if (ctx.state === 'suspended') ctx.resume().catch(function () {});
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    const g = gainVal == null ? 0.12 : gainVal;
+    gain.gain.setValueAtTime(g, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration + 0.02);
+  }
+
+  function beepOk() {
+    playTone(880, 0.08, 'sine', 0.1);
+    setTimeout(function () { playTone(1174, 0.12, 'sine', 0.08); }, 60);
+  }
+
+  function beepBad() {
+    playTone(220, 0.18, 'triangle', 0.14);
+  }
+
+  function beepTick() {
+    playTone(660, 0.04, 'square', 0.06);
+  }
+
+  function beepSlider() {
+    const now = performance.now();
+    if (now - state.lastSliderBeep < 45) return;
+    state.lastSliderBeep = now;
+    playTone(520 + Math.random() * 40, 0.03, 'sine', 0.04);
+  }
+
+  const muteEl = document.getElementById('muteAll');
+  var persisted = loadPersistedState();
+  if (persisted && typeof persisted.muted === 'boolean') {
+    state.muted = persisted.muted;
+    muteEl.checked = state.muted;
+  }
+  muteEl.addEventListener('change', function () {
+    state.muted = muteEl.checked;
+    if (!state.muted) ensureAudio();
+    savePersistedState();
+  });
+  state.muted = muteEl.checked;
+
+  const hintText = document.getElementById('hintText');
+  const hintStepNum = document.getElementById('hintStepNum');
+
+  function setGlobalHint(step, text) {
+    hintStepNum.textContent = String(step);
+    hintText.textContent = text;
+  }
+
+  document.querySelectorAll('.catalog a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      document.querySelectorAll('.catalog a').forEach(function (x) { x.classList.remove('active'); });
+      a.classList.add('active');
+      var key = a.getAttribute('data-hint-nav');
+      if (key === 'rgb') setGlobalHint(1, 'RGB: drag the three sliders to see how your color changes, then compare with the target and match %.');
+      if (key === 'gamut') setGlobalHint(2, 'Gamut: read the prompt and pick the swatch or line that fits “wide gamut” / “out of gamut”.');
+      if (key === 'hex') setGlobalHint(3, 'Hex: tap Start, then quickly match the code to the correct color tile.');
+    });
+  });
+
+  /* ---------- Game 1 RGB ---------- */
+  var target = { r: 100, g: 140, b: 200 };
+  var rgbScore = 0;
+  var rgbAttempts = 0;
+  var rgbRoundIndex = 1;
+  var rgbRoundScores = [];
+  var rgbRoundMatchSum = 0;
+  var rgbHistory = [];
+  var rgbRoundsCompleted = [];
+
+  if (persisted) {
+    rgbScore = Number.isFinite(persisted.rgbScore) ? persisted.rgbScore : rgbScore;
+    rgbAttempts = Number.isFinite(persisted.rgbAttempts) ? persisted.rgbAttempts : rgbAttempts;
+    rgbRoundIndex = Number.isFinite(persisted.rgbRoundIndex) ? persisted.rgbRoundIndex : rgbRoundIndex;
+    rgbRoundScores = Array.isArray(persisted.rgbRoundScores) ? persisted.rgbRoundScores : rgbRoundScores;
+    rgbRoundMatchSum = Number.isFinite(persisted.rgbRoundMatchSum) ? persisted.rgbRoundMatchSum : rgbRoundMatchSum;
+    rgbHistory = Array.isArray(persisted.rgbHistory) ? persisted.rgbHistory.slice(0, 20) : rgbHistory;
+    rgbRoundsCompleted = Array.isArray(persisted.rgbRoundsCompleted) ? persisted.rgbRoundsCompleted : rgbRoundsCompleted;
+  }
+
+  function calcRgbScoreDelta(pct) {
+    if (pct >= 95) return 20;
+    if (pct >= 90) return 15;
+    if (pct >= 80) return 10;
+    if (pct >= 70) return 6;
+    if (pct >= 60) return 2;
+    if (pct >= 45) return -4;
+    return -8;
+  }
+
+  function renderRgbHistory() {
+    var host = document.getElementById('rgbHistoryList');
+    host.innerHTML = '';
+    rgbHistory.forEach(function (item) {
+      var li = document.createElement('li');
+      var sign = item.delta > 0 ? '+' : '';
+      li.textContent =
+        'R' + item.round + ' · #' + item.indexInRound +
+        ' · Match ' + item.pct + '% · ' + sign + item.delta +
+        ' pts · Total ' + item.total +
+        ' · Target ' + item.targetHex + ' · Yours ' + item.userHex;
+      host.appendChild(li);
+    });
+  }
+
+  function pushRgbHistory(entry) {
+    rgbHistory.unshift(entry);
+    if (rgbHistory.length > 20) rgbHistory.pop();
+    renderRgbHistory();
+    savePersistedState();
+  }
+
+  function updateRgbRoundUi() {
+    document.getElementById('rgbScore').textContent = String(rgbScore);
+    document.getElementById('rgbRound').textContent = String(rgbRoundIndex);
+    document.getElementById('rgbRoundProgress').textContent = String((rgbAttempts % 5) || 0) + '/5';
+  }
+
+  function updateRgbRoundSummaryText() {
+    var el = document.getElementById('rgbRoundSummary');
+    if (!rgbRoundsCompleted.length) {
+      el.textContent = 'Every 5 checks count as one round. No completed rounds yet.';
+      return;
+    }
+    var last = rgbRoundsCompleted[rgbRoundsCompleted.length - 1];
+    var avgTxt = last.avgMatch.toFixed(1);
+    el.textContent =
+      'Last round R' + last.round +
+      ': total ' + last.roundScore + ' pts, average match ' + avgTxt +
+      '%. Completed rounds: ' + rgbRoundsCompleted.length + '.';
+  }
+
+  function randByte() {
+    return Math.floor(Math.random() * 256);
+  }
+
+  function toHex(n) {
+    return ('0' + n.toString(16)).slice(-2);
+  }
+
+  function rgbToHex(r, g, b) {
+    return '#' + toHex(r) + toHex(g) + toHex(b);
+  }
+
+  function newRgbTarget() {
+    target = { r: randByte(), g: randByte(), b: randByte() };
+    document.getElementById('targetSwatch').style.background = 'rgb(' + target.r + ',' + target.g + ',' + target.b + ')';
+    document.getElementById('targetHex').textContent = rgbToHex(target.r, target.g, target.b).toUpperCase();
+    document.getElementById('targetRgb').textContent = target.r + ', ' + target.g + ', ' + target.b;
+    setGlobalHint(1, 'New target: adjust one channel first to feel its effect, then fine-tune the other two.');
+    updateRgbUi();
+  }
+
+  function distRgb(a, b) {
+    return Math.sqrt(
+      (a.r - b.r) * (a.r - b.r) +
+      (a.g - b.g) * (a.g - b.g) +
+      (a.b - b.b) * (a.b - b.b)
+    );
+  }
+
+  function getUserRgb() {
+    return {
+      r: +document.getElementById('r').value,
+      g: +document.getElementById('g').value,
+      b: +document.getElementById('b').value
+    };
+  }
+
+  function updateRgbUi() {
+    var u = getUserRgb();
+    document.getElementById('userSwatch').style.background = 'rgb(' + u.r + ',' + u.g + ',' + u.b + ')';
+    document.getElementById('userHex').textContent = rgbToHex(u.r, u.g, u.b).toUpperCase();
+    document.getElementById('rv').textContent = u.r;
+    document.getElementById('gv').textContent = u.g;
+    document.getElementById('bv').textContent = u.b;
+
+    var d = distRgb(u, target);
+    var pct = Math.max(0, Math.min(100, Math.round((1 - d / maxRgbDist) * 100)));
+    document.getElementById('matchPct').textContent = String(pct);
+    document.getElementById('matchBar').style.width = pct + '%';
+
+    var fb = document.getElementById('rgbFeedback').querySelector('p');
+    if (pct >= 98) fb.textContent = 'Extremely close—tap Check match to lock in points.';
+    else if (pct >= 90) fb.textContent = 'Very close—try nudging one channel slightly.';
+    else if (pct >= 70) fb.textContent = 'On the right track—watch lightness and hue gaps.';
+    else fb.textContent = 'Tip: see whether the target leans red, green, or blue and adjust that slider first.';
+  }
+
+  ['r', 'g', 'b'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function () {
+      beepSlider();
+      updateRgbUi();
+    });
+  });
+
+  document.getElementById('rgbNewTarget').addEventListener('click', function () {
+    newRgbTarget();
+    beepTick();
+  });
+
+  document.getElementById('rgbCheck').addEventListener('click', function () {
+    var u = getUserRgb();
+    var d = distRgb(u, target);
+    var pct = Math.max(0, Math.min(100, Math.round((1 - d / maxRgbDist) * 100)));
+    var add = calcRgbScoreDelta(pct);
+    rgbScore = Math.max(0, rgbScore + add);
+    rgbAttempts++;
+    rgbRoundScores.push(add);
+    rgbRoundMatchSum += pct;
+
+    var indexInRound = ((rgbAttempts - 1) % 5) + 1;
+    var targetHex = rgbToHex(target.r, target.g, target.b).toUpperCase();
+    var userHex = rgbToHex(u.r, u.g, u.b).toUpperCase();
+    pushRgbHistory({
+      round: rgbRoundIndex,
+      indexInRound: indexInRound,
+      pct: pct,
+      delta: add,
+      total: rgbScore,
+      targetHex: targetHex,
+      userHex: userHex
+    });
+
+    var roundCompleted = rgbAttempts % 5 === 0;
+    if (roundCompleted) {
+      var roundScore = rgbRoundScores.reduce(function (sum, v) { return sum + v; }, 0);
+      var roundAvg = rgbRoundMatchSum / 5;
+      rgbRoundsCompleted.push({
+        round: rgbRoundIndex,
+        roundScore: roundScore,
+        avgMatch: roundAvg
+      });
+      rgbRoundScores = [];
+      rgbRoundMatchSum = 0;
+      rgbRoundIndex++;
+      document.getElementById('rgbHistoryWrap').open = true;
+    }
+
+    updateRgbRoundUi();
+    updateRgbRoundSummaryText();
+    savePersistedState();
+
+    var fb = document.getElementById('rgbFeedback').querySelector('p');
+    var sign = add > 0 ? '+' : '';
+    if (pct >= 95) {
+      beepOk();
+      fb.textContent = 'Excellent! Match ' + pct + '%, ' + sign + add + ' pts.';
+      setGlobalHint(1, 'Great precision. Keep consistency across a full 5-check round.');
+    } else if (pct >= 80) {
+      playTone(740, 0.1, 'sine', 0.08);
+      fb.textContent = 'Nice (' + pct + '%), ' + sign + add + ' pts. Fine-tune one channel for a bigger bonus.';
+    } else if (pct >= 60) {
+      beepTick();
+      fb.textContent = 'Fair match (' + pct + '%), ' + sign + add + ' pts. Push above 80% for faster score growth.';
+    } else {
+      beepBad();
+      fb.textContent = 'Low match (' + pct + '%), ' + sign + add + ' pts. Large differences now reduce score.';
+    }
+
+    if (roundCompleted) {
+      var lastRound = rgbRoundsCompleted[rgbRoundsCompleted.length - 1];
+      var avgTxt = lastRound.avgMatch.toFixed(1);
+      fb.textContent += ' Round ' + lastRound.round + ' complete: ' + lastRound.roundScore + ' pts, avg ' + avgTxt + '%.';
+      setGlobalHint(1, 'Round ' + lastRound.round + ' finished. Check history, then continue with Round ' + rgbRoundIndex + '.');
+    }
+  });
+
+  newRgbTarget();
+  updateRgbRoundUi();
+  updateRgbRoundSummaryText();
+
+  /* ---------- Game 2 Gamut ---------- */
+  var gamutStreak = 0;
+  var gamutCorrectIndex = 0;
+  if (persisted && Number.isFinite(persisted.gamutStreak)) gamutStreak = persisted.gamutStreak;
+
+  function supportsP3() {
+    return CSS.supports('color', 'color(display-p3 1 1 1)');
+  }
+
+  function buildGamutRound() {
+    var q = document.getElementById('gamutQuestion');
+    var box = document.getElementById('gamutChoices');
+    box.innerHTML = '';
+
+    var modes = ['pickOog', 'whichWider', 'srgbSafe'];
+    var mode = modes[Math.floor(Math.random() * modes.length)];
+
+    if (mode === 'pickOog') {
+      q.textContent = 'Which swatch represents a Display P3-style coordinate that plain sRGB encoding would clip or gamut-map?';
+      gamutCorrectIndex = Math.floor(Math.random() * 4);
+      var labels = ['sRGB cyan', 'sRGB magenta', 'P3 saturated green (demo)', 'sRGB yellow'];
+      var styles = [
+        'background-color: rgb(0,255,255);',
+        'background-color: rgb(255,0,200);',
+        supportsP3()
+          ? 'background-color: color(display-p3 0.2 1 0.35);'
+          : 'background: linear-gradient(135deg, #00ff88, #ccff00);',
+        'background-color: rgb(255, 230, 0);'
+      ];
+      for (var i = 0; i < 4; i++) {
+        var order = (gamutCorrectIndex + i) % 4;
+        var card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'gamut-card';
+        card.dataset.idx = String(i);
+        card.innerHTML = '<div class="gamut-swatch" style="' + styles[order] + '"></div><div style="font-size:13px;font-weight:600;color:var(--text-dark);">' + labels[order] + '</div>';
+        if (order === 2) card.dataset.answer = '1';
+        box.appendChild(card);
+      }
+    } else if (mode === 'whichWider') {
+      q.textContent = 'Which of the following statements is true?';
+      gamutCorrectIndex = Math.floor(Math.random() * 4);
+      var allOpts = [
+        'The sRGB triangle fully contains every color in Display P3',
+        'Wide-gamut displays can show higher chroma for some colors at the same bit depth',
+        'All web colors default to Rec. 2020 encoding',
+        'A larger gamut always means larger file sizes'
+      ];
+      var correctText = 'Wide-gamut displays can show higher chroma for some colors at the same bit depth';
+      var wrongs = allOpts.filter(function (o) { return o !== correctText; });
+      var texts = [];
+      var wi = 0;
+      for (var k = 0; k < 4; k++) {
+        texts.push(k === gamutCorrectIndex ? correctText : wrongs[wi++]);
+      }
+      for (var m = 0; m < 4; m++) {
+        var c3 = document.createElement('button');
+        c3.type = 'button';
+        c3.className = 'gamut-card';
+        c3.dataset.idx = String(m);
+        c3.innerHTML = '<div style="font-size:14px;text-align:left;font-weight:600;color:var(--text-dark);">' + texts[m] + '</div>';
+        if (m === gamutCorrectIndex) c3.dataset.answer = '1';
+        box.appendChild(c3);
+      }
+    } else {
+      q.textContent = 'Which statement is always true for standard 8-bit sRGB values?';
+      gamutCorrectIndex = Math.floor(Math.random() * 4);
+      var right = 'Each channel is stored as an integer from 0 to 255.';
+      var wrongPool = [
+        'Any valid sRGB color must have R + G + B = 255.',
+        'Using 8-bit sRGB guarantees the color is in Display P3.',
+        '8-bit sRGB always stores floating-point channel values.'
+      ];
+      var items = [];
+      var wi2 = 0;
+      for (var n = 0; n < 4; n++) {
+        items.push(n === gamutCorrectIndex ? right : wrongPool[wi2++]);
+      }
+      for (var n2 = 0; n2 < 4; n2++) {
+        var c4 = document.createElement('button');
+        c4.type = 'button';
+        c4.className = 'gamut-card';
+        c4.dataset.idx = String(n2);
+        c4.innerHTML = '<div style="font-size:14px;text-align:left;font-weight:600;color:var(--text-dark);">' + items[n2] + '</div>';
+        if (n2 === gamutCorrectIndex) c4.dataset.answer = '1';
+        box.appendChild(c4);
+      }
+    }
+
+    document.querySelectorAll('#gamutChoices .gamut-card').forEach(function (card) {
+      card.addEventListener('click', onGamutPick);
+    });
+
+    document.getElementById('gamutExplain').querySelector('p').textContent =
+      supportsP3()
+        ? 'This browser supports P3 colors—the “P3 saturated green” swatch should stand out more from sRGB blocks when visible.'
+        : 'This view is mostly sRGB—use the copy to reason about encoding range vs device gamut.';
+  }
+
+  function onGamutPick(e) {
+    var card = e.currentTarget;
+    var ok = card.dataset.answer === '1';
+    document.querySelectorAll('#gamutChoices .gamut-card').forEach(function (c) {
+      c.classList.remove('selected', 'correct', 'wrong');
+      if (c.dataset.answer === '1') c.classList.add('correct');
+    });
+    if (ok) {
+      card.classList.add('selected');
+      gamutStreak++;
+      beepOk();
+      setGlobalHint(2, 'Correct! Remember: what encodings can represent and what a display can show are different problems.');
+    } else {
+      card.classList.add('wrong');
+      gamutStreak = 0;
+      beepBad();
+      setGlobalHint(2, 'Not quite—the green border marks the correct answer. Tap Next question to continue.');
+    }
+    document.getElementById('gamutStreak').textContent = String(gamutStreak);
+    savePersistedState();
+    document.querySelectorAll('#gamutChoices .gamut-card').forEach(function (c) {
+      c.removeEventListener('click', onGamutPick);
+    });
+  }
+
+  document.getElementById('gamutNext').addEventListener('click', function () {
+    buildGamutRound();
+    beepTick();
+    setGlobalHint(2, 'New question: read the prompt first, then inspect swatches or text choices.');
+  });
+
+  buildGamutRound();
+
+  /* ---------- Game 3 Hex ---------- */
+  var hexRunning = false;
+  var hexScore = 0;
+  var hexCombo = 0;
+  var hexTime = 10;
+  var hexRaf = null;
+  var hexDeadline = 0;
+  var hexCorrectHex = '#000000';
+  var hexLastWholeSecond = -1;
+  var hexTimeLeftMs = 0;
+  if (persisted) {
+    hexScore = Number.isFinite(persisted.hexScore) ? persisted.hexScore : hexScore;
+    hexCombo = Number.isFinite(persisted.hexCombo) ? persisted.hexCombo : hexCombo;
+  }
+
+  function randomHexColor() {
+    return '#' + toHex(randByte()) + toHex(randByte()) + toHex(randByte());
+  }
+
+  function hexToRgb(hex) {
+    var h = hex.replace('#', '');
+    return {
+      r: parseInt(h.slice(0, 2), 16),
+      g: parseInt(h.slice(2, 4), 16),
+      b: parseInt(h.slice(4, 6), 16)
+    };
+  }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i];
+      arr[i] = arr[j];
+      arr[j] = t;
+    }
+    return arr;
+  }
+
+  function buildHexRound() {
+    var correct = randomHexColor();
+    hexCorrectHex = correct;
+    var wrongs = [];
+    while (wrongs.length < 3) {
+      var w = randomHexColor();
+      if (w.toLowerCase() !== correct.toLowerCase()) wrongs.push(w);
+    }
+    var all = shuffle([correct].concat(wrongs));
+    var host = document.getElementById('hexChoices');
+    host.innerHTML = '';
+    all.forEach(function (hx) {
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'hex-choice';
+      var rgb = hexToRgb(hx);
+      el.style.background = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
+      el.dataset.hex = hx;
+      el.setAttribute('aria-label', 'Color ' + hx.toUpperCase());
+      el.addEventListener('click', onHexPick);
+      host.appendChild(el);
+    });
+    document.getElementById('hexPrompt').textContent = correct.toUpperCase();
+    hexTime = 10;
+    hexTimeLeftMs = hexTime * 1000;
+    hexDeadline = performance.now() + hexTimeLeftMs;
+    document.getElementById('hexTimer').textContent = (hexTimeLeftMs / 1000).toFixed(1);
+    document.getElementById('hexTimer').className = 'timer-ring';
+  }
+
+  function onHexPick(e) {
+    if (!hexRunning) return;
+    var btn = e.currentTarget;
+    var hx = btn.dataset.hex;
+    if (hx.toLowerCase() === hexCorrectHex.toLowerCase()) {
+      hexCombo++;
+      var bonus = 50 + Math.min(30, hexCombo * 5);
+      hexScore += bonus;
+      btn.classList.add('flash-ok');
+      beepOk();
+      document.getElementById('hexHint').textContent = 'Correct! +' + bonus + ' pts (combo bonus). Next question loading...';
+    } else {
+      hexCombo = 0;
+      btn.classList.add('flash-bad');
+      beepBad();
+      hexScore = Math.max(0, hexScore - 15);
+      document.getElementById('hexHint').textContent = 'Way off—combo reset. Look again at which channels differ.';
+    }
+    document.getElementById('hexScore').textContent = String(hexScore);
+    document.getElementById('hexCombo').textContent = String(hexCombo);
+    savePersistedState();
+    document.querySelectorAll('#hexChoices .hex-choice').forEach(function (b) {
+      b.removeEventListener('click', onHexPick);
+    });
+    setTimeout(function () {
+      if (hexRunning) buildHexRound();
+    }, 380);
+  }
+
+  function hexLoop(now) {
+    if (!hexRunning) return;
+    var left = (hexDeadline - now) / 1000;
+    hexTimeLeftMs = Math.max(0, hexDeadline - now);
+    var el = document.getElementById('hexTimer');
+    if (left <= 0) {
+      hexCombo = 0;
+      hexScore = Math.max(0, hexScore - 10);
+      document.getElementById('hexScore').textContent = String(hexScore);
+      document.getElementById('hexCombo').textContent = '0';
+      beepBad();
+      document.getElementById('hexHint').textContent = 'Time is up—combo reset. Moving to the next question.';
+      buildHexRound();
+      hexDeadline = performance.now() + hexTime * 1000;
+      hexLastWholeSecond = -1;
+      savePersistedState();
+    } else {
+      el.textContent = left.toFixed(1);
+      if (left <= 3) el.className = 'timer-ring danger';
+      else if (left <= 5) el.className = 'timer-ring warn';
+      else el.className = 'timer-ring';
+      var ws = Math.ceil(left);
+      if (left <= 3 && ws !== hexLastWholeSecond) {
+        hexLastWholeSecond = ws;
+        beepTick();
+      }
+    }
+    hexRaf = requestAnimationFrame(hexLoop);
+  }
+
+  document.getElementById('hexStart').addEventListener('click', function () {
+    if (hexRunning) return;
+    hexRunning = true;
+    document.getElementById('hexPause').disabled = false;
+    ensureAudio();
+    if (!document.getElementById('hexChoices').children.length) buildHexRound();
+    if (hexTimeLeftMs <= 0) hexTimeLeftMs = hexTime * 1000;
+    hexDeadline = performance.now() + hexTimeLeftMs;
+    hexLastWholeSecond = -1;
+    cancelAnimationFrame(hexRaf);
+    hexRaf = requestAnimationFrame(hexLoop);
+    setGlobalHint(3, 'Live: read the hex as RR GG BB, spot the strongest channel, then eliminate wrong tiles. Use keys 1-4 for quick picks.');
+    beepOk();
+  });
+
+  document.getElementById('hexPause').addEventListener('click', function () {
+    hexRunning = false;
+    cancelAnimationFrame(hexRaf);
+    document.getElementById('hexPause').disabled = true;
+    hexTimeLeftMs = Math.max(0, hexDeadline - performance.now());
+    document.getElementById('hexHint').textContent = 'Paused. Tap Start to resume this same question.';
+    setGlobalHint(3, 'Paused—take a breath and review how hex maps to RGB.');
+    beepTick();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!hexRunning) return;
+    var k = e.key;
+    if (k !== '1' && k !== '2' && k !== '3' && k !== '4') return;
+    var idx = Number(k) - 1;
+    var choices = document.querySelectorAll('#hexChoices .hex-choice');
+    if (!choices[idx]) return;
+    e.preventDefault();
+    choices[idx].click();
+  });
+
+  document.getElementById('rgbScore').textContent = String(rgbScore);
+  document.getElementById('gamutStreak').textContent = String(gamutStreak);
+  document.getElementById('hexScore').textContent = String(hexScore);
+  document.getElementById('hexCombo').textContent = String(hexCombo);
+  if (rgbHistory.length) renderRgbHistory();
+  setGlobalHint(1, 'Welcome—start with RGB Color Master, or switch games in the sidebar.');
+})();
+  </script>
+</body>
+</html>

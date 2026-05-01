@@ -1,0 +1,4068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colour Lab — Master the Language of Colour</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        /* ================================ */
+        /* CSS Variables — Design System    */
+        /* ================================ */
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --primary-light: #e8f0fe;
+            --secondary: #764ba2;
+            --accent: #ff6b6b;
+            --bg: #ffffff;
+            --bg-alt: #f8f9fc;
+            --bg-dark: #0f0f1a;
+            --text: #1a1a2e;
+            --text-light: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Playfair Display', Georgia, serif;
+        }
+
+        /* ================================ */
+        /* Reset & Base                      */
+        /* ================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ================================ */
+        /* Global Background Canvas         */
+        /* ================================ */
+        #bgCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+        }
+
+        /* ─── NEW: Animated Colour Gradient Mesh ─── */
+        #gradientMesh {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .mesh-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0;
+            animation: meshOrbFloat ease-in-out infinite;
+        }
+        .mesh-orb-1 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,107,107,0.18), transparent 70%);
+            top: -100px; left: -100px;
+            animation-duration: 18s; animation-delay: 0s;
+            opacity: 0.7;
+        }
+        .mesh-orb-2 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(77,150,255,0.15), transparent 70%);
+            top: 30%; right: -80px;
+            animation-duration: 22s; animation-delay: -6s;
+            opacity: 0.7;
+        }
+        .mesh-orb-3 {
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(118,75,162,0.14), transparent 70%);
+            bottom: -80px; left: 30%;
+            animation-duration: 20s; animation-delay: -12s;
+            opacity: 0.6;
+        }
+        .mesh-orb-4 {
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, rgba(107,203,119,0.12), transparent 70%);
+            top: 60%; left: -60px;
+            animation-duration: 25s; animation-delay: -4s;
+            opacity: 0.6;
+        }
+        .mesh-orb-5 {
+            width: 420px; height: 420px;
+            background: radial-gradient(circle, rgba(253,203,110,0.12), transparent 70%);
+            top: 15%; left: 45%;
+            animation-duration: 16s; animation-delay: -8s;
+            opacity: 0.5;
+        }
+        .mesh-orb-6 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(255,107,200,0.10), transparent 70%);
+            top: 75%; right: 15%;
+            animation-duration: 24s; animation-delay: -10s;
+            opacity: 0.5;
+        }
+        .mesh-orb-7 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(100,220,255,0.10), transparent 70%);
+            top: 45%; left: 60%;
+            animation-duration: 20s; animation-delay: -14s;
+            opacity: 0.4;
+        }
+        @keyframes meshOrbFloat {
+            0%   { transform: translate(0, 0) scale(1); }
+            25%  { transform: translate(40px, -30px) scale(1.08); }
+            50%  { transform: translate(-20px, 50px) scale(0.95); }
+            75%  { transform: translate(30px, 20px) scale(1.05); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* ─── NEW: Animated Aurora Background ─── */
+        #auroraBg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background: linear-gradient(135deg, rgba(255,107,107,0.08), rgba(77,150,255,0.08), rgba(118,75,162,0.08), rgba(107,203,119,0.08));
+            background-size: 400% 400%;
+            animation: auroraShift 20s ease infinite;
+        }
+        @keyframes auroraShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ─── NEW: Wavy Section Dividers ─── */
+        .section-divider {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            overflow: hidden;
+            line-height: 0;
+        }
+        .section-divider svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .section-divider-fill {
+            fill: var(--bg-alt);
+        }
+
+        /* ─── NEW: Floating Colour Droplets ─── */
+        .colour-droplet {
+            position: fixed;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            animation: dropletFloat 25s linear infinite;
+            filter: blur(1px);
+        }
+        @keyframes dropletFloat {
+            0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10%  { opacity: 0.15; }
+            90%  { opacity: 0.15; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ─── NEW: Animated Scroll-Line Decorations ─── */
+        .scroll-line {
+            position: fixed;
+            width: 2px;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.05;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            animation: scrollLinePulse 4s ease-in-out infinite;
+        }
+        .scroll-line-left  { left: 20px;  animation-delay: 0s; }
+        .scroll-line-right { right: 20px; animation-delay: 2s; }
+        @keyframes scrollLinePulse {
+            0%, 100% { opacity: 0.03; }
+            50%      { opacity: 0.08; }
+        }
+
+        /* ─── NEW: Section-Specific Colour Accents ─── */
+        .section-accent-bar {
+            position: absolute;
+            height: 4px;
+            border-radius: 2px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .accent-top-left {
+            top: 0; left: 0;
+            width: 120px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+        .accent-bottom-right {
+            bottom: 0; right: 0;
+            width: 120px;
+            background: linear-gradient(270deg, var(--secondary), transparent);
+        }
+
+        /* ─── NEW: Animated Colour Stripes ─── */
+        #colourStripes {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.15;
+        }
+        .colour-stripe {
+            position: absolute;
+            width: 120%;
+            height: 2px;
+            left: -10%;
+            opacity: 0;
+            animation: stripeFade ease-in-out infinite;
+        }
+        .colour-stripe-1 { top: 15%; background: linear-gradient(90deg, transparent, #ff6b6b, transparent); animation-duration: 8s; animation-delay: 0s; }
+        .colour-stripe-2 { top: 35%; background: linear-gradient(90deg, transparent, #4d96ff, transparent); animation-duration: 10s; animation-delay: -3s; }
+        .colour-stripe-3 { top: 55%; background: linear-gradient(90deg, transparent, #6bcb77, transparent); animation-duration: 9s; animation-delay: -5s; }
+        .colour-stripe-4 { top: 75%; background: linear-gradient(90deg, transparent, #ffd93d, transparent); animation-duration: 11s; animation-delay: -7s; }
+        .colour-stripe-5 { top: 90%; background: linear-gradient(90deg, transparent, #764ba2, transparent); animation-duration: 7s; animation-delay: -2s; }
+        @keyframes stripeFade {
+            0%, 100% { opacity: 0; }
+            50%      { opacity: 1; }
+        }
+
+        /* ─── NEW: Floating Colour Bubbles ─── */
+        .colour-bubble {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+            animation: bubbleFloat linear infinite;
+            box-shadow: 0 0 10px currentColor;
+        }
+        @keyframes bubbleFloat {
+            0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+            10%  { opacity: 0.12; }
+            90%  { opacity: 0.12; }
+            100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+        }
+
+        /* ─── NEW: Animated Colour Dots Pattern ─── */
+        #dotPattern {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.08;
+            background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* ─── NEW: Section Colour Accents ─── */
+        .section::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .section:nth-of-type(odd)::before {
+            top: -150px;
+            right: -100px;
+            background: radial-gradient(circle, var(--primary), transparent 70%);
+        }
+        .section:nth-of-type(even)::before {
+            bottom: -150px;
+            left: -100px;
+            background: radial-gradient(circle, var(--secondary), transparent 70%);
+        }
+
+        /* ─── NEW: Background Grid Lines ─── */
+        #bgGrid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+            background-image:
+                linear-gradient(rgba(26,115,232,0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26,115,232,0.3) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* ─── NEW: Floating Colour Dots ─── */
+        .bg-dot {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: bgDotPulse ease-in-out infinite;
+        }
+        @keyframes bgDotPulse {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50%       { opacity: 0.5; transform: scale(1); }
+        }
+
+        /* ─── NEW: Spectral Aurora Bar ─── */
+        #auroraBar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                #ff0000, #ff6600, #ffcc00, #00cc44,
+                #0066ff, #9900ff, #ff0000);
+            background-size: 300% auto;
+            animation: auroraScroll 6s linear infinite;
+            z-index: 999;
+            opacity: 0.8;
+        }
+        @keyframes auroraScroll {
+            from { background-position: 0% center; }
+            to   { background-position: 300% center; }
+        }
+
+        /* Geometric floating shapes */
+        .geo-shape {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: geoFloat linear infinite;
+        }
+        @keyframes geoFloat {
+            0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+            5%   { opacity: 1; }
+            95%  { opacity: 0.6; }
+            100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Noise texture overlay for depth */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        /* Ensure all sections sit above background */
+        nav, section, footer, .page-loader, #videoModal, .swatch-tooltip, .course-modal-overlay {
+            position: relative;
+            z-index: 1;
+        }
+        .navbar { z-index: 1000 !important; }
+        #auroraBar { z-index: 1001 !important; }
+
+        /* Section wave dividers */
+        .wave-divider {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            margin-top: -1px;
+        }
+        .wave-divider svg { display: block; width: 100%; height: 60px; }
+
+        /* Gradient mesh backgrounds for sections */
+        .section-alt {
+            background:
+                radial-gradient(ellipse 80% 50% at 10% 20%, rgba(26,115,232,0.05) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 70% at 90% 80%, rgba(118,75,162,0.04) 0%, transparent 60%),
+                var(--bg-alt) !important;
+        }
+        .demo-section {
+            background:
+                radial-gradient(ellipse 70% 60% at 80% 20%, rgba(255,107,107,0.04) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 50% at 20% 80%, rgba(26,115,232,0.04) 0%, transparent 55%),
+                var(--bg);
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+        /* ================================ */
+        /* Utility Classes                   */
+        /* ================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .section { padding: 100px 0; }
+        .section-dark { background: var(--bg-dark); color: #fff; }
+        .section-alt { background: var(--bg-alt); }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .section-dark .section-label { color: #60a5fa; }
+        .section-title {
+            font-family: var(--font);
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+        .section-dark .section-title { color: #fff; }
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .section-dark .section-subtitle { color: #9ca3af; }
+
+        /* ================================ */
+        /* Buttons                           */
+        /* ================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(26,115,232,0.3);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(26,115,232,0.4);
+        }
+        .btn-outline {
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        .btn-white {
+            background: #fff;
+            color: var(--secondary);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        .btn-ghost {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px);
+        }
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.22);
+            transform: translateY(-2px);
+        }
+        .btn-sm { padding: 10px 22px; font-size: 14px; }
+        .btn-arrow::after { content: '→'; transition: transform 0.3s; }
+        .btn-arrow:hover::after { transform: translateX(4px); }
+
+        /* ================================ */
+        /* Navigation                        */
+        /* ================================ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 16px 0;
+            transition: var(--transition);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .navbar.scrolled {
+            padding: 10px 0;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+        }
+        .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 20px; font-weight: 800; color: var(--text);
+        }
+        .nav-logo-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            animation: logoSpin 8s linear infinite;
+        }
+        @keyframes logoSpin {
+            from { filter: hue-rotate(0deg); }
+            to { filter: hue-rotate(360deg); }
+        }
+        .nav-logo-icon::after {
+            content: '';
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: #fff;
+        }
+        .nav-menu { display: flex; align-items: center; gap: 4px; list-style: none; }
+        .nav-menu a {
+            padding: 8px 18px;
+            font-size: 14px; font-weight: 500;
+            color: var(--text-light);
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+        .nav-actions { display: flex; align-items: center; gap: 12px; }
+        .nav-login {
+            padding: 8px 18px; font-size: 14px; font-weight: 500;
+            color: var(--text); border-radius: 50px; transition: var(--transition);
+        }
+        .nav-login:hover { background: var(--bg-alt); }
+        .nav-signup {
+            padding: 10px 24px; background: var(--primary); color: #fff;
+            border-radius: 50px; font-size: 14px; font-weight: 600;
+            transition: var(--transition);
+        }
+        .nav-signup:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .mobile-toggle {
+            display: none; flex-direction: column; gap: 5px; padding: 8px;
+        }
+        .mobile-toggle span {
+            width: 22px; height: 2px; background: var(--text);
+            border-radius: 2px; transition: var(--transition);
+        }
+
+        /* ================================ */
+        /* Hero Section                      */
+        /* ================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Animated gradient background orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        .hero-orb-1 {
+            top: -150px; right: -100px;
+            width: 550px; height: 550px;
+            background: radial-gradient(circle, rgba(26,115,232,0.10) 0%, transparent 70%);
+            animation-delay: 0s;
+        }
+        .hero-orb-2 {
+            bottom: -80px; left: -80px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(118,75,162,0.08) 0%, transparent 70%);
+            animation-delay: 3s;
+        }
+        .hero-orb-3 {
+            top: 40%; left: 40%;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(255,107,107,0.05) 0%, transparent 70%);
+            animation-delay: 5s;
+        }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(20px, -20px) scale(1.05); }
+            66% { transform: translate(-15px, 15px) scale(0.97); }
+        }
+        .hero .container {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+            position: relative; z-index: 1;
+        }
+        .hero-content { animation: heroSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        @keyframes heroSlideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px;
+            background: var(--primary-light); color: var(--primary);
+            border-radius: 50px; font-size: 13px; font-weight: 600;
+            margin-bottom: 24px;
+            animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
+        }
+        @keyframes badgePop {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .hero-badge .dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--primary);
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+        }
+        .hero h1 {
+            font-family: var(--font);
+            font-size: 58px; font-weight: 900;
+            line-height: 1.1; color: var(--text);
+            margin-bottom: 24px; letter-spacing: -1.5px;
+        }
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s linear infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+        .hero h1 em { font-family: var(--font-display); font-style: italic; font-weight: 700; }
+        .hero-desc {
+            font-size: 18px; color: var(--text-light);
+            line-height: 1.7; margin-bottom: 36px; max-width: 520px;
+            animation: heroSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+        }
+        .hero-actions {
+            display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+            animation: heroSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+        }
+        .hero-stats {
+            display: flex; gap: 40px;
+            margin-top: 48px; padding-top: 32px;
+            border-top: 1px solid var(--border);
+            animation: heroSlideIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+        }
+        .hero-stat-value { font-size: 28px; font-weight: 800; color: var(--text); }
+        .hero-stat-value span { color: var(--primary); }
+        .hero-stat-label { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+        /* Hero Visual */
+        .hero-visual {
+            display: flex; justify-content: center; align-items: center;
+            position: relative;
+            animation: heroVisualIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+        }
+        @keyframes heroVisualIn {
+            from { opacity: 0; transform: translateX(50px) scale(0.9); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        .colour-wheel-container {
+            position: relative; width: 380px; height: 380px;
+        }
+        .colour-wheel {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: conic-gradient(
+                #ff0000 0deg, #ff8800 30deg, #ffff00 60deg, #88ff00 90deg,
+                #00ff00 120deg, #00ff88 150deg, #00ffff 180deg, #0088ff 210deg,
+                #0000ff 240deg, #8800ff 270deg, #ff00ff 300deg, #ff0088 330deg,
+                #ff0000 360deg
+            );
+            opacity: 0.18;
+            animation: rotateWheel 20s linear infinite;
+        }
+        @keyframes rotateWheel {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .colour-wheel-center {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px; height: 180px; border-radius: 50%;
+            background: #fff; box-shadow: var(--shadow-lg);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 4px;
+        }
+        .colour-wheel-center .emoji { font-size: 40px; }
+        .colour-wheel-center .label { font-size: 12px; font-weight: 600; color: var(--text); }
+        .colour-wheel-center .sublabel { font-size: 10px; color: var(--text-muted); }
+
+        /* Floating Cards */
+        .floating-card {
+            position: absolute; background: #fff;
+            border-radius: var(--radius); padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
+            display: flex; align-items: center; gap: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-card.fc-1 { top: 30px; right: -20px; animation-delay: 0s; }
+        .floating-card.fc-2 { bottom: 60px; left: -30px; animation-delay: 1s; }
+        .floating-card.fc-3 { bottom: 20px; right: 10px; animation-delay: 2s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .fc-icon {
+            width: 36px; height: 36px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; font-size: 18px;
+        }
+        .fc-text .fc-value { font-size: 14px; font-weight: 700; color: var(--text); }
+        .fc-text .fc-label { font-size: 11px; color: var(--text-muted); }
+
+        /* ================================ */
+        /* USP Section                       */
+        /* ================================ */
+        .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+        .usp-card {
+            background: #fff; border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 36px 28px;
+            text-align: center; transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .usp-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .usp-card:hover::before { transform: scaleX(1); }
+        .usp-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: transparent; }
+        .usp-icon {
+            width: 64px; height: 64px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; margin: 0 auto 20px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .usp-card:hover .usp-icon { transform: scale(1.15) rotate(-5deg); }
+        .usp-card:nth-child(1) .usp-icon { background: #fff3e0; }
+        .usp-card:nth-child(2) .usp-icon { background: #e3f2fd; }
+        .usp-card:nth-child(3) .usp-icon { background: #e8f5e9; }
+        .usp-card h3 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+        .usp-card p { font-size: 14px; color: var(--text-light); line-height: 1.7; }
+
+        /* ================================ */
+        /* Video Showcase Section (NEW)      */
+        /* ================================ */
+        .video-showcase {
+            background: var(--bg-dark);
+            position: relative;
+            overflow: hidden;
+            padding: 100px 0;
+        }
+        /* Animated particle background */
+        .video-showcase::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 50%, rgba(26,115,232,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 60% at 80% 50%, rgba(118,75,162,0.12) 0%, transparent 60%);
+            animation: bgPulse 6s ease-in-out infinite alternate;
+        }
+        @keyframes bgPulse {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+        .video-showcase .container {
+            position: relative; z-index: 1;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 72px; align-items: center;
+        }
+
+        /* Left text panel */
+        .video-info .section-label { color: #60a5fa; }
+        .video-info .section-title { color: #fff; font-size: 38px; }
+        .video-info .section-subtitle { color: #9ca3af; text-align: left; max-width: 480px; margin: 0 0 32px; }
+
+        .video-feature-list { list-style: none; margin-bottom: 36px; }
+        .video-feature-list li {
+            display: flex; align-items: flex-start; gap: 14px;
+            padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+            opacity: 0; transform: translateX(-20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .video-feature-list li.visible { opacity: 1; transform: translateX(0); }
+        .video-feature-list li:nth-child(1) { transition-delay: 0.1s; }
+        .video-feature-list li:nth-child(2) { transition-delay: 0.2s; }
+        .video-feature-list li:nth-child(3) { transition-delay: 0.3s; }
+        .video-feature-list li:nth-child(4) { transition-delay: 0.4s; }
+        .vfl-icon {
+            width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+            background: rgba(255,255,255,0.08);
+        }
+        .vfl-text h4 { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 3px; }
+        .vfl-text p { font-size: 13px; color: #6b7280; line-height: 1.5; }
+
+        .video-cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+        .video-stat-pill {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; border-radius: 50px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px; color: #d1d5db;
+        }
+        .video-stat-pill span { color: #60a5fa; font-weight: 700; }
+
+        /* Right video player */
+        .video-player-wrap {
+            position: relative;
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .video-player-wrap.visible { opacity: 1; transform: translateY(0); }
+
+        .video-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+            cursor: pointer;
+        }
+        /* Animated colour gradient background inside video frame */
+        .video-frame-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            animation: videoGradient 8s ease infinite;
+        }
+        @keyframes videoGradient {
+            0%   { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
+            25%  { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
+            50%  { background: linear-gradient(135deg, #200122, #6f0000, #200122); }
+            75%  { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+            100% { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
+        }
+
+        /* Animated colour spectrum bar */
+        .video-spectrum {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+            background-size: 200% auto;
+            animation: spectrumScroll 3s linear infinite;
+        }
+        @keyframes spectrumScroll {
+            from { background-position: 0% center; }
+            to { background-position: 200% center; }
+        }
+
+        /* Floating colour orbs inside video frame */
+        .video-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(30px); opacity: 0.4;
+            animation: videoOrbFloat 5s ease-in-out infinite;
+        }
+        .video-orb-1 {
+            width: 200px; height: 200px;
+            background: #ff6b6b; top: -40px; left: -40px;
+            animation-delay: 0s;
+        }
+        .video-orb-2 {
+            width: 150px; height: 150px;
+            background: #4d96ff; bottom: -30px; right: -20px;
+            animation-delay: 2s;
+        }
+        .video-orb-3 {
+            width: 120px; height: 120px;
+            background: #6bcb77; top: 30%; left: 50%;
+            animation-delay: 4s;
+        }
+        @keyframes videoOrbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(15px, -15px) scale(1.1); }
+        }
+
+        /* Video content overlay */
+        .video-content-overlay {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 20px;
+            z-index: 2;
+        }
+        .video-play-btn {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.4);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 24px;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(8px);
+            padding-left: 4px; /* optical centre for play arrow */
+            cursor: pointer;
+        }
+        .video-play-btn:hover {
+            transform: scale(1.18);
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 0 0 12px rgba(255,255,255,0.08), 0 0 40px rgba(255,255,255,0.15);
+        }
+        /* Pulse ring around play button */
+        .play-pulse {
+            position: absolute;
+            width: 72px; height: 72px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            animation: playPulse 2.5s ease-out infinite;
+        }
+        .play-pulse:nth-child(2) { animation-delay: 0.8s; }
+        .play-pulse:nth-child(3) { animation-delay: 1.6s; }
+        @keyframes playPulse {
+            0%   { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+        .video-title-overlay {
+            font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.9);
+            text-align: center; letter-spacing: 0.5px;
+        }
+        .video-duration-badge {
+            position: absolute; top: 14px; right: 14px;
+            background: rgba(0,0,0,0.6); color: #fff;
+            padding: 4px 10px; border-radius: 6px;
+            font-size: 12px; font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+
+        /* Chapter tabs below video */
+        .video-chapters {
+            margin-top: 16px;
+            display: flex; gap: 8px; flex-wrap: wrap;
+        }
+        .chapter-tab {
+            padding: 7px 14px; border-radius: 50px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #9ca3af; font-size: 12px; font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .chapter-tab:hover, .chapter-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        /* ================================ */
+        /* Interactive Demo (new sub-section)*/
+        /* ================================ */
+        .demo-section { padding: 80px 0; background: var(--bg-alt); }
+        .demo-inner {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+        }
+        .demo-visual {
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .colour-swatch-row { display: flex; gap: 10px; }
+        .colour-swatch {
+            flex: 1; height: 64px; border-radius: var(--radius-sm);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.25s ease,
+                        outline 0.15s ease;
+            cursor: crosshair;
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+        .colour-swatch:hover {
+            transform: scaleY(1.18) translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            outline: 2px solid rgba(255,255,255,0.6);
+            z-index: 2;
+            position: relative;
+        }
+        .swatch-row-1 .s1 { background: #ff0000; }
+        .swatch-row-1 .s2 { background: #ff6600; }
+        .swatch-row-1 .s3 { background: #ffcc00; }
+        .swatch-row-1 .s4 { background: #00cc44; }
+        .swatch-row-1 .s5 { background: #0066ff; }
+        .swatch-row-1 .s6 { background: #9900ff; }
+        .swatch-row-2 .s1 { background: #ffcccc; }
+        .swatch-row-2 .s2 { background: #ffdab9; }
+        .swatch-row-2 .s3 { background: #fffacd; }
+        .swatch-row-2 .s4 { background: #c8f7d6; }
+        .swatch-row-2 .s5 { background: #cce0ff; }
+        .swatch-row-2 .s6 { background: #e0ccff; }
+        .swatch-row-3 .s1 { background: #800000; }
+        .swatch-row-3 .s2 { background: #804000; }
+        .swatch-row-3 .s3 { background: #806600; }
+        .swatch-row-3 .s4 { background: #006622; }
+        .swatch-row-3 .s5 { background: #003380; }
+        .swatch-row-3 .s6 { background: #4d0080; }
+
+        .demo-code-block {
+            background: #1e1e2e; border-radius: var(--radius);
+            padding: 20px 24px; font-family: 'Courier New', monospace;
+            font-size: 13px; line-height: 1.8;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .demo-code-block .token-comment { color: #6272a4; }
+        .demo-code-block .token-key { color: #8be9fd; }
+        .demo-code-block .token-val { color: #50fa7b; }
+        .demo-code-block .token-str { color: #f1fa8c; }
+        .demo-code-block .token-num { color: #bd93f9; }
+
+        /* ================================ */
+        /* Swatch Floating Tooltip           */
+        /* ================================ */
+        .swatch-tooltip {
+            position: fixed;
+            z-index: 500;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(6px) scale(0.96);
+            transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .swatch-tooltip.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .swatch-tooltip-inner {
+            background: #1a1a2e;
+            border-radius: 14px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06);
+            overflow: hidden;
+            min-width: 220px;
+        }
+        .swatch-tooltip-preview {
+            width: 100%;
+            height: 56px;
+            position: relative;
+        }
+        .swatch-tooltip-preview-shine {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+        }
+        .swatch-tooltip-body {
+            padding: 14px 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .swatch-tooltip-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .stt-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 2px 7px;
+            border-radius: 4px;
+            min-width: 42px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .stt-badge-hex  { background: rgba(139,233,253,0.15); color: #8be9fd; }
+        .stt-badge-rgb  { background: rgba(80,250,123,0.15);  color: #50fa7b; }
+        .stt-badge-cmyk { background: rgba(255,184,108,0.15); color: #ffb86c; }
+        .stt-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12.5px;
+            color: #f8f8f2;
+            letter-spacing: 0.3px;
+        }
+        /* Tooltip arrow */
+        .swatch-tooltip-inner::after {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #1a1a2e;
+        }
+
+        /* ================================ */
+        /* Courses Section                   */
+        /* ================================ */
+        .course-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .course-card {
+            background: #fff; border-radius: var(--radius);
+            overflow: hidden; border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .course-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: var(--shadow-lg); border-color: transparent; }
+        .course-thumb {
+            height: 160px; position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .course-thumb .thumb-emoji {
+            font-size: 40px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .course-card:hover .thumb-emoji { transform: scale(1.25) rotate(-8deg); }
+        .course-thumb .course-level {
+            position: absolute; top: 12px; right: 12px;
+            padding: 4px 10px; border-radius: 50px;
+            font-size: 11px; font-weight: 600;
+            background: rgba(255,255,255,0.9);
+        }
+        .ct-1 { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); }
+        .ct-2 { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+        .ct-3 { background: linear-gradient(135deg, #55efc4, #00b894); }
+        .ct-4 { background: linear-gradient(135deg, #fd79a8, #e84393); }
+        .course-info { padding: 20px; }
+        .course-info h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .course-meta {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 12px; color: var(--text-muted); margin-bottom: 14px;
+        }
+        .course-meta span { display: flex; align-items: center; gap: 4px; }
+        .course-footer { display: flex; align-items: center; justify-content: space-between; }
+        .course-price { font-size: 20px; font-weight: 800; color: var(--text); }
+        .course-price .free {
+            color: #27ae60; font-size: 14px;
+            background: #d4edda; padding: 2px 10px; border-radius: 50px;
+        }
+        .course-enroll {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: var(--transition);
+        }
+        .course-enroll:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
+
+        /* ================================ */
+        /* Promotional Banner                */
+        /* ================================ */
+        .promo-banner {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative; overflow: hidden;
+        }
+        .promo-banner::before {
+            content: '';
+            position: absolute; top: -50%; right: -10%;
+            width: 400px; height: 400px; border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .promo-banner::after {
+            content: '';
+            position: absolute; bottom: -30%; left: -5%;
+            width: 300px; height: 300px; border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .promo-content {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 40px; position: relative; z-index: 1;
+        }
+        .promo-text h2 { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+        .promo-text p { font-size: 16px; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 24px; }
+        .promo-code {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.15); padding: 6px 16px;
+            border-radius: 50px; color: #fff; font-size: 14px; font-weight: 600;
+            margin-bottom: 20px; border: 1px dashed rgba(255,255,255,0.3);
+        }
+        .promo-visual { font-size: 80px; animation: float 3s ease-in-out infinite; }
+
+        /* ================================ */
+        /* Testimonials                      */
+        /* ================================ */
+        .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .testimonial-card {
+            background: #fff; border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 28px;
+            transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .testimonial-card::after {
+            content: '"';
+            position: absolute; top: -10px; right: 20px;
+            font-size: 120px; font-family: Georgia, serif;
+            color: var(--primary-light); z-index: 0; line-height: 1;
+            transition: transform 0.4s;
+        }
+        .testimonial-card:hover::after { transform: scale(1.1) rotate(-5deg); }
+        .testimonial-card > * { position: relative; z-index: 1; }
+        .testimonial-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: transparent; }
+        .testimonial-stars { color: #f59e0b; font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+        .testimonial-text { font-size: 15px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar {
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 20px;
+        }
+        .ta-1 { background: #ffeaa7; } .ta-2 { background: #a29bfe; } .ta-3 { background: #55efc4; }
+        .testimonial-name { font-size: 14px; font-weight: 700; color: var(--text); }
+        .testimonial-role { font-size: 12px; color: var(--text-muted); }
+
+        /* ================================ */
+        /* Newsletter CTA                    */
+        /* ================================ */
+        .newsletter { text-align: center; }
+        .newsletter .container { max-width: 600px; }
+        .newsletter h2 { font-size: 32px; font-weight: 800; margin-bottom: 16px; }
+        .newsletter p { font-size: 16px; color: var(--text-light); margin-bottom: 28px; }
+        .newsletter-form { display: flex; gap: 12px; max-width: 480px; margin: 0 auto; }
+        .newsletter-input {
+            flex: 1; padding: 14px 20px;
+            border: 2px solid var(--border); border-radius: 50px;
+            font-size: 15px; font-family: var(--font); outline: none;
+            transition: var(--transition);
+        }
+        .newsletter-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(26,115,232,0.1);
+        }
+
+        /* ================================ */
+        /* Footer                            */
+        /* ================================ */
+        .footer { background: var(--bg-dark); color: #9ca3af; padding: 64px 0 32px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
+        .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+        .footer-brand .logo { font-size: 20px; font-weight: 800; color: #fff; }
+        .footer-brand .wheel {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+        }
+        .footer-desc { font-size: 14px; line-height: 1.7; color: #6b7280; margin-bottom: 20px; }
+        .footer h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+        .footer ul { list-style: none; }
+        .footer li { margin-bottom: 10px; }
+        .footer a { font-size: 14px; color: #6b7280; transition: var(--transition); }
+        .footer a:hover { color: #fff; }
+        .footer-bottom {
+            border-top: 1px solid #1f2937; padding-top: 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .footer-bottom p { font-size: 13px; color: #4b5563; }
+        .social-links { display: flex; gap: 12px; }
+        .social-link {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 1px solid #374151;
+            display: flex; align-items: center; justify-content: center;
+            color: #9ca3af; font-size: 14px; transition: var(--transition);
+        }
+        .social-link:hover { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        /* ================================ */
+        /* Scroll Animation System           */
+        /* ================================ */
+
+        /* Base state */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Slide from left */
+        .reveal-left {
+            opacity: 0; transform: translateX(-36px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+        /* Slide from right */
+        .reveal-right {
+            opacity: 0; transform: translateX(36px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+        /* Scale up */
+        .reveal-scale {
+            opacity: 0; transform: scale(0.88);
+            transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        /* Stagger helpers */
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+        .reveal-d3 { transition-delay: 0.3s; }
+        .reveal-d4 { transition-delay: 0.4s; }
+        .reveal-d5 { transition-delay: 0.5s; }
+
+        /* ================================ */
+        /* Page Transition Overlay           */
+        /* ================================ */
+        .page-loader {
+            position: fixed; inset: 0; z-index: 9999;
+            background: var(--bg-dark);
+            display: flex; align-items: center; justify-content: center;
+            animation: loaderFadeOut 0.6s ease-out 0.8s forwards;
+        }
+        .page-loader-inner {
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+        .loader-wheel {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+            animation: rotateWheel 1s linear infinite;
+        }
+        .loader-text { color: #fff; font-size: 14px; font-weight: 500; letter-spacing: 1px; opacity: 0.7; }
+        @keyframes loaderFadeOut {
+            to { opacity: 0; pointer-events: none; }
+        }
+
+        /* ================================ */
+        /* Cursor Spotlight Effect           */
+        /* ================================ */
+        .cursor-spotlight {
+            position: fixed;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(26,115,232,0.06) 0%, transparent 70%);
+            pointer-events: none; z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: left 0.1s, top 0.1s;
+        }
+
+        /* ================================ */
+        /* Responsive                        */
+        /* ================================ */
+        @media (max-width: 1024px) {
+            .hero .container { grid-template-columns: 1fr; text-align: center; }
+            .hero-desc { margin: 0 auto 36px; }
+            .hero-actions { justify-content: center; }
+            .hero-stats { justify-content: center; }
+            .hero-visual { display: none; }
+            .course-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .promo-content { flex-direction: column; text-align: center; }
+            .promo-visual { display: none; }
+            .video-showcase .container { grid-template-columns: 1fr; }
+            .video-info .section-subtitle { max-width: 100%; }
+            .demo-inner { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-menu, .nav-login { display: none; }
+            .mobile-toggle { display: flex; }
+            .hero h1 { font-size: 38px; }
+            .section-title { font-size: 30px; }
+            .usp-grid { grid-template-columns: 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .newsletter-form { flex-direction: column; }
+            .video-chapters { display: none; }
+
+            /* Modal responsive */
+            .cm-header { padding: 16px 18px 14px; }
+            .cm-header-text h2 { font-size: 18px; }
+            .cm-left { padding: 16px; }
+            .cm-right { padding: 16px; }
+            .cm-packages { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .course-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 32px; }
+            .hero-stats { flex-direction: column; gap: 16px; }
+            .jcs-actions { flex-direction: column; width: 100%; }
+            .btn-journey { width: 100%; justify-content: center; }
+            .btn-journey-ghost { width: 100%; }
+        }
+
+        /* ============================================ */
+        /* Back to Top Button                           */
+        /* ============================================ */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(26,115,232,0.35);
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* ============================================ */
+        /* Package card hover enhancements                */
+        /* ============================================ */
+        .cm-pkg-card {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .cm-pkg-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(26,115,232,0.15);
+        }
+        .cm-pkg-card.selected {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(26,115,232,0.2);
+        }
+
+        /* ============================================ */
+        /* Pulse animation for CTA buttons               */
+        /* ============================================ */
+        @keyframes ctaPulse {
+            0%   { box-shadow: 0 0 0 0 rgba(26,115,232,0.4); }
+            70%  { box-shadow: 0 0 0 12px rgba(26,115,232,0); }
+            100% { box-shadow: 0 0 0 0 rgba(26,115,232,0); }
+        }
+        .btn-primary.btn-arrow {
+            animation: ctaPulse 2.5s infinite;
+        }
+        .btn-primary.btn-arrow:hover {
+            animation: none;
+        }
+
+        /* ============================================ */
+        /* Modal open animation for body lock            */
+        /* ============================================ */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* ================================ */
+        /* Courses Section — Enhanced CTA   */
+        /* ================================ */
+        #courses {
+            background:
+                radial-gradient(ellipse 70% 60% at 10% 30%, rgba(26,115,232,0.055) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 90% 70%, rgba(118,75,162,0.045) 0%, transparent 60%),
+                var(--bg);
+        }
+
+        /* Journey CTA strip */
+        .journey-cta-strip {
+            margin-top: 52px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            border-radius: 24px;
+            padding: 48px 40px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .journey-cta-strip::before {
+            content: '';
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 60% 80% at 0% 50%, rgba(99,102,241,0.25) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 70% at 100% 50%, rgba(236,72,153,0.18) 0%, transparent 55%);
+        }
+        .journey-cta-strip::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b, #10b981, #6366f1);
+            background-size: 300% auto;
+            animation: auroraScroll 5s linear infinite;
+        }
+        .jcs-text { flex: 1; position: relative; z-index: 1; }
+        .jcs-text h3 {
+            font-size: 28px; font-weight: 800; color: #fff;
+            margin-bottom: 10px; line-height: 1.3;
+        }
+        .jcs-text h3 span {
+            background: linear-gradient(90deg, #a78bfa, #f472b6, #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .jcs-text p { font-size: 15px; color: #94a3b8; line-height: 1.6; margin-bottom: 20px; }
+        .jcs-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+        .jcs-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: 50px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            font-size: 12px; color: #cbd5e1; font-weight: 500;
+        }
+        .jcs-actions { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 1; flex-shrink: 0; }
+        .btn-journey {
+            padding: 16px 36px; border-radius: 14px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff; font-size: 15px; font-weight: 700;
+            border: none; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 32px rgba(99,102,241,0.4);
+            white-space: nowrap;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-journey:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 14px 40px rgba(99,102,241,0.55);
+        }
+        .btn-journey-ghost {
+            padding: 12px 28px; border-radius: 14px;
+            background: transparent; color: #94a3b8;
+            border: 1.5px solid rgba(255,255,255,0.15);
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+        .btn-journey-ghost:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+
+        @media (max-width: 768px) {
+            .journey-cta-strip { flex-direction: column; padding: 32px 24px; gap: 28px; }
+            .jcs-actions { flex-direction: row; }
+        }
+        @media (max-width: 480px) {
+            .jcs-actions { flex-direction: column; }
+            .journey-cta-strip { padding: 24px 16px; }
+            .jcs-text h3 { font-size: 22px; }
+        }
+
+        /* ================================ */
+        /* Course Selection Modal            */
+        /* ================================ */
+        .course-modal-overlay {
+            position: fixed; inset: 0; z-index: 3000;
+            background: rgba(10, 10, 30, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: none; align-items: center; justify-content: center;
+            padding: 16px;
+        }
+        .course-modal-overlay.open { display: flex; }
+        .course-modal {
+            background: #fff;
+            border-radius: 24px;
+            width: min(1080px, 96vw);
+            max-height: 92vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 120px rgba(0,0,0,0.4);
+            animation: cmSlideUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        @keyframes cmSlideUp {
+            from { opacity:0; transform: translateY(60px) scale(0.96); }
+            to   { opacity:1; transform: translateY(0) scale(1); }
+        }
+
+        /* Modal header */
+        .cm-header {
+            padding: 24px 32px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 16px;
+            background: linear-gradient(135deg, #f0f7ff 0%, #faf5ff 100%);
+            flex-shrink: 0;
+        }
+        .cm-header-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+        }
+        .cm-header-text h2 { font-size: 22px; font-weight: 800; color: var(--text); }
+        .cm-header-text p  { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+        .cm-close {
+            margin-left: auto; width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(0,0,0,0.06); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: var(--text-light); transition: var(--transition);
+            flex-shrink: 0;
+        }
+        .cm-close:hover { background: rgba(0,0,0,0.12); color: var(--text); transform: rotate(90deg); }
+
+        /* Modal body — two columns */
+        .cm-body {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            flex: 1;
+            overflow: hidden;
+        }
+        @media (max-width: 768px) {
+            .cm-body { grid-template-columns: 1fr; }
+        }
+
+        /* LEFT: course list */
+        .cm-left {
+            padding: 24px 28px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+        }
+        .cm-left::-webkit-scrollbar { width: 4px; }
+        .cm-left::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .cm-section-title {
+            font-size: 12px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 14px;
+        }
+
+        /* Package cards */
+        .cm-packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+        @media (max-width: 900px) { .cm-packages { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 480px) { .cm-packages { grid-template-columns: 1fr; } }
+
+        .cm-pkg-card {
+            border: 2px solid var(--border); border-radius: 16px;
+            padding: 18px 16px; cursor: pointer; transition: var(--transition);
+            position: relative; overflow: hidden; text-align: center;
+        }
+        .cm-pkg-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,115,232,0.12); }
+        .cm-pkg-card.selected { border-color: var(--primary); background: var(--primary-light); }
+        .cm-pkg-card.selected::after {
+            content: '✓';
+            position: absolute; top: 10px; right: 12px;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: var(--primary); color: #fff;
+            font-size: 12px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cm-pkg-badge {
+            display: inline-block; padding: 3px 10px; border-radius: 50px;
+            font-size: 11px; font-weight: 700; margin-bottom: 10px;
+        }
+        .pkg-starter .cm-pkg-badge  { background: #e8f5e9; color: #2e7d32; }
+        .pkg-popular .cm-pkg-badge  { background: #fff3e0; color: #e65100; }
+        .pkg-pro     .cm-pkg-badge  { background: #ede7f6; color: #5e35b1; }
+        .pkg-popular { border-color: #ffd93d; }
+        .pkg-popular .cm-pkg-title { color: #e65100; }
+        .cm-pkg-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .cm-pkg-courses { font-size: 12px; color: var(--text-light); margin-bottom: 10px; }
+        .cm-pkg-price { font-size: 24px; font-weight: 900; color: var(--primary); }
+        .cm-pkg-price small { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+        .cm-pkg-save {
+            display: inline-block; margin-top: 6px;
+            padding: 2px 8px; border-radius: 50px;
+            background: #ffeaa7; color: #856404;
+            font-size: 11px; font-weight: 600;
+        }
+        .cm-pkg-features { list-style: none; margin-top: 12px; text-align: left; }
+        .cm-pkg-features li { font-size: 12px; color: var(--text-light); padding: 3px 0; display: flex; gap: 6px; }
+        .cm-pkg-features li::before { content: '✓'; color: #27ae60; font-weight: 700; flex-shrink: 0; }
+
+        /* Individual course items */
+        .cm-course-list { display: flex; flex-direction: column; gap: 10px; }
+        .cm-course-item {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 16px; border: 2px solid var(--border);
+            border-radius: 14px; cursor: pointer; transition: var(--transition);
+            position: relative;
+        }
+        .cm-course-item:hover { border-color: var(--primary); background: #fafbff; }
+        .cm-course-item.selected { border-color: var(--primary); background: var(--primary-light); }
+        .cm-course-thumb {
+            width: 52px; height: 52px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+        .cm-course-info { flex: 1; min-width: 0; }
+        .cm-course-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cm-course-meta { display: flex; gap: 10px; margin-top: 3px; }
+        .cm-course-meta span { font-size: 11px; color: var(--text-muted); }
+        .cm-course-level-badge {
+            font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 50px;
+        }
+        .lvl-beginner     { background: #e8f5e9; color: #2e7d32; }
+        .lvl-intermediate { background: #e3f2fd; color: #1565c0; }
+        .lvl-advanced     { background: #fce4ec; color: #c62828; }
+        .cm-course-price-tag {
+            font-size: 16px; font-weight: 800; color: var(--text); flex-shrink: 0;
+        }
+        .cm-course-price-tag .free-tag {
+            color: #27ae60; font-size: 12px; font-weight: 700;
+            background: #d4edda; padding: 2px 8px; border-radius: 50px;
+        }
+        .cm-check-circle {
+            position: absolute; top: 10px; right: 10px;
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2px solid var(--border); background: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; transition: var(--transition);
+        }
+        .cm-course-item.selected .cm-check-circle {
+            background: var(--primary); border-color: var(--primary); color: #fff;
+        }
+        .cm-course-item.selected .cm-check-circle::after { content: '✓'; }
+
+        /* RIGHT: cart / summary */
+        .cm-right {
+            background: #fafbff;
+            padding: 24px 22px;
+            overflow-y: auto;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .cm-right::-webkit-scrollbar { width: 4px; }
+        .cm-right::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .cm-cart-empty {
+            text-align: center; padding: 40px 0;
+            color: var(--text-muted); font-size: 14px;
+        }
+        .cm-cart-empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+        .cm-cart-items { display: flex; flex-direction: column; gap: 8px; }
+        .cm-cart-row {
+            display: flex; align-items: center; gap: 10px;
+            background: #fff; border-radius: 10px; padding: 10px 12px;
+            border: 1px solid var(--border); animation: cartItemIn 0.25s ease both;
+        }
+        @keyframes cartItemIn {
+            from { opacity:0; transform: translateX(20px) scale(0.95); }
+            to   { opacity:1; transform: translateX(0) scale(1); }
+        }
+        .cm-cart-row-icon { font-size: 20px; flex-shrink: 0; }
+        .cm-cart-row-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cm-cart-row-price { font-size: 14px; font-weight: 800; color: var(--text); flex-shrink: 0; }
+        .cm-cart-row-remove {
+            width: 22px; height: 22px; border-radius: 50%;
+            background: #fee2e2; color: #dc2626; border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; transition: var(--transition); flex-shrink: 0;
+        }
+        .cm-cart-row-remove:hover { background: #dc2626; color: #fff; }
+
+        /* Promo code */
+        .cm-promo-row {
+            display: flex; gap: 8px;
+        }
+        .cm-promo-input {
+            flex: 1; padding: 10px 14px; border: 2px solid var(--border);
+            border-radius: 10px; font-size: 13px; font-family: var(--font);
+            outline: none; transition: var(--transition); text-transform: uppercase;
+        }
+        .cm-promo-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,115,232,0.1); }
+        .cm-promo-btn {
+            padding: 10px 16px; background: var(--primary); color: #fff;
+            border: none; border-radius: 10px; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: var(--transition); white-space: nowrap;
+        }
+        .cm-promo-btn:hover { background: var(--primary-dark); }
+        .cm-promo-msg { font-size: 12px; margin-top: 4px; min-height: 18px; }
+        .cm-promo-ok  { color: #27ae60; }
+        .cm-promo-err { color: #dc2626; }
+
+        /* Price breakdown */
+        .cm-price-box {
+            background: #fff; border-radius: 14px; padding: 16px;
+            border: 1px solid var(--border);
+        }
+        .cm-price-row {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; padding: 5px 0; color: var(--text-light);
+        }
+        .cm-price-row.divider { border-top: 1px dashed var(--border); margin-top: 8px; padding-top: 12px; }
+        .cm-price-row.total { font-size: 18px; font-weight: 800; color: var(--text); }
+        .cm-price-row.total .val { color: var(--primary); }
+        .cm-price-row .discount-val { color: #27ae60; font-weight: 600; }
+        .cm-savings-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: #d4edda; color: #155724; border-radius: 50px;
+            padding: 4px 12px; font-size: 12px; font-weight: 600;
+            margin-top: 10px; width: 100%; justify-content: center;
+        }
+
+        /* Checkout button */
+        .cm-checkout-btn {
+            width: 100%; padding: 16px; background: var(--primary); color: #fff;
+            border: none; border-radius: 14px; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .cm-checkout-btn:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,115,232,0.35); }
+        .cm-checkout-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+        .cm-checkout-note { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+        /* Checkout success screen */
+        .cm-success {
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center; padding: 48px 32px; text-align: center; gap: 16px;
+        }
+        .cm-success.show { display: flex; }
+        .cm-success-icon {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #d4edda, #b8f5c8);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px; animation: successPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        @keyframes successPop {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+        .cm-success h3 { font-size: 22px; font-weight: 800; color: var(--text); }
+        .cm-success p  { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+        .cm-success-courses { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 4px 0; }
+        .cm-success-tag {
+            padding: 5px 12px; border-radius: 50px;
+            background: var(--primary-light); color: var(--primary);
+            font-size: 12px; font-weight: 600;
+        }
+
+        /* ============================================ */
+        /* Section-Specific Decorative Backgrounds       */
+        /* ============================================ */
+
+        /* Hero — large diagonal colour stripe + corner circles */
+        #hero .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #hero .deco-hex-grid {
+            position: absolute; right: -60px; top: 50%; transform: translateY(-50%);
+            width: 420px; height: 420px; opacity: 0.045;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34z' fill='none' stroke='%231a73e8' stroke-width='1.5'/%3E%3Cpath d='M28 100L0 84V50l28-16 28 16v34z' fill='none' stroke='%231a73e8' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-size: 56px 100px;
+        }
+        #hero .deco-diagonal {
+            position: absolute; top: 0; right: 0;
+            width: 55%; height: 100%;
+            background: linear-gradient(135deg, transparent 40%, rgba(26,115,232,0.025) 40%);
+        }
+        #hero .deco-circle-tl {
+            position: absolute; top: -80px; left: -80px;
+            width: 360px; height: 360px; border-radius: 50%;
+            border: 60px solid rgba(255,107,107,0.04);
+        }
+        #hero .deco-circle-br {
+            position: absolute; bottom: -120px; right: -120px;
+            width: 400px; height: 400px; border-radius: 50%;
+            border: 80px solid rgba(118,75,162,0.04);
+        }
+
+        /* USP Section — dot matrix pattern */
+        #usps {
+            position: relative;
+        }
+        #usps .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #usps .deco-wave-top {
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #764ba2, #ff6b6b);
+            background-size: 300% auto;
+            animation: auroraScroll 8s linear infinite;
+            opacity: 0.5;
+        }
+        #usps .deco-circles-bg {
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(26,115,232,0.07) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+        }
+        #usps .deco-arc {
+            position: absolute; right: -100px; top: 50%;
+            transform: translateY(-50%);
+            width: 500px; height: 500px; border-radius: 50%;
+            border: 2px solid rgba(26,115,232,0.07);
+        }
+        #usps .deco-arc::after {
+            content: '';
+            position: absolute; inset: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(118,75,162,0.06);
+        }
+
+        /* Video Showcase — scan lines + corner triangle */
+        #video-showcase .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #video-showcase .deco-scanlines {
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 4px);
+        }
+        #video-showcase .deco-triangle-tr {
+            position: absolute; top: 0; right: 0;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 0 200px 200px 0;
+            border-color: transparent rgba(77,150,255,0.07) transparent transparent;
+        }
+        #video-showcase .deco-triangle-bl {
+            position: absolute; bottom: 0; left: 0;
+            width: 0; height: 0;
+            border-style: solid;
+            border-width: 160px 0 0 160px;
+            border-color: transparent transparent transparent rgba(118,75,162,0.07);
+        }
+        #video-showcase .deco-ring {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 700px; height: 700px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        #video-showcase .deco-ring::before {
+            content: '';
+            position: absolute; inset: 80px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        /* Demo Section — colour strip vertical bars */
+        .demo-section {
+            position: relative;
+        }
+        .demo-section .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .demo-section .deco-spectrum-left {
+            position: absolute; top: 0; left: 0; bottom: 0;
+            width: 6px;
+            background: linear-gradient(to bottom, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+            opacity: 0.2;
+        }
+        .demo-section .deco-spectrum-right {
+            position: absolute; top: 0; right: 0; bottom: 0;
+            width: 6px;
+            background: linear-gradient(to top, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+            opacity: 0.2;
+        }
+        .demo-section .deco-cross-pattern {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(26,115,232,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26,115,232,0.04) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
+
+        /* Courses Section — zigzag top & bottom */
+        #courses {
+            position: relative;
+        }
+        #courses .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #courses .deco-zigzag-top {
+            position: absolute; top: 0; left: 0; right: 0; height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 12'%3E%3Cpath d='M0 0 L10 12 L20 0' fill='none' stroke='rgba(26,115,232,0.12)' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-size: 20px 12px;
+        }
+        #courses .deco-large-circle {
+            position: absolute; right: -200px; bottom: -200px;
+            width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(99,102,241,0.05) 0%, transparent 65%);
+        }
+        #courses .deco-small-circles {
+            position: absolute; left: -60px; top: 50%;
+            width: 300px; height: 300px;
+        }
+        #courses .deco-small-circles::before {
+            content: '';
+            position: absolute; width: 200px; height: 200px;
+            border-radius: 50%; border: 1.5px dashed rgba(26,115,232,0.1);
+            top: 50%; left: 50%; transform: translate(-50%,-50%);
+        }
+        #courses .deco-small-circles::after {
+            content: '';
+            position: absolute; width: 100px; height: 100px;
+            border-radius: 50%; background: rgba(255,107,107,0.05);
+            top: 50%; left: 50%; transform: translate(-50%,-50%);
+        }
+
+        /* Promo Banner — diagonal stripes */
+        #promo .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #promo .deco-stripes {
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
+                transparent 1px, transparent 20px
+            );
+        }
+        #promo .deco-star-burst {
+            position: absolute; top: -60px; left: -60px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+        }
+        #promo .deco-honeycomb {
+            position: absolute; bottom: -20px; right: 80px; opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50V16L28 0l28 16v34z' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M28 100L0 84V50l28-16 28 16v34z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+            background-size: 56px 100px;
+            width: 280px; height: 200px;
+        }
+
+        /* Testimonials — quote pattern */
+        #testimonials {
+            position: relative;
+        }
+        #testimonials .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #testimonials .deco-quote-bg {
+            position: absolute; top: 20px; left: 40px;
+            font-size: 300px; font-family: Georgia, serif;
+            color: rgba(26,115,232,0.04); line-height: 1;
+            font-weight: 900; user-select: none;
+        }
+        #testimonials .deco-dots-grid {
+            position: absolute; bottom: 0; right: 0; width: 200px; height: 200px;
+            background-image: radial-gradient(circle, rgba(118,75,162,0.12) 1.5px, transparent 1.5px);
+            background-size: 20px 20px;
+        }
+
+        /* Newsletter — radial burst */
+        #newsletter {
+            position: relative;
+        }
+        #newsletter .section-bg-deco {
+            position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        #newsletter .deco-radial-burst {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 800px; height: 800px;
+            background: conic-gradient(
+                rgba(255,107,107,0.03) 0deg, transparent 30deg,
+                rgba(77,150,255,0.03) 60deg, transparent 90deg,
+                rgba(118,75,162,0.03) 120deg, transparent 150deg,
+                rgba(107,203,119,0.03) 180deg, transparent 210deg,
+                rgba(253,203,110,0.03) 240deg, transparent 270deg,
+                rgba(255,107,200,0.03) 300deg, transparent 330deg,
+                rgba(255,107,107,0.03) 360deg
+            );
+            border-radius: 50%;
+            animation: rotateWheel 30s linear infinite;
+        }
+        #newsletter .deco-ring-nl {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 500px; height: 500px; border-radius: 50%;
+            border: 1.5px dashed rgba(26,115,232,0.08);
+            animation: rotateWheel 20s linear infinite reverse;
+        }
+        #newsletter .deco-ring-nl-2 {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+            width: 300px; height: 300px; border-radius: 50%;
+            border: 1.5px dashed rgba(118,75,162,0.07);
+            animation: rotateWheel 12s linear infinite;
+        }
+
+        /* Make sure section content sits above decorations */
+        #usps .container, #courses .container, #testimonials .container,
+        #newsletter .container, .demo-section .container,
+        #promo .container {
+            position: relative; z-index: 1;
+        }
+
+        /* ============================================ */
+        /* Language Switcher                             */
+        /* ============================================ */
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: var(--bg-alt);
+            border-radius: 50px;
+            padding: 3px;
+            border: 1px solid var(--border);
+        }
+        .lang-btn {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font);
+        }
+        .lang-btn.active {
+            background: #fff;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .navbar .lang-switcher {
+            margin-right: 4px;
+        }
+        @media (max-width: 768px) {
+            .lang-switcher { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div id="scrollProgressBar" style="position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff,#ff6b6b);background-size:300% auto;animation:auroraScroll 4s linear infinite;width:0%;z-index:1002;transition:width 0.1s;"></div>
+
+    <!-- Aurora top bar -->
+    <div id="auroraBar"></div>
+
+    <!-- Background Canvas (particles) -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Animated Aurora Background -->
+    <div id="auroraBg" aria-hidden="true"></div>
+
+    <!-- Scroll line decorations -->
+    <div class="scroll-line scroll-line-left" aria-hidden="true"></div>
+    <div class="scroll-line scroll-line-right" aria-hidden="true"></div>
+
+    <!-- Animated gradient mesh orbs -->
+    <div id="gradientMesh" aria-hidden="true">
+        <div class="mesh-orb mesh-orb-1"></div>
+        <div class="mesh-orb mesh-orb-2"></div>
+        <div class="mesh-orb mesh-orb-3"></div>
+        <div class="mesh-orb mesh-orb-4"></div>
+        <div class="mesh-orb mesh-orb-5"></div>
+        <div class="mesh-orb mesh-orb-6"></div>
+        <div class="mesh-orb mesh-orb-7"></div>
+    </div>
+
+    <!-- Animated colour stripes -->
+    <div id="colourStripes" aria-hidden="true">
+        <div class="colour-stripe colour-stripe-1"></div>
+        <div class="colour-stripe colour-stripe-2"></div>
+        <div class="colour-stripe colour-stripe-3"></div>
+        <div class="colour-stripe colour-stripe-4"></div>
+        <div class="colour-stripe colour-stripe-5"></div>
+    </div>
+
+    <!-- Subtle background grid -->
+    <div id="bgGrid" aria-hidden="true"></div>
+
+    <!-- Dot pattern overlay -->
+    <div id="dotPattern" aria-hidden="true"></div>
+
+    <!-- Geometric floating shapes -->
+    <div id="geoShapes" aria-hidden="true"></div>
+
+    <!-- Floating colour bubbles (injected by JS) -->
+    <div id="colourBubbles" aria-hidden="true"></div>
+
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="page-loader-inner">
+            <div class="loader-wheel"></div>
+            <div class="loader-text">Loading Colour Lab...</div>
+        </div>
+    </div>
+
+    <!-- Cursor Spotlight -->
+    <div class="cursor-spotlight" id="cursorSpotlight"></div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to Top">↑</button>
+
+    <!-- ======================== -->
+    <!-- Navigation               -->
+    <!-- ======================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="homepage.html" class="nav-logo">
+                <div class="nav-logo-icon"></div>
+                Colour Lab
+            </a>
+            <ul class="nav-menu">
+                <li><a href="homepage.html" class="active" data-i18n="nav.home">Home</a></li>
+                <li><a href="Learning.html" data-i18n="nav.learning">Learning</a></li>
+                <li><a href="color-test page.html" data-i18n="nav.test">Test</a></li>
+                <li><a href="Game.html" data-i18n="nav.game">Game</a></li>
+                <li><a href="community page.html" data-i18n="nav.community">Community</a></li>
+            </ul>
+            <div class="nav-actions">
+                <div class="lang-switcher" id="langSwitcher" aria-label="Language Switcher">
+                    <button class="lang-btn active" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                </div>
+                <button class="nav-login" data-i18n="nav.login">Log In</button>
+                <button class="nav-signup" data-i18n="nav.signup">Sign Up Free</button>
+            </div>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ======================== -->
+    <!-- Hero Section              -->
+    <!-- ======================== -->
+    <section class="hero" id="hero">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-hex-grid"></div>
+            <div class="deco-diagonal"></div>
+            <div class="deco-circle-tl"></div>
+            <div class="deco-circle-br"></div>
+        </div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="dot"></span>
+                    <span data-i18n="hero.badge">Now Open for Enrollment</span>
+                </div>
+                <h1>
+                    <span data-i18n="hero.h1line1">Master the</span><br>
+                    <span data-i18n="hero.h1line2">Language of</span><br>
+                    <span class="gradient-text"><em data-i18n="hero.h1line3">Colour</em></span>
+                </h1>
+                <p class="hero-desc" data-i18n="hero.desc">
+                    Explore the science, psychology, and art behind colour encoding. From RGB fundamentals to advanced colour theory — learn how colours shape our digital and physical world.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary btn-arrow" id="heroStartBtn" data-i18n="hero.startBtn">Start Learning</button>
+                    <button class="btn btn-outline" id="watchDemoBtn" data-i18n="hero.watchBtn">▶ Watch Demo</button>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-value" data-target="12000">0<span>+</span></div>
+                        <div class="hero-stat-label" data-i18n="hero.stat1">Active Learners</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-value" data-target="86">0<span>%</span></div>
+                        <div class="hero-stat-label" data-i18n="hero.stat2">Completion Rate</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-value" data-target="4.9" data-decimal="1">0<span>★</span></div>
+                        <div class="hero-stat-label" data-i18n="hero.stat3">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="colour-wheel-container">
+                    <div class="colour-wheel"></div>
+                    <div class="colour-wheel-center">
+                        <div class="emoji">🎨</div>
+                        <div class="label" data-i18n="hero.wheelLabel">Colour Lab</div>
+                        <div class="sublabel" data-i18n="hero.wheelSub">Start Your Journey</div>
+                    </div>
+                    <div class="floating-card fc-1">
+                        <div class="fc-icon" style="background:#e8f5e9;">✓</div>
+                        <div class="fc-text">
+                            <div class="fc-value">RGB</div>
+                            <div class="fc-label">Encoding</div>
+                        </div>
+                    </div>
+                    <div class="floating-card fc-2">
+                        <div class="fc-icon" style="background:#fff3e0;">🎨</div>
+                        <div class="fc-text">
+                            <div class="fc-value">CMYK</div>
+                            <div class="fc-label">Print Systems</div>
+                        </div>
+                    </div>
+                    <div class="floating-card fc-3">
+                        <div class="fc-icon" style="background:#e3f2fd;">💡</div>
+                        <div class="fc-text">
+                            <div class="fc-value">HEX</div>
+                            <div class="fc-label">Web Colours</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- USP Section               -->
+    <!-- ======================== -->
+    <section class="section section-alt" id="usps">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-wave-top"></div>
+            <div class="deco-circles-bg"></div>
+            <div class="deco-arc"></div>
+        </div>
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label" data-i18n="usp.label">Why Choose Us</div>
+                <h2 class="section-title" data-i18n="usp.title">Everything You Need to Master Colour</h2>
+                <p class="section-subtitle" data-i18n="usp.subtitle">Our platform combines structured learning with hands-on practice to build genuine expertise in colour encoding.</p>
+            </div>
+            <div class="usp-grid">
+                <div class="usp-card reveal reveal-d1">
+                    <div class="usp-icon">📖</div>
+                    <h3 data-i18n="usp.card1.title">Structured Curriculum</h3>
+                    <p data-i18n="usp.card1.desc">From basic colour wheels to complex encoding systems. Step-by-step lessons designed by industry experts for all learning levels.</p>
+                </div>
+                <div class="usp-card reveal reveal-d2">
+                    <div class="usp-icon">🎮</div>
+                    <h3 data-i18n="usp.card2.title">Interactive Exercises</h3>
+                    <p data-i18n="usp.card2.desc">Hands-on colour mixing, matching, and encoding challenges that reinforce your understanding through active practice and experimentation.</p>
+                </div>
+                <div class="usp-card reveal reveal-d3">
+                    <div class="usp-icon">🏆</div>
+                    <h3 data-i18n="usp.card3.title">Certified Program</h3>
+                    <p data-i18n="usp.card3.desc">Earn industry-recognized certificates in colour science and digital colour management. Boost your career credentials today.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- Video Showcase Section (NEW)           -->
+    <!-- ====================================== -->
+    <section class="video-showcase" id="video-showcase">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-scanlines"></div>
+            <div class="deco-triangle-tr"></div>
+            <div class="deco-triangle-bl"></div>
+            <div class="deco-ring"></div>
+        </div>
+        <div class="container">
+
+            <!-- Left: Info Panel -->
+            <div class="video-info reveal-left">
+                <div class="section-label" data-i18n="video.label">Video Introduction</div>
+                <h2 class="section-title" data-i18n="video.title">See Colour Encoding in Action</h2>
+                <p class="section-subtitle" data-i18n="video.subtitle">Watch our comprehensive introduction to colour science — from wavelengths to digital pixels, explained visually and intuitively.</p>
+
+                <ul class="video-feature-list" id="videoFeatureList">
+                    <li>
+                        <div class="vfl-icon">🌈</div>
+                        <div class="vfl-text">
+                            <h4 data-i18n="video.feat1.title">The Physics of Light &amp; Colour</h4>
+                            <p data-i18n="video.feat1.desc">Understand how wavelengths translate into the colours we perceive every day.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="vfl-icon">💻</div>
+                        <div class="vfl-text">
+                            <h4 data-i18n="video.feat2.title">RGB, HEX &amp; CMYK Demystified</h4>
+                            <p data-i18n="video.feat2.desc">A clear visual breakdown of digital and print colour models side by side.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="vfl-icon">🧠</div>
+                        <div class="vfl-text">
+                            <h4 data-i18n="video.feat3.title">Colour Psychology &amp; Perception</h4>
+                            <p data-i18n="video.feat3.desc">Discover how the brain interprets colour and why it matters in design.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="vfl-icon">🎨</div>
+                        <div class="vfl-text">
+                            <h4 data-i18n="video.feat4.title">Hands-On Colour Mixing Demo</h4>
+                            <p data-i18n="video.feat4.desc">Live interactive demo showing additive and subtractive colour mixing.</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="video-cta-row">
+                    <button class="btn btn-ghost btn-sm btn-arrow" id="playVideoBtn" data-i18n="video.watchBtn">Watch Full Video</button>
+                    <div class="video-stat-pill">⏱ <span>18 min</span> <span data-i18n="video.intro">intro</span></div>
+                    <div class="video-stat-pill">👁 <span>24K</span> <span data-i18n="video.views">views</span></div>
+                </div>
+            </div>
+
+            <!-- Right: Video Player -->
+            <div class="video-player-wrap" id="videoPlayerWrap">
+                <div class="video-frame" id="videoFrame" role="button" tabindex="0" aria-label="Play introduction video">
+                    <div class="video-frame-bg"></div>
+                    <div class="video-orb video-orb-1"></div>
+                    <div class="video-orb video-orb-2"></div>
+                    <div class="video-orb video-orb-3"></div>
+
+                    <div class="video-content-overlay">
+                        <!-- Pulse rings -->
+                        <div style="position:relative; display:flex; align-items:center; justify-content:center; width:72px; height:72px;">
+                            <div class="play-pulse"></div>
+                            <div class="play-pulse"></div>
+                            <div class="play-pulse"></div>
+                            <button class="video-play-btn" aria-label="Play">▶</button>
+                        </div>
+                        <div class="video-title-overlay" data-i18n="video.playerTitle">Introduction to Colour Encoding</div>
+                    </div>
+
+                    <div class="video-duration-badge">18:42</div>
+                    <div class="video-spectrum"></div>
+                </div>
+
+                <!-- Chapter Tabs -->
+                <div class="video-chapters">
+                    <div class="chapter-tab active" data-chapter="0" data-i18n="video.ch0">▶ Intro</div>
+                    <div class="chapter-tab" data-chapter="1" data-i18n="video.ch1">🌈 Colour Basics</div>
+                    <div class="chapter-tab" data-chapter="2" data-i18n="video.ch2">💻 Digital Models</div>
+                    <div class="chapter-tab" data-chapter="3" data-i18n="video.ch3">🧠 Psychology</div>
+                    <div class="chapter-tab" data-chapter="4" data-i18n="video.ch4">🎨 Live Demo</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- Colour Swatch Demo Section (NEW)        -->
+    <!-- ====================================== -->
+    <section class="demo-section">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-spectrum-left"></div>
+            <div class="deco-spectrum-right"></div>
+            <div class="deco-cross-pattern"></div>
+        </div>
+        <div class="container">
+            <div class="demo-inner">
+                <div class="reveal-left">
+                    <div class="section-label" data-i18n="demo.label">Interactive Preview</div>
+                    <h2 class="section-title" style="font-size:32px;" data-i18n="demo.title">Explore the Colour Spectrum</h2>
+                    <p class="section-subtitle" style="text-align:left; margin:0 0 24px; font-size:16px;" data-i18n="demo.desc">Hover over any swatch to instantly see its <strong>HEX</strong>, <strong>RGB</strong>, and <strong>CMYK</strong> values — the three colour encoding systems you'll master in our courses. Notice how the same colour translates differently across screen and print models.</p>
+                    <div class="demo-code-block">
+                        <div class="token-comment">/* — HEX  (Web / CSS) ————————— */</div>
+                        <div><span class="token-key">red</span>:    <span class="token-val">#FF0000</span></div>
+                        <div><span class="token-key">orange</span>: <span class="token-val">#FF6600</span></div>
+                        <div><span class="token-key">blue</span>:   <span class="token-val">#0066FF</span></div>
+                        <br>
+                        <div class="token-comment">/* — RGB  (Screen / Additive) —— */</div>
+                        <div><span class="token-key">red</span>:    <span class="token-str">rgb(</span><span class="token-num">255</span>, <span class="token-num">0</span>, <span class="token-num">0</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">orange</span>: <span class="token-str">rgb(</span><span class="token-num">255</span>, <span class="token-num">102</span>, <span class="token-num">0</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">blue</span>:   <span class="token-str">rgb(</span><span class="token-num">0</span>, <span class="token-num">102</span>, <span class="token-num">255</span><span class="token-str">)</span></div>
+                        <br>
+                        <div class="token-comment">/* — CMYK (Print / Subtractive) — */</div>
+                        <div><span class="token-key">red</span>:    <span class="token-str">cmyk(</span><span class="token-num">0%</span>, <span class="token-num">100%</span>, <span class="token-num">100%</span>, <span class="token-num">0%</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">orange</span>: <span class="token-str">cmyk(</span><span class="token-num">0%</span>, <span class="token-num">60%</span>, <span class="token-num">100%</span>, <span class="token-num">0%</span><span class="token-str">)</span></div>
+                        <div><span class="token-key">blue</span>:   <span class="token-str">cmyk(</span><span class="token-num">100%</span>, <span class="token-num">60%</span>, <span class="token-num">0%</span>, <span class="token-num">0%</span><span class="token-str">)</span></div>
+                    </div>
+                </div>
+                <div class="demo-visual reveal-right">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Saturated</span>
+                    </div>
+                    <div class="colour-swatch-row swatch-row-1">
+                        <div class="colour-swatch s1" data-hex="#FF0000" data-r="255" data-g="0"   data-b="0"></div>
+                        <div class="colour-swatch s2" data-hex="#FF6600" data-r="255" data-g="102" data-b="0"></div>
+                        <div class="colour-swatch s3" data-hex="#FFCC00" data-r="255" data-g="204" data-b="0"></div>
+                        <div class="colour-swatch s4" data-hex="#00CC44" data-r="0"   data-g="204" data-b="68"></div>
+                        <div class="colour-swatch s5" data-hex="#0066FF" data-r="0"   data-g="102" data-b="255"></div>
+                        <div class="colour-swatch s6" data-hex="#9900FF" data-r="153" data-g="0"   data-b="255"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 8px;">
+                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Light Tints</span>
+                    </div>
+                    <div class="colour-swatch-row swatch-row-2">
+                        <div class="colour-swatch s1" data-hex="#FFCCCC" data-r="255" data-g="204" data-b="204"></div>
+                        <div class="colour-swatch s2" data-hex="#FFD9B9" data-r="255" data-g="217" data-b="185"></div>
+                        <div class="colour-swatch s3" data-hex="#FFFACD" data-r="255" data-g="250" data-b="205"></div>
+                        <div class="colour-swatch s4" data-hex="#C8F7D6" data-r="200" data-g="247" data-b="214"></div>
+                        <div class="colour-swatch s5" data-hex="#CCE0FF" data-r="204" data-g="224" data-b="255"></div>
+                        <div class="colour-swatch s6" data-hex="#E0CCFF" data-r="224" data-g="204" data-b="255"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0 8px;">
+                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Dark Shades</span>
+                    </div>
+                    <div class="colour-swatch-row swatch-row-3">
+                        <div class="colour-swatch s1" data-hex="#800000" data-r="128" data-g="0"   data-b="0"></div>
+                        <div class="colour-swatch s2" data-hex="#804000" data-r="128" data-g="64"  data-b="0"></div>
+                        <div class="colour-swatch s3" data-hex="#806600" data-r="128" data-g="102" data-b="0"></div>
+                        <div class="colour-swatch s4" data-hex="#006622" data-r="0"   data-g="102" data-b="34"></div>
+                        <div class="colour-swatch s5" data-hex="#003380" data-r="0"   data-g="51"  data-b="128"></div>
+                        <div class="colour-swatch s6" data-hex="#4D0080" data-r="77"  data-g="0"   data-b="128"></div>
+                    </div>
+                    <div id="swatchTooltipBar" style="height:36px; display:flex; align-items:center; padding:0 4px; font-size:13px; color:var(--text-light); font-family:monospace; transition: var(--transition);" data-i18n="demo.hoverHint">
+                        Hover a swatch to see its colour codes ↑
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- Courses Section           -->
+    <!-- ======================== -->
+    <section class="section" id="courses">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-zigzag-top"></div>
+            <div class="deco-large-circle"></div>
+            <div class="deco-small-circles"></div>
+        </div>
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label" data-i18n="courses.label">Popular Courses</div>
+                <h2 class="section-title" data-i18n="courses.title">Start Your Colour Journey</h2>
+                <p class="section-subtitle" data-i18n="courses.subtitle">Carefully crafted courses that take you from beginner to expert in colour encoding.</p>
+            </div>
+            <div class="course-grid">
+                <div class="course-card reveal reveal-d1">
+                    <div class="course-thumb ct-1">
+                        <span class="thumb-emoji">🌈</span>
+                        <span class="course-level" data-i18n="level.beginner">Beginner</span>
+                    </div>
+                    <div class="course-info">
+                        <h3 data-i18n="course1.title">Fundamentals of Colour</h3>
+                        <div class="course-meta">
+                            <span>📖 <span data-i18n="meta.lessons.12">12 Lessons</span></span>
+                            <span>⏱ <span data-i18n="meta.hours.3.5">3.5 hrs</span></span>
+                        </div>
+                        <div class="course-footer">
+                            <span class="course-price"><span class="free" data-i18n="price.free">Free</span></span>
+                            <button class="course-enroll" onclick="openCourseModal('course-1')">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-card reveal reveal-d2">
+                    <div class="course-thumb ct-2">
+                        <span class="thumb-emoji">💻</span>
+                        <span class="course-level" data-i18n="level.intermediate">Intermediate</span>
+                    </div>
+                    <div class="course-info">
+                        <h3 data-i18n="course2.title">Digital Colour Systems</h3>
+                        <div class="course-meta">
+                            <span>📖 <span data-i18n="meta.lessons.18">18 Lessons</span></span>
+                            <span>⏱ <span data-i18n="meta.hours.6">6 hrs</span></span>
+                        </div>
+                        <div class="course-footer">
+                            <span class="course-price">$49</span>
+                            <button class="course-enroll" onclick="openCourseModal('course-2')">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-card reveal reveal-d3">
+                    <div class="course-thumb ct-3">
+                        <span class="thumb-emoji">🧠</span>
+                        <span class="course-level" data-i18n="level.intermediate">Intermediate</span>
+                    </div>
+                    <div class="course-info">
+                        <h3 data-i18n="course3.title">Colour &amp; Human Mind</h3>
+                        <div class="course-meta">
+                            <span>📖 <span data-i18n="meta.lessons.15">15 Lessons</span></span>
+                            <span>⏱ <span data-i18n="meta.hours.4.5">4.5 hrs</span></span>
+                        </div>
+                        <div class="course-footer">
+                            <span class="course-price">$39</span>
+                            <button class="course-enroll" onclick="openCourseModal('course-3')">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-card reveal reveal-d4">
+                    <div class="course-thumb ct-4">
+                        <span class="thumb-emoji">🖨️</span>
+                        <span class="course-level" data-i18n="level.advanced">Advanced</span>
+                    </div>
+                    <div class="course-info">
+                        <h3 data-i18n="course4.title">CMYK, HEX &amp; Beyond</h3>
+                        <div class="course-meta">
+                            <span>📖 <span data-i18n="meta.lessons.24">24 Lessons</span></span>
+                            <span>⏱ <span data-i18n="meta.hours.8">8 hrs</span></span>
+                        </div>
+                        <div class="course-footer">
+                            <span class="course-price">$79</span>
+                            <button class="course-enroll" onclick="openCourseModal('course-4')">→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="journey-cta-strip reveal">
+                <div class="jcs-text">
+                    <h3 data-i18n="journey.title">Ready to <span>Start Your Journey?</span></h3>
+                    <p data-i18n="journey.desc">Pick individual courses or grab a money-saving bundle — your path to colour mastery starts here.</p>
+                    <div class="jcs-badges">
+                        <span class="jcs-badge" data-i18n="journey.badge1">🎁 Bundle &amp; Save up to 52%</span>
+                        <span class="jcs-badge" data-i18n="journey.badge2">🔒 30-day Money Back</span>
+                        <span class="jcs-badge" data-i18n="journey.badge3">♾️ Lifetime Access</span>
+                        <span class="jcs-badge" data-i18n="journey.badge4">🏆 Verified Certificate</span>
+                    </div>
+                </div>
+                <div class="jcs-actions">
+                    <button class="btn-journey" id="openCourseModalBtn" onclick="openCourseModal()" data-i18n="journey.enrollBtn">
+                        🎨 Browse &amp; Enroll Now
+                    </button>
+                    <button class="btn-journey-ghost" onclick="openCourseModal('popular')" data-i18n="journey.bundleBtn">
+                        ⭐ View Best Bundle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- Promotional Banner        -->
+    <!-- ======================== -->
+    <section class="promo-banner" id="promo">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-stripes"></div>
+            <div class="deco-star-burst"></div>
+            <div class="deco-honeycomb"></div>
+        </div>
+        <div class="container">
+            <div class="promo-content reveal-scale">
+                <div class="promo-text">
+                    <h2 data-i18n="promo.title">🎉 Limited Time — 50% Off Your First Course!</h2>
+                    <p data-i18n="promo.desc">Join thousands of learners mastering colour encoding. Our introductory offer won't last forever — start your journey today.</p>
+                    <div class="promo-code">
+                        🏷️ <span data-i18n="promo.code">Code:</span> <strong>COLOUR50</strong>
+                    </div>
+                    <button class="btn btn-white btn-sm btn-arrow" data-i18n="promo.btn">Claim Your Discount</button>
+                </div>
+                <div class="promo-visual">🎨</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- Testimonials              -->
+    <!-- ======================== -->
+    <section class="section section-alt" id="testimonials">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-quote-bg">"</div>
+            <div class="deco-dots-grid"></div>
+        </div>
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label" data-i18n="test.label">Testimonials</div>
+                <h2 class="section-title" data-i18n="test.title">What Learners Say</h2>
+                <p class="section-subtitle" data-i18n="test.subtitle">Join our growing community of colour enthusiasts and professionals.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card reveal reveal-d1">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text" data-i18n="test.t1">"Colour Lab completely changed how I approach design. The interactive exercises made complex concepts feel intuitive and natural."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar ta-1">👩</div>
+                        <div>
+                            <div class="testimonial-name">Sarah Chen</div>
+                            <div class="testimonial-role" data-i18n="test.t1.role">UX Designer at Figma</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal reveal-d2">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text" data-i18n="test.t2">"The structured curriculum helped me go from zero knowledge to confidently working with professional colour systems in just weeks."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar ta-2">👨</div>
+                        <div>
+                            <div class="testimonial-name">Marcus Rivera</div>
+                            <div class="testimonial-role" data-i18n="test.t2.role">Front-end Developer</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal reveal-d3">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text" data-i18n="test.t3">"Best colour course I've found online. The certificate helped me land a role in digital media production. Highly recommended!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar ta-3">👩</div>
+                        <div>
+                            <div class="testimonial-name">Emily Zhang</div>
+                            <div class="testimonial-role" data-i18n="test.t3.role">Graphic Designer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- Newsletter CTA            -->
+    <!-- ======================== -->
+    <section class="section newsletter" id="newsletter">
+        <div class="section-bg-deco" aria-hidden="true">
+            <div class="deco-radial-burst"></div>
+            <div class="deco-ring-nl"></div>
+            <div class="deco-ring-nl-2"></div>
+        </div>
+        <div class="container reveal-scale">
+            <h2 data-i18n="nl.title">Stay Updated on Colour Science</h2>
+            <p data-i18n="nl.desc">Get weekly tips, tutorials, and insights about colour encoding delivered to your inbox.</p>
+            <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+                <input type="email" class="newsletter-input" id="newsletterEmail" data-i18n-placeholder="nl.placeholder" placeholder="Enter your email address">
+                <button type="submit" class="btn btn-primary btn-sm" id="subscribeBtn" data-i18n="nl.btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ======================== -->
+    <!-- Swatch Floating Tooltip   -->
+    <!-- ======================== -->
+    <div class="swatch-tooltip" id="swatchTooltip">
+        <div class="swatch-tooltip-inner" style="position:relative;">
+            <div class="swatch-tooltip-preview" id="tooltipPreview">
+                <div class="swatch-tooltip-preview-shine"></div>
+            </div>
+            <div class="swatch-tooltip-body">
+                <div class="swatch-tooltip-row">
+                    <span class="stt-badge stt-badge-hex">HEX</span>
+                    <span class="stt-value" id="tooltipHex">#FF0000</span>
+                </div>
+                <div class="swatch-tooltip-row">
+                    <span class="stt-badge stt-badge-rgb">RGB</span>
+                    <span class="stt-value" id="tooltipRgb">rgb(255, 0, 0)</span>
+                </div>
+                <div class="swatch-tooltip-row">
+                    <span class="stt-badge stt-badge-cmyk">CMYK</span>
+                    <span class="stt-value" id="tooltipCmyk">0%, 100%, 100%, 0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== -->
+    <!-- Footer                    -->
+    <!-- ======================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <div class="wheel"></div>
+                        <span class="logo">Colour Lab</span>
+                    </div>
+                    <p class="footer-desc" data-i18n="footer.desc">Empowering learners worldwide to master the science and art of colour encoding. From pixels to print — we make colour accessible to everyone.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">f</a>
+                        <a href="#" class="social-link" aria-label="Twitter">𝕏</a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+                        <a href="#" class="social-link" aria-label="YouTube">▶</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 data-i18n="footer.learning">Learning</h4>
+                    <ul>
+                        <li><a href="#" data-i18n="footer.allCourses">All Courses</a></li>
+                        <li><a href="#" data-i18n="footer.paths">Learning Paths</a></li>
+                        <li><a href="#" data-i18n="footer.resources">Resources</a></li>
+                        <li><a href="#" data-i18n="footer.certs">Certificates</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="#" data-i18n="footer.about">About Us</a></li>
+                        <li><a href="#" data-i18n="footer.careers">Careers</a></li>
+                        <li><a href="#" data-i18n="footer.blog">Blog</a></li>
+                        <li><a href="#" data-i18n="footer.contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 data-i18n="footer.support">Support</h4>
+                    <ul>
+                        <li><a href="#" data-i18n="footer.help">Help Center</a></li>
+                        <li><a href="#" data-i18n="footer.community">Community</a></li>
+                        <li><a href="#" data-i18n="footer.privacy">Privacy Policy</a></li>
+                        <li><a href="#" data-i18n="footer.terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-i18n="footer.copy">© 2026 Colour Lab. All rights reserved.</p>
+                <p data-i18n="footer.made">Made with 🎨 for colour lovers everywhere.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ======================== -->
+    <!-- Course Selection Modal    -->
+    <!-- ======================== -->
+    <div class="course-modal-overlay" id="courseModalOverlay" role="dialog" aria-modal="true" aria-label="Course Selection">
+        <div class="course-modal" id="courseModal">
+            <!-- Header -->
+            <div class="cm-header">
+                <div class="cm-header-icon">🎨</div>
+                <div class="cm-header-text">
+                    <h2>Start Your Colour Journey</h2>
+                    <p>Select individual courses or pick a bundle for the best value</p>
+                </div>
+                <button class="cm-close" id="closeCourseModal" aria-label="Close">✕</button>
+            </div>
+
+            <!-- Body -->
+            <div class="cm-body">
+                <!-- LEFT: course selection -->
+                <div class="cm-left">
+                    <!-- Bundle packages -->
+                    <div class="cm-section-title">🎁 Bundle Packages — Best Value</div>
+                    <div class="cm-packages">
+                        <div class="cm-pkg-card pkg-starter" data-pkg="starter" onclick="selectPackage('starter')">
+                            <span class="cm-pkg-badge">🌱 Starter</span>
+                            <div class="cm-pkg-title">Colour Basics</div>
+                            <div class="cm-pkg-courses">2 Courses</div>
+                            <div class="cm-pkg-price">$39 <small>/ bundle</small></div>
+                            <div class="cm-pkg-save" id="save-starter">Save 0%</div>
+                            <ul class="cm-pkg-features">
+                                <li>Fundamentals of Colour</li>
+                                <li>Colour &amp; Human Mind</li>
+                                <li>Certificate of Completion</li>
+                                <li>Email Support</li>
+                            </ul>
+                        </div>
+                        <div class="cm-pkg-card pkg-popular" data-pkg="popular" onclick="selectPackage('popular')">
+                            <span class="cm-pkg-badge">⭐ Most Popular</span>
+                            <div class="cm-pkg-title">Digital Pro</div>
+                            <div class="cm-pkg-courses">3 Courses</div>
+                            <div class="cm-pkg-price">$79 <small>/ bundle</small></div>
+                            <div class="cm-pkg-save" id="save-popular">Save 10%</div>
+                            <ul class="cm-pkg-features">
+                                <li>Fundamentals of Colour</li>
+                                <li>Digital Colour Systems</li>
+                                <li>Colour &amp; Human Mind</li>
+                                <li>Priority Support</li>
+                                <li>Project Files</li>
+                            </ul>
+                        </div>
+                        <div class="cm-pkg-card pkg-pro" data-pkg="pro" onclick="selectPackage('pro')">
+                            <span class="cm-pkg-badge">🚀 Complete</span>
+                            <div class="cm-pkg-title">Full Mastery</div>
+                            <div class="cm-pkg-courses">All 4 Courses</div>
+                            <div class="cm-pkg-price">$129 <small>/ bundle</small></div>
+                            <div class="cm-pkg-save" id="save-pro">Save 23%</div>
+                            <ul class="cm-pkg-features">
+                                <li>All 4 Courses</li>
+                                <li>Live Q&amp;A Sessions</li>
+                                <li>Verified Certificate</li>
+                                <li>Lifetime Access</li>
+                                <li>1-on-1 Mentorship</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Special limited-time offer -->
+                    <div style="margin:16px 0 8px; padding:14px 18px; background:linear-gradient(135deg, #fff3e0, #ffe0b2); border-radius:12px; border:1.5px solid #ffcc80; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <span style="font-size:24px;">🔥</span>
+                        <div style="flex:1; min-width:180px;">
+                            <div style="font-size:14px; font-weight:700; color:#e65100;">Limited Time Offer</div>
+                            <div style="font-size:12px; color:#bf360c;">Use code <strong>COLOUR50</strong> to get an extra 50% off any bundle!</div>
+                        </div>
+                        <div style="font-size:11px; color:#e65100; font-weight:600; padding:4px 10px; background:rgba(255,255,255,0.7); border-radius:50px;">Ends in <span id="countdownTimer">23:59:59</span></div>
+                    </div>
+
+                    <!-- Individual courses -->
+                    <div class="cm-section-title" style="margin-top:8px;">📚 Or Choose Individual Courses</div>
+                    <div class="cm-course-list" id="cmCourseList">
+                        <!-- injected by JS -->
+                    </div>
+                </div>
+
+                <!-- RIGHT: cart & summary -->
+                <div class="cm-right" id="cmRight">
+                    <!-- Cart section -->
+                    <div>
+                        <div class="cm-section-title">🛒 Your Selection</div>
+                        <div id="cmCartItems">
+                            <div class="cm-cart-empty" id="cmCartEmpty">
+                                <div class="empty-icon">🛒</div>
+                                <div>No courses selected yet.<br>Pick a bundle or individual courses.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Promo code -->
+                    <div>
+                        <div class="cm-section-title">🏷️ Promo Code</div>
+                        <div class="cm-promo-row">
+                            <input type="text" class="cm-promo-input" id="cmPromoInput" placeholder="e.g. COLOUR50" maxlength="20">
+                            <button class="cm-promo-btn" onclick="applyPromo()">Apply</button>
+                        </div>
+                        <div class="cm-promo-msg" id="cmPromoMsg"></div>
+                    </div>
+
+                    <!-- Price summary -->
+                    <div class="cm-price-box" id="cmPriceBox">
+                        <div class="cm-price-row">
+                            <span>Subtotal</span>
+                            <span id="cmSubtotal">$0</span>
+                        </div>
+                        <div class="cm-price-row" id="cmBundleRow" style="display:none;">
+                            <span>Bundle Discount</span>
+                            <span class="discount-val" id="cmBundleDiscount">-$0</span>
+                        </div>
+                        <div class="cm-price-row" id="cmPromoRow" style="display:none;">
+                            <span>Promo (<span id="cmPromoName"></span>)</span>
+                            <span class="discount-val" id="cmPromoDiscount">-$0</span>
+                        </div>
+                        <div class="cm-price-row divider total">
+                            <span>Total</span>
+                            <span class="val" id="cmTotal">$0</span>
+                        </div>
+                        <div id="cmSavingsBadge" style="display:none;" class="cm-savings-badge">
+                            🎉 You save <strong id="cmSavingsAmt"></strong> with this selection!
+                        </div>
+                    </div>
+
+                    <!-- Checkout -->
+                    <button class="cm-checkout-btn" id="cmCheckoutBtn" disabled onclick="doCheckout()">
+                        🔒 Proceed to Checkout
+                    </button>
+                    <div class="cm-checkout-note">Secure payment · 30-day money back guarantee</div>
+
+                    <!-- Success screen (hidden initially) -->
+                    <div class="cm-success" id="cmSuccess">
+                        <div class="cm-success-icon">✅</div>
+                        <h3>Enrollment Confirmed!</h3>
+                        <p>You've successfully enrolled in:</p>
+                        <div class="cm-success-courses" id="cmSuccessCourses"></div>
+                        <p style="font-size:13px;">Check your email for access details. Start learning right away!</p>
+                        <button class="btn btn-primary btn-sm" onclick="closeCourseModal()">Back to Homepage</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== -->
+    <!-- Video Modal               -->
+    <!-- ======================== -->
+    <div id="videoModal" style="
+        display:none; position:fixed; inset:0; z-index:2000;
+        background:rgba(0,0,0,0.85); backdrop-filter:blur(12px);
+        align-items:center; justify-content:center;
+        animation: modalFadeIn 0.3s ease;
+    ">
+        <div style="
+            position:relative; width:min(860px, 90vw);
+            background:#000; border-radius:20px; overflow:hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+            animation: modalSlideUp 0.4s cubic-bezier(0.22,1,0.36,1);
+        ">
+            <button id="closeModal" style="
+                position:absolute; top:14px; right:14px; z-index:10;
+                width:36px; height:36px; border-radius:50%;
+                background:rgba(255,255,255,0.15); color:#fff; font-size:18px;
+                border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+                backdrop-filter:blur(8px); transition: all 0.2s;
+            ">✕</button>
+            <div style="aspect-ratio:16/9; position:relative; background:linear-gradient(135deg,#0f0c29,#302b63); display:flex; align-items:center; justify-content:center;">
+                <div style="text-align:center; color:#fff; padding:40px;">
+                    <div style="font-size:56px; margin-bottom:20px;">🎨</div>
+                    <h3 style="font-size:22px; font-weight:700; margin-bottom:12px;">Introduction to Colour Encoding</h3>
+                    <p style="color:#9ca3af; font-size:15px; line-height:1.6; max-width:480px;">
+                        In a full production build, this modal would embed an actual video player (e.g. YouTube or self-hosted).<br><br>
+                        Topics covered: Light & wavelengths · RGB / HEX / CMYK · Colour psychology · Live mixing demo.
+                    </p>
+                    <div style="margin-top:28px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                        <span style="padding:6px 14px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:13px;">⏱ 18:42</span>
+                        <span style="padding:6px 14px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:13px;">👁 24K views</span>
+                        <span style="padding:6px 14px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:13px;">📖 4 chapters</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+
+    <!-- ======================== -->
+    <!-- JavaScript                -->
+    <!-- ======================== -->
+    <script>
+        /* ============================================ */
+        /* ERROR HANDLER — helps debug issues              */
+        /* ============================================ */
+        window.addEventListener('error', function(e) {
+            console.error('JavaScript Error:', e.error);
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = 'position:fixed;bottom:10px;left:10px;background:rgba(255,0,0,0.8);color:white;padding:10px;border-radius:5px;z-index:9999;font-size:12px;max-width:400px;';
+            errDiv.textContent = 'JS Error: ' + e.message + ' (line ' + e.lineno + ')';
+            document.body.appendChild(errDiv);
+        });
+
+        /* ============================================ */
+        /* COURSE DATA — All prices & packages           */
+        /* ============================================ */
+        const COURSES = [
+            { id: 'course-1', name: 'Fundamentals of Colour',     level: 'Beginner',     lessons: 12, hours: 3.5, price: 0,   emoji: '🌈', color: '#fdcb6e' },
+            { id: 'course-2', name: 'Digital Colour Systems',    level: 'Intermediate', lessons: 18, hours: 6,   price: 49,  emoji: '💻', color: '#a29bfe' },
+            { id: 'course-3', name: 'Colour & Human Mind',      level: 'Intermediate', lessons: 15, hours: 4.5, price: 39,  emoji: '🧠', color: '#55efc4' },
+            { id: 'course-4', name: 'CMYK, HEX & Beyond',       level: 'Advanced',     lessons: 24, hours: 8,   price: 79,  emoji: '🖨️', color: '#fd79a8' },
+        ];
+
+        const PACKAGES = {
+            starter: { name: 'Colour Basics',  courseIds: ['course-1', 'course-3'],            price: 39, badge: '🌱 Starter',   save: 0,  features: ['Fundamentals of Colour','Colour & Human Mind','Certificate','Email Support'] },
+            popular: { name: 'Digital Pro',    courseIds: ['course-1', 'course-2', 'course-3'], price: 79, badge: '⭐ Most Popular', save: 0,  features: ['Fundamentals of Colour','Digital Colour Systems','Colour & Human Mind','Priority Support','Project Files'] },
+            pro:     { name: 'Full Mastery',  courseIds: ['course-1','course-2','course-3','course-4'], price: 129, badge: '🚀 Complete', save: 0, features: ['All 4 Courses','Live Q&A','Verified Certificate','Lifetime Access','1-on-1 Mentorship'] },
+        };
+
+        /* Calculate savings for display */
+        function calcPackageSavings(pkg) {
+            const fullPrice = pkg.courseIds.reduce((sum, cid) => {
+                const c = COURSES.find(c => c.id === cid);
+                return sum + (c ? c.price : 0);
+            }, 0);
+            return fullPrice - pkg.price;
+        }
+        Object.values(PACKAGES).forEach(p => p.save = calcPackageSavings(p));
+
+        /* Promo codes */
+        const PROMO_CODES = {
+            'COLOUR50':  { type: 'percent', value: 50, label: '50% Off' },
+            'WELCOME20': { type: 'percent', value: 20, label: '20% Off' },
+            'BUNDLE10':  { type: 'fixed',   value: 10, label: '$10 Off' },
+            'STUDENT30': { type: 'percent', value: 30, label: 'Student 30% Off' },
+        };
+
+        /* State */
+        let selectedCourses = new Set();
+        let selectedPackage = null;
+        let appliedPromo = null;
+
+        /* ============================================ */
+        /* 0. Inject individual course list into modal   */
+        /* ============================================ */
+        (function injectCourseList() {
+            const list = document.getElementById('cmCourseList');
+            if (!list) return;
+            list.innerHTML = COURSES.map(c => `
+                <div class="cm-course-item" data-cid="${c.id}" onclick="toggleCourse('${c.id}')">
+                    <div class="cm-course-thumb" style="background:${c.color}20; color:${c.color};">${c.emoji}</div>
+                    <div class="cm-course-info">
+                        <div class="cm-course-name">${c.name}</div>
+                        <div class="cm-course-meta">
+                            <span class="cm-course-level-badge lvl-${c.level.toLowerCase()}">${c.level}</span>
+                            <span>📖 ${c.lessons} lessons</span>
+                            <span>⏱ ${c.hours}h</span>
+                        </div>
+                    </div>
+                    <div class="cm-course-price-tag">${c.price === 0 ? '<span class="free-tag">Free</span>' : '$' + c.price}</div>
+                    <div class="cm-check-circle"></div>
+                </div>
+            `).join('');
+        })();
+
+        /* ============================================ */
+        /* 0.5 Update package save percentages           */
+        /* ============================================ */
+        (function updatePackageSaves() {
+            Object.entries(PACKAGES).forEach(([name, pkg]) => {
+                const el = document.getElementById('save-' + name);
+                if (el) {
+                    const fullPrice = pkg.courseIds.reduce((sum, cid) => {
+                        const c = COURSES.find(c => c.id === cid);
+                        return sum + (c ? c.price : 0);
+                    }, 0);
+                    const savePercent = fullPrice > 0 ? Math.round((pkg.save / fullPrice) * 100) : 0;
+                    if (pkg.save > 0) {
+                        el.textContent = 'Save ' + savePercent + '%';
+                    } else if (name === 'starter') {
+                        el.textContent = 'Best for Beginners';
+                    } else {
+                        el.textContent = 'Best Value';
+                    }
+                }
+            });
+        })();
+
+        /* ============================================ */
+        /* 1. Navbar scroll effect                       */
+        /* ============================================ */
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        }, { passive: true });
+
+        /* ============================================ */
+        /* 2. Universal Scroll Reveal (multi-direction) */
+        /* ============================================ */
+        const allReveal = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        allReveal.forEach(el => revealObs.observe(el));
+
+        /* ============================================ */
+        /* 3. Video feature list stagger reveal          */
+        /* ============================================ */
+        const featureItems = document.querySelectorAll('#videoFeatureList li');
+        const featureObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    featureItems.forEach(li => li.classList.add('visible'));
+                    featureObs.disconnect();
+                }
+            });
+        }, { threshold: 0.2 });
+        if (featureItems.length) featureObs.observe(document.querySelector('#videoFeatureList'));
+
+        /* ============================================ */
+        /* 4. Video player wrap reveal                   */
+        /* ============================================ */
+        const videoPlayerWrap = document.getElementById('videoPlayerWrap');
+        const vpObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    videoPlayerWrap.classList.add('visible');
+                    vpObs.disconnect();
+                }
+            });
+        }, { threshold: 0.15 });
+        if (videoPlayerWrap) vpObs.observe(videoPlayerWrap);
+
+        /* ============================================ */
+        /* 5. Video modal                                */
+        /* ============================================ */
+        const videoModal = document.getElementById('videoModal');
+        const openModalBtns = [
+            document.getElementById('videoFrame'),
+            document.getElementById('playVideoBtn'),
+            document.getElementById('watchDemoBtn')
+        ];
+        openModalBtns.forEach(btn => {
+            if (btn) btn.addEventListener('click', () => {
+                videoModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        videoModal.addEventListener('click', (e) => {
+            if (e.target === videoModal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+        function closeModal() {
+            videoModal.style.animation = 'none';
+            videoModal.style.opacity = '0';
+            videoModal.style.transition = 'opacity 0.2s';
+            setTimeout(() => {
+                videoModal.style.display = 'none';
+                videoModal.style.opacity = '';
+                videoModal.style.transition = '';
+                document.body.style.overflow = '';
+            }, 200);
+        }
+
+        /* ============================================ */
+        /* 6. Video chapter tabs                         */
+        /* ============================================ */
+        const chapterTabs = document.querySelectorAll('.chapter-tab');
+        chapterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                chapterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        /* ============================================ */
+        /* 7. Colour swatch tooltip — HEX / RGB / CMYK  */
+        /* ============================================ */
+        (function() {
+            const swatches    = document.querySelectorAll('.colour-swatch');
+            const tooltip     = document.getElementById('swatchTooltip');
+            const preview     = document.getElementById('tooltipPreview');
+            const elHex       = document.getElementById('tooltipHex');
+            const elRgb       = document.getElementById('tooltipRgb');
+            const elCmyk      = document.getElementById('tooltipCmyk');
+            const tooltipBar  = document.getElementById('swatchTooltipBar');
+            const OFFSET      = 14;
+
+            function rgbToCmyk(r, g, b) {
+                const rp = r / 255, gp = g / 255, bp = b / 255;
+                const k  = 1 - Math.max(rp, gp, bp);
+                if (k === 1) return { c: 0, m: 0, y: 0, k: 100 };
+                const c = (1 - rp - k) / (1 - k);
+                const m = (1 - gp - k) / (1 - k);
+                const y = (1 - bp - k) / (1 - k);
+                return {
+                    c: Math.round(c * 100),
+                    m: Math.round(m * 100),
+                    y: Math.round(y * 100),
+                    k: Math.round(k * 100)
+                };
+            }
+
+            function positionTooltip(e) {
+                const tw = tooltip.offsetWidth  || 230;
+                const th = tooltip.offsetHeight || 160;
+                let left = e.clientX + OFFSET;
+                let top  = e.clientY - th / 2;
+                if (left + tw > window.innerWidth - 8) left = e.clientX - tw - OFFSET;
+                top = Math.max(8, Math.min(top, window.innerHeight - th - 8));
+                tooltip.style.left = left + 'px';
+                tooltip.style.top  = top  + 'px';
+            }
+
+            swatches.forEach(s => {
+                s.addEventListener('mouseenter', (e) => {
+                    const r   = parseInt(s.dataset.r, 10);
+                    const g   = parseInt(s.dataset.g, 10);
+                    const b   = parseInt(s.dataset.b, 10);
+                    const hex = s.dataset.hex;
+                    const cmyk = rgbToCmyk(r, g, b);
+                    preview.style.background = hex;
+                    elHex.textContent  = hex;
+                    elRgb.textContent  = `rgb(${r}, ${g}, ${b})`;
+                    elCmyk.textContent = `${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%`;
+                    tooltipBar.innerHTML =
+                        `<span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${hex};margin-right:8px;vertical-align:middle;box-shadow:0 0 0 1px rgba(0,0,0,.08);"></span>` +
+                        `<strong style="color:var(--text);">${hex}</strong>` +
+                        `<span style="margin-left:10px;color:var(--text-muted);">rgb(${r},${g},${b})</span>` +
+                        `<span style="margin-left:10px;color:var(--text-muted);">cmyk(${cmyk.c}%,${cmyk.m}%,${cmyk.y}%,${cmyk.k}%)</span>`;
+                    positionTooltip(e);
+                    tooltip.classList.add('show');
+                });
+                s.addEventListener('mousemove', positionTooltip);
+                s.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('show');
+                    tooltipBar.innerHTML = 'Hover a swatch to see its colour codes ↑';
+                });
+            });
+        })();
+
+        /* ============================================ */
+        /* 8. Animated counter for hero stats            */
+        /* ============================================ */
+        function animateCounter(el, target, isDecimal) {
+            const duration = 1800;
+            const start = performance.now();
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = target * eased;
+                el.firstChild.textContent = isDecimal
+                    ? value.toFixed(1)
+                    : Math.round(value >= 1000 ? value / 1000 : value).toString() + (target >= 1000 ? 'K' : '');
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+        const statEls = document.querySelectorAll('.hero-stat-value[data-target]');
+        const statsObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseFloat(el.dataset.target);
+                    const isDecimal = el.dataset.decimal === '1';
+                    animateCounter(el, target, isDecimal);
+                    statsObs.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        statEls.forEach(el => statsObs.observe(el));
+
+        /* ============================================ */
+        /* 9. Cursor spotlight                           */
+        /* ============================================ */
+        const spotlight = document.getElementById('cursorSpotlight');
+        document.addEventListener('mousemove', (e) => {
+            spotlight.style.left = e.clientX + 'px';
+            spotlight.style.top = e.clientY + 'px';
+        }, { passive: true });
+
+        /* ============================================ */
+        /* 10. Newsletter submit with animation          */
+        /* ============================================ */
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const btn = document.getElementById('subscribeBtn');
+            const input = document.getElementById('newsletterEmail');
+            if (!input.value) return;
+            btn.textContent = '✓ Subscribed!';
+            btn.style.background = '#27ae60';
+            btn.style.pointerEvents = 'none';
+            input.value = '';
+            setTimeout(() => {
+                btn.textContent = 'Subscribe';
+                btn.style.background = '';
+                btn.style.pointerEvents = '';
+            }, 3000);
+        }
+
+        /* ============================================ */
+        /* 11. Smooth scroll for nav links               */
+        /* ============================================ */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        /* ============================================ */
+        /* 12. Active nav link on scroll                 */
+        /* ============================================ */
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        const sectionObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                    });
+                }
+            });
+        }, { threshold: 0.4 });
+        sections.forEach(sec => sectionObs.observe(sec));
+
+        /* ============================================ */
+        /* 13. Back to Top Button                       */
+        /* ============================================ */
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        /* ============================================ */
+        /* 14. Scroll Progress Bar                       */
+        /* ============================================ */
+        const scrollProgressBar = document.getElementById('scrollProgressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            scrollProgressBar.style.width = progress + '%';
+        }, { passive: true });
+
+        /* ============================================ */
+        /* 15. COURSE MODAL — Open / Close               */
+        /* ============================================ */
+        const courseModalOverlay = document.getElementById('courseModalOverlay');
+        const courseModal = document.getElementById('courseModal');
+
+        function openCourseModal(pkgName) {
+            courseModalOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            if (pkgName && PACKAGES[pkgName]) {
+                selectPackage(pkgName);
+            }
+        }
+        function closeCourseModal() {
+            courseModalOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('closeCourseModal').addEventListener('click', closeCourseModal);
+        courseModalOverlay.addEventListener('click', (e) => {
+            if (e.target === courseModalOverlay) closeCourseModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && courseModalOverlay.classList.contains('open')) {
+                closeCourseModal();
+            }
+        });
+
+        /* Hero "Start Learning" button opens modal */
+        document.getElementById('heroStartBtn').addEventListener('click', () => openCourseModal());
+
+        /* ============================================ */
+        /* 14. COURSE SELECTION LOGIC                    */
+        /* ============================================ */
+        function toggleCourse(cid) {
+            if (selectedPackage) {
+                selectedPackage = null;
+                document.querySelectorAll('.cm-pkg-card').forEach(c => c.classList.remove('selected'));
+            }
+            if (selectedCourses.has(cid)) {
+                selectedCourses.delete(cid);
+            } else {
+                selectedCourses.add(cid);
+            }
+            updateCourseItemsUI();
+            updateCart();
+        }
+
+        function selectPackage(pkgName) {
+            const pkg = PACKAGES[pkgName];
+            if (!pkg) return;
+
+            if (selectedPackage === pkgName) {
+                selectedPackage = null;
+                document.querySelectorAll('.cm-pkg-card').forEach(c => c.classList.remove('selected'));
+                selectedCourses.clear();
+            } else {
+                selectedPackage = pkgName;
+                selectedCourses = new Set(pkg.courseIds);
+                document.querySelectorAll('.cm-pkg-card').forEach(c => {
+                    c.classList.toggle('selected', c.dataset.pkg === pkgName);
+                });
+            }
+            updateCourseItemsUI();
+            updateCart();
+        }
+
+        function updateCourseItemsUI() {
+            document.querySelectorAll('.cm-course-item').forEach(el => {
+                const cid = el.dataset.cid;
+                el.classList.toggle('selected', selectedCourses.has(cid));
+            });
+        }
+
+        function removeCourse(cid) {
+            selectedCourses.delete(cid);
+            if (selectedPackage && !PACKAGES[selectedPackage].courseIds.every(id => selectedCourses.has(id))) {
+                selectedPackage = null;
+                document.querySelectorAll('.cm-pkg-card').forEach(c => c.classList.remove('selected'));
+            }
+            updateCourseItemsUI();
+            updateCart();
+        }
+
+        /* Make remove buttons work */
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.cm-cart-row-remove')) {
+                const row = e.target.closest('.cm-cart-row');
+                if (row) {
+                    const cid = row.dataset.cid;
+                    removeCourse(cid);
+                }
+            }
+        });
+
+        /* ============================================ */
+        /* 15. CART & PRICE CALCULATION                  */
+        /* ============================================ */
+        function updateCart() {
+            const cartEl = document.getElementById('cmCartItems');
+                const checkoutBtn = document.getElementById('cmCheckoutBtn');
+
+            if (selectedCourses.size === 0) {
+                cartEl.innerHTML = `<div class="cm-cart-empty" id="cmCartEmpty"><div class="empty-icon">🛒</div><div>No courses selected yet.<br>Pick a bundle or individual courses.</div></div>`;
+                checkoutBtn.disabled = true;
+                updatePriceSummary(0, 0, 0);
+                return;
+            }
+
+            checkoutBtn.disabled = false;
+
+            let courses = [];
+            selectedCourses.forEach(cid => {
+                const c = COURSES.find(c => c.id === cid);
+                if (c) courses.push(c);
+            });
+
+            cartEl.innerHTML = courses.map(c => `
+                <div class="cm-cart-row" data-cid="${c.id}">
+                    <div class="cm-cart-row-icon">${c.emoji}</div>
+                    <div class="cm-cart-row-name">${c.name}</div>
+                    <div class="cm-cart-row-price">${c.price === 0 ? 'Free' : '$' + c.price}</div>
+                    <button class="cm-cart-row-remove" aria-label="Remove">✕</button>
+                </div>
+            `).join('') + `<div style="font-size:11px; color:var(--text-muted); margin-top:8px;">🔒 Secure checkout powered by Colour Lab</div>`;
+
+            /* Calculate price */
+            const subtotal = courses.reduce((sum, c) => sum + c.price, 0);
+
+            /* Auto-detect if selection EXACTLY matches a package (not just subset) */
+            let bundleDiscount = 0;
+            Object.entries(PACKAGES).forEach(([name, pkg]) => {
+                const pkgSet = new Set(pkg.courseIds);
+                const selectedArray = Array.from(selectedCourses);
+                /* Exact match: same size AND all package courses are selected */
+                if (selectedCourses.size === pkg.courseIds.length &&
+                    pkg.courseIds.every(id => selectedCourses.has(id))) {
+                    const saving = subtotal - pkg.price;
+                    if (saving > bundleDiscount) {
+                        bundleDiscount = saving;
+                    }
+                }
+            });
+
+            /* If user selected a package manually, use that discount */
+            if (selectedPackage && PACKAGES[selectedPackage]) {
+                const pkg = PACKAGES[selectedPackage];
+                bundleDiscount = Math.max(bundleDiscount, subtotal - pkg.price);
+            }
+
+            const afterBundle = Math.max(0, subtotal - bundleDiscount);
+            updatePriceSummary(subtotal, bundleDiscount, afterBundle);
+        }
+
+        function updatePriceSummary(subtotal, bundleDiscount, afterBundle) {
+            document.getElementById('cmSubtotal').textContent = '$' + subtotal;
+
+            const bundleRow = document.getElementById('cmBundleRow');
+            if (bundleDiscount > 0) {
+                bundleRow.style.display = '';
+                document.getElementById('cmBundleDiscount').textContent = '-$' + bundleDiscount;
+            } else {
+                bundleRow.style.display = 'none';
+            }
+
+            /* Promo discount */
+            let promoDiscount = 0;
+            if (appliedPromo && PROMO_CODES[appliedPromo]) {
+                const promo = PROMO_CODES[appliedPromo];
+                promoDiscount = promo.type === 'percent'
+                    ? Math.round(afterBundle * promo.value / 100)
+                    : promo.value;
+                document.getElementById('cmPromoRow').style.display = '';
+                document.getElementById('cmPromoName').textContent = appliedPromo;
+                document.getElementById('cmPromoDiscount').textContent = '-$' + promoDiscount;
+            } else {
+                document.getElementById('cmPromoRow').style.display = 'none';
+            }
+
+            const total = Math.max(0, afterBundle - promoDiscount);
+            document.getElementById('cmTotal').textContent = '$' + total;
+
+            /* Savings badge */
+            const totalSavings = (subtotal - total);
+            const savingsBadge = document.getElementById('cmSavingsBadge');
+            if (totalSavings > 0) {
+                savingsBadge.style.display = 'flex';
+                document.getElementById('cmSavingsAmt').textContent = '$' + totalSavings;
+            } else {
+                savingsBadge.style.display = 'none';
+            }
+        }
+
+        /* ============================================ */
+        /* 16. PROMO CODE                                */
+        /* ============================================ */
+        function applyPromo() {
+            const input = document.getElementById('cmPromoInput');
+            const msg = document.getElementById('cmPromoMsg');
+            const code = input.value.trim().toUpperCase();
+
+            if (!code) {
+                msg.textContent = 'Please enter a promo code.';
+                msg.className = 'cm-promo-msg cm-promo-err';
+                return;
+            }
+            if (PROMO_CODES[code]) {
+                appliedPromo = code;
+                msg.textContent = '✓ ' + PROMO_CODES[code].label + ' applied!';
+                msg.className = 'cm-promo-msg cm-promo-ok';
+                input.disabled = true;
+                input.style.opacity = '0.6';
+                document.querySelector('.cm-promo-btn').disabled = true;
+                document.querySelector('.cm-promo-btn').textContent = 'Applied ✓';
+                updateCart();
+            } else {
+                msg.textContent = 'Invalid promo code. Try COLOUR50, WELCOME20, BUNDLE10, or STUDENT30.';
+                msg.className = 'cm-promo-msg cm-promo-err';
+            }
+        }
+
+        /* ============================================ */
+        /* 17. CHECKOUT (simulated)                      */
+        /* ============================================ */
+        function doCheckout() {
+            const cartEl = document.getElementById('cmCartItems');
+            const priceBox = document.getElementById('cmPriceBox');
+            const checkoutBtn = document.getElementById('cmCheckoutBtn');
+            const successEl = document.getElementById('cmSuccess');
+            const successCourses = document.getElementById('cmSuccessCourses');
+
+            /* Simulate processing */
+            checkoutBtn.innerHTML = '⏳ Processing...';
+            checkoutBtn.disabled = true;
+
+            setTimeout(() => {
+                /* Show success */
+                cartEl.style.display = 'none';
+                priceBox.style.display = 'none';
+                document.querySelector('.cm-promo-row').style.display = 'none';
+                document.getElementById('cmPromoMsg').style.display = 'none';
+                checkoutBtn.style.display = 'none';
+                document.querySelector('.cm-checkout-note').style.display = 'none';
+
+                /* List enrolled courses */
+                let names = [];
+                selectedCourses.forEach(cid => {
+                    const c = COURSES.find(c => c.id === cid);
+                    if (c) names.push(c.name);
+                });
+                successCourses.innerHTML = names.map(n => `<span class="cm-success-tag">${n}</span>`).join('');
+                successEl.classList.add('show');
+            }, 1500);
+        }
+
+        /* ============================================ */
+        /* 18. Background Bubbles Generator               */
+        /* ============================================ */
+        (function initBubbles() {
+            const container = document.getElementById('colourBubbles');
+            if (!container) return;
+            const colours = [
+                'rgba(255,107,107,0.12)', 'rgba(77,150,255,0.10)', 'rgba(118,75,162,0.10)',
+                'rgba(107,203,119,0.10)', 'rgba(253,203,110,0.10)', 'rgba(255,107,200,0.08)'
+            ];
+            for (let i = 0; i < 15; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'colour-bubble';
+                const size = 10 + Math.random() * 40;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.background = colours[Math.floor(Math.random() * colours.length)];
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (12 + Math.random() * 18) + 's';
+                bubble.style.animationDelay = (-Math.random() * 20) + 's';
+                container.appendChild(bubble);
+            }
+        })();
+
+        /* ============================================ */
+        /* 19. Geometric Shapes Generator                 */
+        /* ============================================ */
+        (function initGeoShapes() {
+            const container = document.getElementById('geoShapes');
+            if (!container) return;
+            const shapes = ['■', '●', '▲', '◆', '★', '♦'];
+            for (let i = 0; i < 12; i++) {
+                const el = document.createElement('div');
+                el.className = 'geo-shape';
+                el.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                el.style.fontSize = (14 + Math.random() * 20) + 'px';
+                const r = Math.floor(Math.random() * 156 + 100);
+                const g = Math.floor(Math.random() * 156 + 100);
+                const b = Math.floor(Math.random() * 156 + 100);
+                el.style.color = `rgba(${r},${g},${b},0.08)`;
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = (15 + Math.random() * 25) + 's';
+                el.style.animationDelay = (-Math.random() * 30) + 's';
+                container.appendChild(el);
+            }
+        })();
+
+        /* ============================================ */
+        /* 20. Limited-Time Countdown Timer               */
+        /* ============================================ */
+        function initCountdown() {
+            const timerEl = document.getElementById('countdownTimer');
+            if (!timerEl) return;
+
+            /* Use localStorage to persist end time across page reloads */
+            let endTime = localStorage.getItem('countdownEndTime');
+            if (!endTime || Date.now() > parseInt(endTime)) {
+                endTime = Date.now() + 24 * 60 * 60 * 1000;
+                localStorage.setItem('countdownEndTime', endTime);
+            } else {
+                endTime = parseInt(endTime);
+            }
+
+            function update() {
+                const now = Date.now();
+                let diff = Math.max(0, endTime - now);
+                const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+                diff %= 3600000;
+                const m = String(Math.floor(diff / 60000)).padStart(2, '0');
+                diff %= 60000;
+                const s = String(Math.floor(diff / 1000)).padStart(2, '0');
+                timerEl.textContent = h + ':' + m + ':' + s;
+
+                if (diff <= 0) {
+                    /* Countdown expired, reset for another 24h */
+                    endTime = Date.now() + 24 * 60 * 60 * 1000;
+                    localStorage.setItem('countdownEndTime', endTime);
+                }
+            }
+            update();
+            setInterval(update, 1000);
+        }
+        /* Call initCountdown when DOM is ready */
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initCountdown);
+        } else {
+            initCountdown();
+        }
+
+        /* ============================================ */
+        /* 22. Internationalisation (i18n)               */
+        /* ============================================ */
+        const I18N = {
+            en: {
+                /* Nav */
+                'nav.home': 'Home',
+                'nav.learning': 'Learning',
+                'nav.test': 'Test',
+                'nav.game': 'Game',
+                'nav.community': 'Community',
+                'nav.login': 'Log In',
+                'nav.signup': 'Sign Up Free',
+                /* Hero */
+                'hero.badge': 'Now Open for Enrollment',
+                'hero.h1line1': 'Master the',
+                'hero.h1line2': 'Language of',
+                'hero.h1line3': 'Colour',
+                'hero.desc': 'Explore the science, psychology, and art behind colour encoding. From RGB fundamentals to advanced colour theory — learn how colours shape our digital and physical world.',
+                'hero.startBtn': 'Start Learning',
+                'hero.watchBtn': '▶ Watch Demo',
+                'hero.stat1': 'Active Learners',
+                'hero.stat2': 'Completion Rate',
+                'hero.stat3': 'Average Rating',
+                'hero.wheelLabel': 'Colour Lab',
+                'hero.wheelSub': 'Start Your Journey',
+                /* USP */
+                'usp.label': 'Why Choose Us',
+                'usp.title': 'Everything You Need to Master Colour',
+                'usp.subtitle': 'Our platform combines structured learning with hands-on practice to build genuine expertise in colour encoding.',
+                'usp.card1.title': 'Structured Curriculum',
+                'usp.card1.desc': 'From basic colour wheels to complex encoding systems. Step-by-step lessons designed by industry experts for all learning levels.',
+                'usp.card2.title': 'Interactive Exercises',
+                'usp.card2.desc': 'Hands-on colour mixing, matching, and encoding challenges that reinforce your understanding through active practice and experimentation.',
+                'usp.card3.title': 'Certified Program',
+                'usp.card3.desc': 'Earn industry-recognized certificates in colour science and digital colour management. Boost your career credentials today.',
+                /* Video */
+                'video.label': 'Video Introduction',
+                'video.title': 'See Colour Encoding in Action',
+                'video.subtitle': 'Watch our comprehensive introduction to colour science — from wavelengths to digital pixels, explained visually and intuitively.',
+                'video.feat1.title': 'The Physics of Light & Colour',
+                'video.feat1.desc': 'Understand how wavelengths translate into the colours we perceive every day.',
+                'video.feat2.title': 'RGB, HEX & CMYK Demystified',
+                'video.feat2.desc': 'A clear visual breakdown of digital and print colour models side by side.',
+                'video.feat3.title': 'Colour Psychology & Perception',
+                'video.feat3.desc': 'Discover how the brain interprets colour and why it matters in design.',
+                'video.feat4.title': 'Hands-On Colour Mixing Demo',
+                'video.feat4.desc': 'Live interactive demo showing additive and subtractive colour mixing.',
+                'video.watchBtn': 'Watch Full Video',
+                'video.intro': 'intro',
+                'video.views': 'views',
+                'video.playerTitle': 'Introduction to Colour Encoding',
+                'video.ch0': '▶ Intro',
+                'video.ch1': '🌈 Colour Basics',
+                'video.ch2': '💻 Digital Models',
+                'video.ch3': '🧠 Psychology',
+                'video.ch4': '🎨 Live Demo',
+                /* Demo */
+                'demo.label': 'Interactive Preview',
+                'demo.title': 'Explore the Colour Spectrum',
+                'demo.desc': 'Hover over any swatch to instantly see its <strong>HEX</strong>, <strong>RGB</strong>, and <strong>CMYK</strong> values — the three colour encoding systems you\'ll master in our courses. Notice how the same colour translates differently across screen and print models.',
+                'demo.hoverHint': 'Hover a swatch to see its colour codes ↑',
+                /* Courses */
+                'courses.label': 'Popular Courses',
+                'courses.title': 'Start Your Colour Journey',
+                'courses.subtitle': 'Carefully crafted courses that take you from beginner to expert in colour encoding.',
+                'level.beginner': 'Beginner',
+                'level.intermediate': 'Intermediate',
+                'level.advanced': 'Advanced',
+                'course1.title': 'Fundamentals of Colour',
+                'course2.title': 'Digital Colour Systems',
+                'course3.title': 'Colour & Human Mind',
+                'course4.title': 'CMYK, HEX & Beyond',
+                'price.free': 'Free',
+                /* Course meta */
+                'meta.lessons.12': '12 Lessons',
+                'meta.lessons.15': '15 Lessons',
+                'meta.lessons.18': '18 Lessons',
+                'meta.lessons.24': '24 Lessons',
+                'meta.hours.3.5': '3.5 hrs',
+                'meta.hours.4.5': '4.5 hrs',
+                'meta.hours.6': '6 hrs',
+                'meta.hours.8': '8 hrs',
+                /* Journey CTA */
+                'journey.title': 'Ready to <span>Start Your Journey?</span>',
+                'journey.desc': 'Pick individual courses or grab a money-saving bundle — your path to colour mastery starts here.',
+                'journey.badge1': '🎁 Bundle & Save up to 52%',
+                'journey.badge2': '🔒 30-day Money Back',
+                'journey.badge3': '♾️ Lifetime Access',
+                'journey.badge4': '🏆 Verified Certificate',
+                'journey.enrollBtn': '🎨 Browse & Enroll Now',
+                'journey.bundleBtn': '⭐ View Best Bundle',
+                /* Promo */
+                'promo.title': '🎉 Limited Time — 50% Off Your First Course!',
+                'promo.desc': 'Join thousands of learners mastering colour encoding. Our introductory offer won\'t last forever — start your journey today.',
+                'promo.code': 'Code:',
+                'promo.btn': 'Claim Your Discount',
+                /* Testimonials */
+                'test.label': 'Testimonials',
+                'test.title': 'What Learners Say',
+                'test.subtitle': 'Join our growing community of colour enthusiasts and professionals.',
+                'test.t1': '"Colour Lab completely changed how I approach design. The interactive exercises made complex concepts feel intuitive and natural."',
+                'test.t1.role': 'UX Designer at Figma',
+                'test.t2': '"The structured curriculum helped me go from zero knowledge to confidently working with professional colour systems in just weeks."',
+                'test.t2.role': 'Front-end Developer',
+                'test.t3': '"Best colour course I\'ve found online. The certificate helped me land a role in digital media production. Highly recommended!"',
+                'test.t3.role': 'Graphic Designer',
+                /* Newsletter */
+                'nl.title': 'Stay Updated on Colour Science',
+                'nl.desc': 'Get weekly tips, tutorials, and insights about colour encoding delivered to your inbox.',
+                'nl.placeholder': 'Enter your email address',
+                'nl.btn': 'Subscribe',
+                /* Footer */
+                'footer.desc': 'Empowering learners worldwide to master the science and art of colour encoding. From pixels to print — we make colour accessible to everyone.',
+                'footer.learning': 'Learning',
+                'footer.allCourses': 'All Courses',
+                'footer.paths': 'Learning Paths',
+                'footer.resources': 'Resources',
+                'footer.certs': 'Certificates',
+                'footer.company': 'Company',
+                'footer.about': 'About Us',
+                'footer.careers': 'Careers',
+                'footer.blog': 'Blog',
+                'footer.contact': 'Contact',
+                'footer.support': 'Support',
+                'footer.help': 'Help Center',
+                'footer.community': 'Community',
+                'footer.privacy': 'Privacy Policy',
+                'footer.terms': 'Terms of Service',
+                'footer.copy': '© 2026 Colour Lab. All rights reserved.',
+                'footer.made': 'Made with 🎨 for colour lovers everywhere.',
+            },
+            zh: {
+                /* Nav */
+                'nav.home': '首页',
+                'nav.learning': '学习',
+                'nav.test': '测试',
+                'nav.game': '游戏',
+                'nav.community': '社区',
+                'nav.login': '登录',
+                'nav.signup': '免费注册',
+                /* Hero */
+                'hero.badge': '现已开放报名',
+                'hero.h1line1': '掌握',
+                'hero.h1line2': '色彩的',
+                'hero.h1line3': '语言',
+                'hero.desc': '探索色彩编码背后的科学、心理学与艺术。从 RGB 基础到高级色彩理论——学习色彩如何塑造我们的数字与现实世界。',
+                'hero.startBtn': '开始学习',
+                'hero.watchBtn': '▶ 观看演示',
+                'hero.stat1': '活跃学员',
+                'hero.stat2': '完成率',
+                'hero.stat3': '平均评分',
+                'hero.wheelLabel': '色彩实验室',
+                'hero.wheelSub': '开启你的旅程',
+                /* USP */
+                'usp.label': '为什么选择我们',
+                'usp.title': '掌握色彩所需的一切',
+                'usp.subtitle': '我们的平台将系统化学习与实践相结合，帮助您在色彩编码领域建立真正的专业能力。',
+                'usp.card1.title': '系统化课程',
+                'usp.card1.desc': '从基础色轮到复杂编码系统，循序渐进的课程由行业专家为各层次学员精心设计。',
+                'usp.card2.title': '互动练习',
+                'usp.card2.desc': '通过动手混色、配色和编码挑战，在主动实践与探索中加深理解。',
+                'usp.card3.title': '认证项目',
+                'usp.card3.desc': '获得色彩科学与数字色彩管理的行业认可证书，提升您的职业竞争力。',
+                /* Video */
+                'video.label': '视频介绍',
+                'video.title': '看色彩编码如何运作',
+                'video.subtitle': '观看我们关于色彩科学的全面介绍——从波长到数字像素，直观生动地讲解清楚。',
+                'video.feat1.title': '光与色彩的物理学',
+                'video.feat1.desc': '了解波长如何转化为我们每天感知的颜色。',
+                'video.feat2.title': 'RGB、HEX 与 CMYK 揭秘',
+                'video.feat2.desc': '并排清晰呈现数字与印刷色彩模型的视觉对比。',
+                'video.feat3.title': '色彩心理学与感知',
+                'video.feat3.desc': '探索大脑如何解读色彩，以及这对设计的重要意义。',
+                'video.feat4.title': '动手混色演示',
+                'video.feat4.desc': '展示加色法与减色法混色的实时互动演示。',
+                'video.watchBtn': '观看完整视频',
+                'video.intro': '介绍',
+                'video.views': '次观看',
+                'video.playerTitle': '色彩编码入门',
+                'video.ch0': '▶ 简介',
+                'video.ch1': '🌈 色彩基础',
+                'video.ch2': '💻 数字模型',
+                'video.ch3': '🧠 心理学',
+                'video.ch4': '🎨 实时演示',
+                /* Demo */
+                'demo.label': '互动预览',
+                'demo.title': '探索色彩光谱',
+                'demo.desc': '悬停在任意色块上，即可看到其 <strong>HEX</strong>、<strong>RGB</strong> 和 <strong>CMYK</strong> 值——这三种色彩编码系统正是您将在课程中掌握的核心内容。请注意同一颜色在屏幕与印刷模型中的不同表现。',
+                'demo.hoverHint': '悬停色块即可查看颜色代码 ↑',
+                /* Courses */
+                'courses.label': '热门课程',
+                'courses.title': '开启你的色彩之旅',
+                'courses.subtitle': '精心打造的课程，带你从零基础成长为色彩编码专家。',
+                'level.beginner': '入门',
+                'level.intermediate': '进阶',
+                'level.advanced': '高级',
+                'course1.title': '色彩基础',
+                'course2.title': '数字色彩系统',
+                'course3.title': '色彩与人类心理',
+                'course4.title': 'CMYK、HEX 及更多',
+                'price.free': '免费',
+                /* Course meta */
+                'meta.lessons.12': '12 课时',
+                'meta.lessons.15': '15 课时',
+                'meta.lessons.18': '18 课时',
+                'meta.lessons.24': '24 课时',
+                'meta.hours.3.5': '3.5 小时',
+                'meta.hours.4.5': '4.5 小时',
+                'meta.hours.6': '6 小时',
+                'meta.hours.8': '8 小时',
+                /* Journey CTA */
+                'journey.title': '准备好<span>开启你的旅程</span>了吗？',
+                'journey.desc': '选择单门课程或超值套餐——你的色彩精通之路从这里开始。',
+                'journey.badge1': '🎁 套餐最高省52%',
+                'journey.badge2': '🔒 30天退款保障',
+                'journey.badge3': '♾️ 终身访问',
+                'journey.badge4': '🏆 认证证书',
+                'journey.enrollBtn': '🎨 浏览并立即报名',
+                'journey.bundleBtn': '⭐ 查看最佳套餐',
+                /* Promo */
+                'promo.title': '🎉 限时优惠——首门课程五折！',
+                'promo.desc': '数千名学员正在掌握色彩编码，我们的优惠不会持续太久——今天就开启你的旅程吧。',
+                'promo.code': '优惠码：',
+                'promo.btn': '立即领取折扣',
+                /* Testimonials */
+                'test.label': '学员评价',
+                'test.title': '学员这样说',
+                'test.subtitle': '加入我们不断壮大的色彩爱好者与专业人士社区。',
+                'test.t1': '"色彩实验室彻底改变了我的设计思路。互动练习让复杂的概念变得直观自然。"',
+                'test.t1.role': 'Figma UX设计师',
+                'test.t2': '"系统化的课程帮助我从零起步，在短短几周内便能自信地使用专业色彩系统。"',
+                'test.t2.role': '前端开发工程师',
+                'test.t3': '"我找到的最好的在线色彩课程。凭借这张证书，我成功获得了数字媒体制作的职位。强烈推荐！"',
+                'test.t3.role': '平面设计师',
+                /* Newsletter */
+                'nl.title': '随时了解色彩科学动态',
+                'nl.desc': '每周获取色彩编码相关技巧、教程与见解，直接发送到你的邮箱。',
+                'nl.placeholder': '请输入您的邮箱地址',
+                'nl.btn': '订阅',
+                /* Footer */
+                'footer.desc': '赋能全球学习者掌握色彩编码的科学与艺术。从像素到印刷——我们让色彩触手可及。',
+                'footer.learning': '学习',
+                'footer.allCourses': '全部课程',
+                'footer.paths': '学习路径',
+                'footer.resources': '资源中心',
+                'footer.certs': '证书',
+                'footer.company': '公司',
+                'footer.about': '关于我们',
+                'footer.careers': '招聘',
+                'footer.blog': '博客',
+                'footer.contact': '联系我们',
+                'footer.support': '支持',
+                'footer.help': '帮助中心',
+                'footer.community': '社区',
+                'footer.privacy': '隐私政策',
+                'footer.terms': '服务条款',
+                'footer.copy': '© 2026 色彩实验室 版权所有。',
+                'footer.made': '为全球色彩爱好者用心打造 🎨',
+            }
+        };
+
+        let currentLang = localStorage.getItem('colourLabLang') || 'en';
+
+        function applyLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('colourLabLang', lang);
+            const dict = I18N[lang] || I18N.en;
+
+            /* Update html lang attribute */
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+            /* Update title */
+            document.title = lang === 'zh'
+                ? '色彩实验室 — 掌握色彩的语言'
+                : 'Colour Lab — Master the Language of Colour';
+
+            /* Update all [data-i18n] elements */
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const val = dict[key];
+                if (val !== undefined) {
+                    el.innerHTML = val;
+                }
+            });
+
+            /* Update placeholder attributes */
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                const val = dict[key];
+                if (val !== undefined) el.placeholder = val;
+            });
+
+            /* Update lang switcher button states */
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+        }
+
+        function switchLang(lang) {
+            if (lang === currentLang) return;
+            applyLang(lang);
+        }
+
+        /* Apply saved language on load */
+        applyLang(currentLang);
+
+        /* ============================================ */
+        /* 21. Canvas Background Particles                */
+        /* ============================================ */
+        (function initParticleCanvas() {
+            const canvas = document.getElementById('bgCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let w, h;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize, { passive: true });
+
+            const PARTICLE_COUNT = Math.min(60, Math.floor(window.innerWidth / 25));
+
+            function Particle() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.size = Math.random() * 2.5 + 0.5;
+                const colours = [
+                    'rgba(26,115,232,', 'rgba(255,107,107,', 'rgba(118,75,162,',
+                    'rgba(107,203,119,', 'rgba(253,203,110,'
+                ];
+                this.color = colours[Math.floor(Math.random() * colours.length)];
+                this.alpha = Math.random() * 0.4 + 0.1;
+            }
+            Particle.prototype.update = function() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > w) this.vx *= -1;
+                if (this.y < 0 || this.y > h) this.vy *= -1;
+            };
+            Particle.prototype.draw = function() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.alpha + ')';
+                ctx.fill();
+            };
+
+            for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, w, h);
+                particles.forEach(p => { p.update(); p.draw(); });
+
+                /* Draw lines between close particles */
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = 'rgba(26,115,232,' + (0.06 * (1 - dist / 150)) + ')';
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+    </script>
+</body>
+</html>

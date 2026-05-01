@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test | Colour Lab — Learning & Lab Check</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --primary-light: #e8f0fe;
+      --secondary-coral: #ff6b6b;
+      --success: #10b981;
+      --warn: #f59e0b;
+      --bg-light: #f8f9fc;
+      --bg-dark: #0f0f1a;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 48px rgba(0, 0, 0, 1);
+      --radius-base: 12px;
+      --radius-small: 8px;
+      --radius-pill: 50px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow-soft);
+      z-index: 1000;
+      padding: 16px 24px;
+      transition: var(--transition);
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+    .nav-menu a {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+    .nav-menu a.active { color: var(--primary); font-weight: 600; }
+    .nav-menu a:hover { color: var(--primary-dark); }
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: var(--text-dark);
+    }
+    .page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .breadcrumb {
+      margin-top: 120px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .hero {
+      padding: 36px 0 32px;
+      text-align: center;
+    }
+    .section-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-desc {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+    .module {
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      transition: var(--transition);
+    }
+    .module:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    .module h2, .module .panel-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .panel-sub {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .home-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--text-dark);
+      border: 2px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+    .btn-danger {
+      background: var(--secondary-coral);
+      color: var(--white);
+    }
+    .btn-danger:hover {
+      filter: brightness(0.95);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary-light);
+    }
+    .btn-ghost:hover {
+      background: var(--primary-light);
+    }
+    .btn-warn {
+      background: var(--warn);
+      color: #fff;
+    }
+    .setting-group {
+      margin: 28px 0;
+      text-align: left;
+    }
+    .setting-group h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 14px;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .option-item input { accent-color: var(--primary); }
+    .btns {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .highlight {
+      outline: 2px solid var(--secondary-coral);
+      outline-offset: 4px;
+      border-radius: var(--radius-small);
+    }
+    .question-box {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-base);
+      margin: 20px 0;
+      min-height: 200px;
+      line-height: 1.65;
+      background: var(--bg-light);
+      position: relative;
+    }
+    .unanswered-dot {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 10px;
+      height: 10px;
+      background: var(--secondary-coral);
+      border-radius: 50%;
+    }
+    .question-box h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+    .progress-wrap {
+      margin-bottom: 16px;
+    }
+    .progress-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), #48dbfb);
+      border-radius: 99px;
+      transition: width 0.25s ease;
+    }
+    .timer-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--secondary-coral);
+    }
+    .nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    #q-index {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 15, 26, 0.45);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+    .modal-content {
+      background: var(--white);
+      padding: 28px 32px;
+      border-radius: var(--radius-base);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: var(--shadow-hover);
+      border: 1px solid var(--border);
+    }
+    .modal-btns {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .review-item {
+      border: 1px solid var(--border);
+      padding: 18px;
+      margin: 12px 0;
+      border-radius: var(--radius-base);
+      background: var(--white);
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .review-body {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      display: none;
+    }
+    .review-body.show { display: block; }
+    .q-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      border-radius: var(--radius-small);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .q-item:hover { background: var(--primary-light); }
+    .correct { color: var(--success); font-weight: 600; }
+    .wrong { color: var(--secondary-coral); font-weight: 600; }
+    .score {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin: 24px 0;
+      color: var(--text-dark);
+    }
+    .wrong-list {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .wrong-num {
+      display: inline-block;
+      padding: 8px 14px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-radius: var(--radius-pill);
+      margin: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .wrong-num:hover {
+      border-color: var(--primary);
+      background: var(--white);
+    }
+    .option-label {
+      display: block;
+      margin: 10px 0;
+      cursor: pointer;
+      padding: 12px 14px;
+      border-radius: var(--radius-small);
+      border: 1px solid var(--border);
+      background: var(--white);
+      transition: var(--transition);
+      font-size: 15px;
+      color: var(--text-dark);
+    }
+    .option-label:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .option-label input { margin-right: 10px; accent-color: var(--primary); }
+    .fill-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-small);
+      font-family: inherit;
+    }
+    .fill-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-light);
+    }
+    .tag-line {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-top: 8px;
+    }
+    footer {
+      background: var(--bg-dark);
+      padding: 48px 24px;
+      color: var(--white);
+      margin-top: 40px;
+    }
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .footer-text {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 12px;
+    }
+    #timeUpModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 15, 26, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .time-up-box {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--radius-base);
+      box-shadow: var(--shadow-hover);
+      border: 1px solid var(--border);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--secondary-coral);
+    }
+    .collect-btn {
+      position: absolute;
+      top: 16px;
+      right: 36px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .collect-btn.active {
+      color: var(--warn);
+    }
+    @media (max-width: 768px) {
+      .nav-menu { display: none; }
+      .hamburger { display: block; }
+      .hero-title { font-size: 30px; }
+      .module { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">Colour Lab</a>
+      <ul class="nav-menu">
+        <li><a href="homepage.html">Home</a></li>
+        <li><a href="Learning.html">Learning</a></li>
+        <li><a href="Game.html">Game</a></li>
+        <li><a href="color-test page.html" class="active">Test</a></li>
+        <li><a href="community page.html">Community</a></li>
+      </ul>
+      <button type="button" class="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+  <div class="page-container">
+    <div class="breadcrumb">Home &gt; Test &gt; Knowledge Check</div>
+    <section class="hero">
+      <div class="section-label">Assess your progress</div>
+      <h1 class="hero-title">Learning &amp; Lab Test</h1>
+      <p class="hero-desc">
+        Questions follow the <strong>Learning</strong> modules (vision, RGB, CMYK, HSV, YUV/YCbCr, advanced gamut)
+        and the <strong>Game</strong> lab ideas (RGB mixing, hex codes, gamut). Choose a focus and question types, then answer 10 items.
+      </p>
+    </section>
+    <div id="home" class="view active">
+      <div class="module">
+        <h2 class="panel-title">Ready when you are</h2>
+        <p class="panel-sub">Your last attempts are saved under Test review. Each run draws a fresh mix from the bank.</p>
+        <div class="home-actions">
+          <button type="button" class="btn btn-primary" onclick="showView('setting')">Configure &amp; start</button>
+          <button type="button" class="btn btn-secondary" onclick="showView('review')">Test review</button>
+          <button type="button" class="btn btn-warn" onclick="exportCollected()">Export collected</button>
+        </div>
+      </div>
+    </div>
+    <div id="setting" class="view">
+      <div class="module">
+        <h2 class="panel-title">Test setup</h2>
+        <p class="panel-sub">Pick which material to draw from, then choose one or more question formats.</p>
+        <div class="setting-group" id="scope-group">
+          <h3>Content focus</h3>
+          <div class="options">
+            <label class="option-item"><input type="radio" name="scope" value="all" checked> All (learning + lab)</label>
+            <label class="option-item"><input type="radio" name="scope" value="learning"> Learning modules only</label>
+            <label class="option-item"><input type="radio" name="scope" value="games"> Game lab (RGB · gamut · hex) only</label>
+          </div>
+        </div>
+        <div class="setting-group" id="type-group">
+          <h3>Question types</h3>
+          <div class="options">
+            <label class="option-item"><input type="checkbox" name="type" value="mcq" checked> Multiple choice</label>
+            <label class="option-item"><input type="checkbox" name="type" value="tf" checked> True / False</label>
+            <label class="option-item"><input type="checkbox" name="type" value="fill" checked> Short answer</label>
+          </div>
+        </div>
+        <div class="btns">
+          <button type="button" class="btn btn-primary" onclick="confirmSetting()">Start test</button>
+          <button type="button" class="btn btn-secondary" onclick="backFromSetting()">Back</button>
+        </div>
+      </div>
+    </div>
+    <div id="quiz" class="view">
+      <div class="module">
+        <div class="timer-wrap">Remaining time: <span id="countdown">30:00</span></div>
+        <div class="progress-wrap">
+          <div class="progress-bar"><span id="progressFill" style="width:10%"></span></div>
+        </div>
+        <div id="question-container" class="question-box"></div>
+        <div class="nav-bar">
+          <button type="button" class="btn btn-ghost" id="prev-btn" onclick="prevQuestion()">Previous</button>
+          <div id="q-index">Question 1 / 10</div>
+          <button type="button" class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next</button>
+          <button type="button" class="btn btn-danger" id="submit-btn" onclick="submitPaper()" style="display:none;">Submit</button>
+        </div>
+        <div style="text-align:center; margin-top:30px;">
+          <button class="btn btn-secondary" onclick="goHomeFromQuiz()">Home</button>
+        </div>
+      </div>
+    </div>
+    <div id="score" class="view">
+      <div class="module">
+        <h2 class="panel-title">Results</h2>
+        <div class="score" id="final-score"></div>
+        <p class="panel-sub" style="text-align:center;margin-bottom:8px;">Tap a question number to see explanation.</p>
+        <div class="wrong-list" id="wrong-list"></div>
+        <div class="btns">
+          <button type="button" class="btn btn-primary" onclick="goHome()">Back to test home</button>
+        </div>
+      </div>
+    </div>
+    <div id="review" class="view">
+      <div class="module">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2 class="panel-title" style="margin:0;">Past attempts</h2>
+          <button id="clearRecordsBtn" class="btn btn-danger" style="padding:10px 20px; font-size:14px;">Clear test records</button>
+        </div>
+        <p class="panel-sub">Expand a row to see each question; tap a line to open analysis.</p>
+        <div id="review-list"></div>
+        <div class="btns">
+          <button type="button" class="btn btn-secondary" onclick="goHome()">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="timeUpModal">
+    <div class="time-up-box">Time is up</div>
+  </div>
+  <div class="modal" id="analysis-modal">
+    <div class="modal-content" style="max-width:520px;text-align:left;">
+      <div id="analysis-content"></div>
+      <div class="modal-btns">
+        <button type="button" class="btn btn-primary" onclick="closeAnalysisModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="modal">
+    <div class="modal-content" id="modal-text"></div>
+  </div>
+  <footer>
+    <div class="footer-container">
+      <div class="logo" style="color:var(--white);">Colour Lab</div>
+      <p class="footer-text">© 2026 Colour Lab · Test aligned with Learning modules &amp; Game lab</p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      let testRecords = [];
+      try {
+        testRecords = JSON.parse(localStorage.getItem('testRecords')) || [];
+        if (!Array.isArray(testRecords)) testRecords = [];
+      } catch (e) {
+        testRecords = [];
+      }
+      let collectedQuestions = [];
+      try {
+        collectedQuestions = JSON.parse(localStorage.getItem('collectedQuestions')) || [];
+        if (!Array.isArray(collectedQuestions)) collectedQuestions = [];
+      } catch (e) {
+        collectedQuestions = [];
+      }
+      let state = {
+        currentView: 'home',
+        currentQ: 0,
+        questions: [],
+        lastReviewQuestions: null
+      };
+      try {
+        const saved = localStorage.getItem('testState');
+        if (saved) state = JSON.parse(saved);
+      } catch (e) {}
+
+      let totalSeconds = 30 * 60;
+      let countdownInterval = null;
+      let timerSubmitted = false;
+
+      function startCountdown() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        totalSeconds = 30 * 60;
+        timerSubmitted = false;
+        updateTimerDisplay();
+        countdownInterval = setInterval(() => {
+          totalSeconds--;
+          updateTimerDisplay();
+          if (totalSeconds <= 0 && !timerSubmitted) {
+            clearInterval(countdownInterval);
+            triggerTimeUp();
+          }
+        }, 1000);
+      }
+      function updateTimerDisplay() {
+        const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        const s = (totalSeconds % 60).toString().padStart(2, '0');
+        const el = document.getElementById('countdown');
+        if (el) el.textContent = `${m}:${s}`;
+      }
+      function triggerTimeUp() {
+        if (timerSubmitted) return;
+        timerSubmitted = true;
+        const modal = document.getElementById('timeUpModal');
+        modal.style.display = 'flex';
+        modal.onclick = (e) => {
+          if (e.target === modal) {
+            modal.style.display = 'none';
+            submitPaper();
+          }
+        };
+      }
+      function bindClearRecords() {
+        const btn = document.getElementById('clearRecordsBtn');
+        if (!btn) return;
+        btn.onclick = () => {
+          showModal('Clear all test records? This cannot be undone.', true, (yes) => {
+            if (yes) {
+              testRecords = [];
+              localStorage.removeItem('testRecords');
+              loadReview();
+            }
+          });
+        };
+      }
+      const questionBank = {
+        mcq: [
+          { title: 'The human retina uses three cone types mainly sensitive to which idea?', options: ['Long / medium / short wavelength regions (often called L, M, S)', 'CMY ink densities', 'YCbCr subsampling ratios', 'Printer DPI only'], answer: 'Long / medium / short wavelength regions (often called L, M, S)', analysis: 'Learning §1: trichromacy — three receptor types map to roughly red, green, and blue regions of the spectrum.', scopes: ['learning', 'both'] },
+          { title: 'In learning materials, “metamers” are best described as:', options: ['Different spectra that can look the same to a viewer', 'Identical file sizes', 'Two monitors with the same resolution', 'Colors outside sRGB'], answer: 'Different spectra that can look the same to a viewer', analysis: 'Learning §1: metamers matter because encoding must match perception, not a single spectrum.', scopes: ['learning', 'both'] },
+          { title: 'RGB(0, 0, 0) on a display represents:', options: ['Black (no emitted light)', 'White', 'Transparent pixel', 'Printer black (K ink)'], answer: 'Black (no emitted light)', analysis: 'Learning §2: RGB is additive; zero in all channels means no light.', scopes: ['learning', 'both'] },
+          { title: 'RGB(255, 255, 255) on a display represents:', options: ['White (full light)', '50% gray', 'CMYK paper white', 'Chroma-only signal'], answer: 'White (full light)', analysis: 'Learning §2: full R, G, B emit full additive white.', scopes: ['learning', 'both'] },
+          { title: '8-bit per channel RGB means each channel is usually encoded as integers:', options: ['0–255', '0–100', '0–1 only', '0–360'], answer: '0–255', analysis: 'Learning §2: 8-bit channels use 256 levels (0–255).', scopes: ['learning', 'both'] },
+          { title: 'The standard luminance approximation used in the course is L =', options: ['0.299R + 0.587G + 0.114B', 'R + G + B', 'max(R,G,B)', '(R+G+B)/3 only, always'], answer: '0.299R + 0.587G + 0.114B', analysis: 'Learning §2: weighted sum approximates perceived brightness.', scopes: ['learning', 'both'] },
+          { title: 'CMYK is primarily used for:', options: ['Print and physical media', 'Direct LCD emission', 'Audio loudness', 'Video frame rate'], answer: 'Print and physical media', analysis: 'Learning §3: CMYK is subtractive inks on paper/packaging.', scopes: ['learning', 'both'] },
+          { title: 'The “K” in CMYK stands for:', options: ['Key (black) ink', 'Kelvin white point', 'Kilobytes', 'Kerning'], answer: 'Key (black) ink', analysis: 'Learning §3: K improves neutrals and saves ink vs. muddy CMY-only blacks.', scopes: ['learning', 'both'] },
+          { title: 'Compared to typical RGB displays, CMYK print gamut is usually:', options: ['Smaller — some bright screen colors are hard to print', 'Always larger', 'Unrelated to gamut', 'Infinite'], answer: 'Smaller — some bright screen colors are hard to print', analysis: 'Learning §3 info box: many saturated RGB colors lie outside common print gamuts.', scopes: ['learning', 'both'] },
+          { title: 'In HSV, hue is often represented on a wheel at angles roughly:', options: ['0° red, 120° green, 240° blue', '0° always black', 'Only 0–100%', 'RGB byte order only'], answer: '0° red, 120° green, 240° blue', analysis: 'Learning §4: hue is cyclic 0°–360° with primaries spaced 120° apart.', scopes: ['learning', 'both'] },
+          { title: 'In HSV, saturation at 0% means:', options: ['A grayscale (no chroma)', 'Maximum vividness', 'Maximum value only', 'HDR peak brightness'], answer: 'A grayscale (no chroma)', analysis: 'Learning §4: saturation is purity; 0% removes chroma.', scopes: ['learning', 'both'] },
+          { title: 'YCbCr separates:', options: ['Luminance (Y) and chrominance (Cb/Cr)', 'Left and right audio', 'CPU and GPU', 'Ink viscosity'], answer: 'Luminance (Y) and chrominance (Cb/Cr)', analysis: 'Learning §5: luma vs chroma enables compression with less visible loss.', scopes: ['learning', 'both'] },
+          { title: 'JPEG and digital video pipelines commonly use:', options: ['YCbCr-style color transformations', 'Raw Morse code', 'Grayscale only, always', 'Printer spot channels only'], answer: 'YCbCr-style color transformations', analysis: 'Learning §5: YCbCr appears in JPEG/MPEG-style workflows.', scopes: ['learning', 'both'] },
+          { title: 'Display P3 and Rec.2020 are examples of:', options: ['Wider / professional color gamuts vs. sRGB', 'Printer paper sizes', 'Font formats', 'Audio codecs'], answer: 'Wider / professional color gamuts vs. sRGB', analysis: 'Learning §6 + Game §2: gamut names describe reproducible color ranges.', scopes: ['learning', 'both'] },
+          { title: 'In “RGB Color Master”, you match colors by adjusting:', options: ['Red, green, and blue channels', 'Only printer DPI', 'Audio volume', 'Page margins'], answer: 'Red, green, and blue channels', analysis: 'Game §1: sliders mix additive RGB to approach a target swatch.', scopes: ['games', 'both'] },
+          { title: 'A 6-digit CSS hex triplet #RRGGBB encodes:', options: ['Two hex digits each for red, green, and blue', 'Only opacity', 'CMYK percentages', 'Audio sample rate'], answer: 'Two hex digits each for red, green, and blue', analysis: 'Game §3 “Hex Sprint”: pairs map to R,G,B bytes.', scopes: ['games', 'both'] },
+          { title: '“Gamut Quest” mainly trains you to reason about:', options: ['Which colors a device or space can reproduce', 'Keyboard shortcuts', 'Network latency', 'File compression of text only'], answer: 'Which colors a device or space can reproduce', analysis: 'Game §2: comparing sRGB vs wide-gamut thinking.', scopes: ['games', 'both'] },
+          { title: 'sRGB is best described as:', options: ['A common default RGB space for the web', 'A subtractive ink set', 'A video shutter speed', 'A printer nozzle count'], answer: 'A common default RGB space for the web', analysis: 'Learning §2/§6: sRGB is the everyday web reference space.', scopes: ['learning', 'both'] },
+          { title: 'Value (V) in HSV at 0% typically means:', options: ['Black regardless of hue', 'Always white', 'Maximum saturation', 'Printer registration mark'], answer: 'Black regardless of hue', analysis: 'Learning §4: value is brightness; 0% collapses to black.', scopes: ['learning', 'both'] },
+          { title: 'Additive mixing is the core idea of:', options: ['RGB emitted light', 'CMYK ink absorption only', 'Grayscale fax without color', 'YCbCr without Y'], answer: 'RGB emitted light', analysis: 'Learning §2 vs §3: additive = light; subtractive = inks.', scopes: ['learning', 'both'] }
+        ],
+        tf: [
+          { title: 'Human colour vision is based on trichromatic signals (three cone pathways).', answer: 'True', analysis: 'Learning §1: three cone types support tristimulus thinking.', scopes: ['learning', 'both'] },
+          { title: 'Hue describes the dominant colour name / wheel position; saturation describes purity.', answer: 'True', analysis: 'Learning §1 vocabulary: hue vs saturation.', scopes: ['learning', 'both'] },
+          { title: 'RGB is a subtractive model like printing inks.', answer: 'False', analysis: 'RGB is additive (light); CMYK is subtractive (inks).', scopes: ['learning', 'both'] },
+          { title: '10-bit RGB channels allow more discrete levels than 8-bit per channel.', answer: 'True', analysis: 'Learning §2 mentions higher bit depths for professional use.', scopes: ['learning', 'both'] },
+          { title: 'CMYK “K” exists partly to improve deep neutrals and ink economy.', answer: 'True', analysis: 'Learning §3: black channel rationale.', scopes: ['learning', 'both'] },
+          { title: 'YCbCr keeps full chroma resolution for every pixel like RGB always.', answer: 'False', analysis: 'Learning §5: chroma is often subsampled because human vision is less sensitive to it.', scopes: ['learning', 'both'] },
+          { title: 'HSV hue is represented as an angle on a colour wheel (0°–360°).', answer: 'True', analysis: 'Learning §4.', scopes: ['learning', 'both'] },
+          { title: 'Gamut describes the range of colours reproducible on a device or in a space.', answer: 'True', analysis: 'Learning §6 + Game §2 framing.', scopes: ['learning', 'both'] },
+          { title: 'Hex sprint in the lab expects you to map #RRGGBB to the correct swatch.', answer: 'True', analysis: 'Game §3 subtitle.', scopes: ['games', 'both'] },
+          { title: 'Wide gamut displays can show more saturated colours than sRGB on supported content.', answer: 'True', analysis: 'Game §2 explanation text (device/content dependent).', scopes: ['games', 'both'] },
+          { title: 'RGB(255,0,0) is pure green.', answer: 'False', analysis: 'Learning §2: (255,0,0) is pure red.', scopes: ['games', 'both'] },
+          { title: 'Cyan, magenta, and yellow are the subtractive primaries in CMY printing logic.', answer: 'True', analysis: 'Learning §3.', scopes: ['learning', 'both'] },
+          { title: 'Metamers prove that identical perceived colours must have identical spectra.', answer: 'False', analysis: 'Learning §1: different spectra can match in perception.', scopes: ['learning', 'both'] },
+          { title: 'RGB mixing games use sliders tied to 0–255 style channel ranges.', answer: 'True', analysis: 'Game §1 UI: R,G,B sliders.', scopes: ['games', 'both'] },
+          { title: 'Rec. 2020 is unrelated to HDR or wide gamut workflows.', answer: 'False', analysis: 'Learning §6 lists Rec.2020 gamut in HDR context.', scopes: ['learning', 'both'] },
+          { title: 'Value in HSV is the same concept as “brightness” in the learning notes.', answer: 'True', analysis: 'Learning §4: value ~ brightness axis.', scopes: ['learning', 'both'] },
+          { title: 'Printer RGB separation plates are identical to CMYK plates.', answer: 'False', analysis: 'Learning §3: printing workflow centres on CMYK (or spot), not RGB plates.', scopes: ['learning', 'both'] },
+          { title: 'Luminance (Y) carries most of the perceived detail in compressed imagery.', answer: 'True', analysis: 'Learning §5: vision is more sensitive to luma.', scopes: ['learning', 'both'] }
+        ],
+        fill: [
+          { title: 'The three cone-mediated signals underpin the ______ theory of colour vision.', answer: 'tristimulus', analysis: 'Learning §1: tristimulus / three-channel encoding idea.', scopes: ['learning', 'both'] },
+          { title: 'RGB is an ______ colour model (light emitted from pixels).', answer: 'additive', analysis: 'Learning §2.', scopes: ['learning', 'both'] },
+          { title: 'CMYK is a ______ model used for inks on paper.', answer: 'subtractive', analysis: 'Learning §3.', scopes: ['learning', 'both'] },
+          { title: 'In HSV, the three letters stand for Hue, Saturation, and ______.', answer: 'Value', analysis: 'Learning §4 naming.', scopes: ['learning', 'both'] },
+          { title: 'JPEG-style pipelines often store images in ______ colour space (digital luma/chroma).', answer: 'YCbCr', analysis: 'Learning §5.', scopes: ['learning', 'both'] },
+          { title: 'In YCbCr, ______ carries brightness and fine detail most strongly.', answer: 'Y', analysis: 'Learning §5: Y is luminance.', scopes: ['learning', 'both'] },
+          { title: 'The common web default RGB space is abbreviated ______.', answer: 'sRGB', analysis: 'Learning §2/§6.', scopes: ['learning', 'both'] },
+          { title: '8-bit RGB channels are usually integers from 0 through ______.', answer: '255', analysis: 'Learning §2.', scopes: ['learning', 'both'] },
+          { title: 'Hex #FF0000 encodes full ______ with zero green and blue.', answer: 'red', analysis: 'Game §3 + Learning §2 examples.', scopes: ['games', 'both'] },
+          { title: 'Hex #00FF00 is pure ______ in #RRGGBB notation.', answer: 'green', analysis: 'Game §3 hex drills.', scopes: ['games', 'both'] },
+          { title: 'Game 1 asks you to match a target by mixing R, G, and B on ______.', answer: 'sliders', analysis: 'Game §1 UI.', scopes: ['games', 'both'] },
+          { title: 'Game 2 focuses on colour ______ — what a display or colour space can reproduce.', answer: 'gamut', analysis: 'Game §2 title and copy.', scopes: ['games', 'both'] },
+          { title: 'In CMYK, black ink is denoted by the letter ______.', answer: 'K', analysis: 'Learning §3 (Key).', scopes: ['learning', 'both'] },
+          { title: 'Learning notes give grayscale luminance as L = 0.299R + 0.587G + 0.114______.', answer: 'B', analysis: 'Learning §2 formula (blue term).', scopes: ['learning', 'both'] },
+          { title: 'Per learning §4, hue 120° is associated with ______ on the wheel.', answer: 'green', analysis: '0° red, 120° green, 240° blue.', scopes: ['learning', 'both'] },
+          { title: 'Wide gamut examples in the course include Display P3 and ______.', answer: 'Rec.2020', analysis: 'Learning §6 HDR / gamut list (Rec.2020 named).', scopes: ['learning', 'both'] },
+          { title: 'Different light spectra that look the same are called ______.', answer: 'metamers', analysis: 'Learning §1 definition.', scopes: ['learning', 'both'] },
+          { title: 'The “Hex Sprint” game tests reading ______ codes and picking swatches.', answer: 'hex', analysis: 'Game §3 title.', scopes: ['games', 'both'] }
+        ]
+      };
+      function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const t = a[i];
+          a[i] = a[j];
+          a[j] = t;
+        }
+        return a;
+      }
+      function filterByScope(items, scope) {
+        if (scope === 'all') return items.slice();
+        return items.filter(function (q) {
+          return q.scopes.indexOf(scope) !== -1 || q.scopes.indexOf('both') !== -1;
+        });
+      }
+      function normalizeFill(s) {
+        return String(s || '')
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, ' ')
+          .replace(/^#/, '');
+      }
+      function answersMatch(q, userRaw) {
+        const user = q.type === 'fill' ? normalizeFill(userRaw) : String(userRaw || '').trim();
+        const ans = q.type === 'fill' ? normalizeFill(q.answer) : String(q.answer).trim();
+        if (q.type === 'fill') return user === ans;
+        return user === ans;
+      }
+      function generateQuestions(selectedTypes, scope) {
+        const order = ['mcq', 'tf', 'fill'].filter(function (t) { return selectedTypes.indexOf(t) !== -1; });
+        state.questions = [];
+        const usedTitles = {};
+        order.forEach(function (t) {
+          let pool = filterByScope(questionBank[t], scope);
+          if (pool.length === 0) pool = questionBank[t].slice();
+          shuffle(pool).forEach(function (q) {
+            if (state.questions.length >= 10) return;
+            if (usedTitles[q.title]) return;
+            usedTitles[q.title] = 1;
+            state.questions.push({
+              id: state.questions.length + 1,
+              type: t,
+              title: q.title,
+              options: q.options ? q.options.slice() : [],
+              answer: q.answer,
+              userAnswer: null,
+              analysis: q.analysis,
+              point: (t === 'mcq' || t === 'tf') ? 1 : 3
+            });
+          });
+        });
+        if (state.questions.length < 10) {
+          const fillerTypes = shuffle(order);
+          fillerTypes.forEach(function (t) {
+            const pool = shuffle(questionBank[t].slice());
+            pool.forEach(function (q) {
+              if (state.questions.length >= 10) return;
+              if (usedTitles[q.title]) return;
+              usedTitles[q.title] = 1;
+              state.questions.push({
+                id: state.questions.length + 1,
+                type: t,
+                title: q.title,
+                options: q.options ? q.options.slice() : [],
+                answer: q.answer,
+                userAnswer: null,
+                analysis: q.analysis,
+                point: (t === 'mcq' || t === 'tf') ? 1 : 3
+              });
+            });
+          });
+        }
+      }
+      function saveState() {
+        try {
+          localStorage.setItem('testState', JSON.stringify(state));
+        } catch (e) {}
+      }
+      function saveCollected() {
+        localStorage.setItem('collectedQuestions', JSON.stringify(collectedQuestions));
+      }
+      function toggleCollect() {
+        const q = state.questions[state.currentQ];
+        if (!q) return;
+        const idx = collectedQuestions.findIndex(item => item.title === q.title);
+        const btn = document.querySelector('.collect-btn');
+        if (idx === -1) {
+          collectedQuestions.push(JSON.parse(JSON.stringify(q)));
+          btn.classList.add('active');
+          showModal('Added to collection', false);
+        } else {
+          collectedQuestions.splice(idx, 1);
+          btn.classList.remove('active');
+          showModal('Removed from collection', false);
+        }
+        saveCollected();
+      }
+      function exportCollected() {
+        if (collectedQuestions.length === 0) {
+          showModal('No collected questions', false);
+          return;
+        }
+        let text = 'Colour Lab - Collected Questions\n';
+        text += '===================================\n\n';
+        collectedQuestions.forEach((q, i) => {
+          text += `Q${i+1}: ${q.title}\n`;
+          text += `Type: ${q.type.toUpperCase()}\n`;
+          text += `Answer: ${q.answer}\n`;
+          text += `Analysis: ${q.analysis}\n\n`;
+        });
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'collected-questions.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      function goHome() {
+        state.currentView = 'home';
+        state.currentQ = 0;
+        state.questions = [];
+        if (countdownInterval) clearInterval(countdownInterval);
+        saveState();
+        renderAll();
+      }
+      function showView(id) {
+        state.currentView = id;
+        if (id === 'review') {
+          loadReview();
+          bindClearRecords();
+        }
+        saveState();
+        renderAll();
+      }
+      function updateProgress() {
+        const el = document.getElementById('progressFill');
+        if (!el || !state.questions.length) return;
+        const pct = ((state.currentQ + 1) / state.questions.length) * 100;
+        el.style.width = pct + '%';
+      }
+      function renderAll() {
+        document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+        const panel = document.getElementById(state.currentView);
+        if (panel) panel.classList.add('active');
+        if (state.currentView === 'quiz' && state.questions.length) {
+          renderQuestion();
+        }
+      }
+      function checkCurrentAnswered() {
+        const q = state.questions[state.currentQ];
+        if (!q) return true;
+        saveAnswer();
+        return !!q.userAnswer;
+      }
+      function renderQuestion() {
+        const q = state.questions[state.currentQ];
+        if (!q) return;
+        let unansweredDot = '';
+        if (!q.userAnswer) {
+          unansweredDot = '<div class="unanswered-dot"></div>';
+        }
+        const isCollected = collectedQuestions.some(item => item.title === q.title);
+        const collectBtn = `<button class="collect-btn ${isCollected ? 'active' : ''}" onclick="toggleCollect()">⭐</button>`;
+        let html = unansweredDot + collectBtn + '<div class="tag-line">' + q.type.toUpperCase() + '</div><h3>Q' + (state.currentQ + 1) + ': ' + q.title + '</h3>';
+        if (q.type === 'mcq') {
+          q.options.forEach(function (o) {
+            const checked = q.userAnswer === o ? ' checked' : '';
+            html += '<label class="option-label"><input type="radio" name="qa" value="' + escapeAttr(o) + '"' + checked + '> ' + escapeHtml(o) + '</label>';
+          });
+        } else if (q.type === 'tf') {
+          html += '<label class="option-label"><input type="radio" name="qa" value="True"' + (q.userAnswer === 'True' ? ' checked' : '') + '> True</label>';
+          html += '<label class="option-label"><input type="radio" name="qa" value="False"' + (q.userAnswer === 'False' ? ' checked' : '') + '> False</label>';
+        } else if (q.type === 'fill') {
+          const v = q.userAnswer ? escapeAttr(q.userAnswer) : '';
+          html += '<p style="font-size:14px;color:var(--text-muted);margin-top:8px;">Short phrase — spelling can be relaxed for numbers/hex.</p>';
+          html += '<input type="text" class="fill-input" value="' + v + '"/>';
+        }
+        document.getElementById('question-container').innerHTML = html;
+        document.getElementById('q-index').textContent = 'Question ' + (state.currentQ + 1) + ' / 10';
+        document.getElementById('next-btn').style.display = state.currentQ < 9 ? 'inline-flex' : 'none';
+        document.getElementById('submit-btn').style.display = state.currentQ === 9 ? 'inline-flex' : 'none';
+        updateProgress();
+      }
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/"/g, '&quot;');
+      }
+      function escapeAttr(s) {
+        return escapeHtml(s).replace(/'/g, '&#39;');
+      }
+      function saveAnswer() {
+        const q = state.questions[state.currentQ];
+        if (!q) return;
+        if (q.type === 'mcq' || q.type === 'tf') {
+          const sel = document.querySelector('input[name="qa"]:checked');
+          q.userAnswer = sel ? sel.value : null;
+        } else if (q.type === 'fill') {
+          const inp = document.querySelector('.fill-input');
+          q.userAnswer = inp ? inp.value.trim() || null : null;
+        }
+        saveState();
+      }
+      function prevQuestion() {
+        saveAnswer();
+        if (state.currentQ === 0) {
+          showModal('This is the first question, cannot go back.', false);
+          return;
+        }
+        state.currentQ--;
+        saveState();
+        renderQuestion();
+      }
+      function nextQuestion() {
+        saveAnswer();
+        if (checkCurrentAnswered()) {
+          if (state.currentQ < 9) {
+            state.currentQ++;
+            saveState();
+            renderQuestion();
+          }
+          return;
+        }
+        showModal("This question is not answered yet.\nChoose: Return to answer / Skip to next", true, (res) => {
+          if (res) {
+            if (state.currentQ < 9) {
+              state.currentQ++;
+              saveState();
+              renderQuestion();
+            }
+          }
+        });
+      }
+      let modalCallback = null;
+      function closeModal() {
+        var m = document.getElementById('modal');
+        if (m) {
+          m.style.display = 'none';
+          m.onclick = null;
+        }
+        modalCallback = null;
+      }
+      function closeAnalysisModal() {
+        document.getElementById('analysis-modal').style.display = 'none';
+      }
+      function showModal(text, confirmMode, onResult) {
+        const m = document.getElementById('modal');
+        const t = document.getElementById('modal-text');
+        modalCallback = onResult || null;
+        m.onclick = null;
+        
+        if (confirmMode) {
+          t.innerHTML = `
+            <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">${escapeHtml(text)}</p>
+            <div class="modal-btns">
+              <button type="button" class="btn btn-secondary" id="modal-no">Cancel</button>
+              <button type="button" class="btn btn-primary" id="modal-yes">Confirm</button>
+            </div>
+          `;
+          m.style.display = 'flex';
+          document.getElementById('modal-yes').onclick = function () {
+            const cb = modalCallback;
+            closeModal();
+            if (cb) cb(true);
+          };
+          document.getElementById('modal-no').onclick = function () {
+            const cb = modalCallback;
+            closeModal();
+            if (cb) cb(false);
+          };
+        } else {
+          t.innerHTML = '<p style="color:var(--text-muted);">' + escapeHtml(text) + '</p>' +
+            '<div class="modal-btns"><button type="button" class="btn btn-primary" onclick="closeModal()">OK</button></div>';
+          m.style.display = 'flex';
+          m.onclick = function (e) {
+            if (e.target === m) closeModal();
+          };
+        }
+      }
+      function checkAllAnswered() {
+        saveAnswer();
+        const empty = state.questions.findIndex(q => !q.userAnswer);
+        return empty === -1;
+      }
+      function submitPaper() {
+        saveAnswer();
+        if (countdownInterval) clearInterval(countdownInterval);
+        const allAnswered = checkAllAnswered();
+        const msg = allAnswered ? 'Submit all 10 answers?' : 'Some questions are incomplete. Submit anyway?';
+        showModal(msg, true, function (ok) {
+          if (!ok) return;
+          let score = 0;
+          let total = 0;
+          const wrongs = [];
+          state.questions.forEach(function (q, i) {
+            total += q.point;
+            if (answersMatch(q, q.userAnswer)) {
+              score += q.point;
+            } else {
+              wrongs.push(i + 1);
+            }
+          });
+          testRecords.unshift({
+            time: new Date().toLocaleString(),
+            score: score + '/' + total,
+            questions: JSON.parse(JSON.stringify(state.questions))
+          });
+          try {
+            localStorage.setItem('testRecords', JSON.stringify(testRecords));
+          } catch (e) {}
+          document.getElementById('final-score').textContent = 'Score: ' + score + ' / ' + total;
+          const wl = document.getElementById('wrong-list');
+          wl.innerHTML = '';
+          if (wrongs.length === 0) {
+            wl.innerHTML = '<p style="color:var(--success);font-weight:600;">No misses — great job.</p>';
+          } else {
+            wl.innerHTML = '<p style="font-size:14px;color:var(--text-muted);margin-bottom:10px;">Review wrong items:</p>';
+            wrongs.forEach(function (n) {
+              wl.innerHTML += '<span class="wrong-num" data-qi="' + (n - 1) + '">' + n + '</span>';
+            });
+            wl.querySelectorAll('.wrong-num').forEach(function (span) {
+              span.onclick = function () {
+                showAnalysis(Number(span.getAttribute('data-qi')));
+              };
+            });
+          }
+          showView('score');
+        });
+      }
+      function showAnalysis(idx) {
+        const q = state.questions[idx] || (state.lastReviewQuestions && state.lastReviewQuestions[idx]);
+        if (!q) return;
+        document.getElementById('analysis-content').innerHTML =
+          '<h3 style="margin-bottom:12px;font-size:18px;">Q' + (idx + 1) + '</h3>' +
+          '<p style="color:var(--text-muted);margin-bottom:10px;">' + escapeHtml(q.title) + '</p>' +
+          '<p><strong>Yours:</strong> ' + escapeHtml(q.userAnswer == null ? '—' : String(q.userAnswer)) + '</p>' +
+          '<p><strong>Correct:</strong> ' + escapeHtml(String(q.answer)) + '</p>' +
+          '<p style="margin-top:12px;color:var(--primary-dark);font-weight:500;">' + escapeHtml(q.analysis) + '</p>';
+        document.getElementById('analysis-modal').style.display = 'flex';
+      }
+      document.getElementById('analysis-modal').addEventListener('click', function (e) {
+        if (e.target.id === 'analysis-modal') closeAnalysisModal();
+      });
+      function loadReview() {
+        const list = document.getElementById('review-list');
+        list.innerHTML = '';
+        if (testRecords.length === 0) {
+          list.innerHTML = '<p style="color:var(--text-muted);">No saved attempts yet.</p>';
+          return;
+        }
+        testRecords.forEach(function (rec, i) {
+          const item = document.createElement('div');
+          item.className = 'review-item';
+          item.innerHTML =
+            '<div class="review-header">' +
+            '<span>Attempt ' + (i + 1) + '</span><span>' + escapeHtml(rec.time) + '</span><span>Score: ' + escapeHtml(rec.score) + '</span>' +
+            '<button type="button" class="btn btn-ghost" style="padding:8px 14px;font-size:13px;">▼</button></div>' +
+            '<div class="review-body"></div>';
+          const body = item.querySelector('.review-body');
+          const qs = rec.questions || [];
+          body.innerHTML = qs.map(function (q, j) {
+            const ok = answersMatch(q, q.userAnswer);
+            return '<div class="q-item ' + (ok ? 'correct' : 'wrong') + '" data-qj="' + j + '">Q' + (j + 1) + ': ' + (ok ? 'Correct' : 'Incorrect') + '</div>';
+          }).join('');
+          body.querySelectorAll('.q-item').forEach(function (row) {
+            row.onclick = function () {
+              state.lastReviewQuestions = qs;
+              showAnalysis(Number(row.getAttribute('data-qj')));
+            };
+          });
+          item.querySelector('.review-header button').onclick = function () {
+            this.parentElement.nextElementSibling.classList.toggle('show');
+          };
+          list.appendChild(item);
+        });
+      }
+      function confirmSetting() {
+        const scopeEl = document.querySelector('input[name="scope"]:checked');
+        const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(function (t) { return t.value; });
+        let ok = true;
+        document.querySelectorAll('.setting-group').forEach(function (g) { g.classList.remove('highlight'); });
+        if (!scopeEl) ok = false;
+        if (types.length === 0) {
+          document.getElementById('type-group').classList.add('highlight');
+          ok = false;
+        }
+        if (!ok) {
+          showModal('Please choose at least one question type (and a content focus).', false);
+          return;
+        }
+        generateQuestions(types, scopeEl.value);
+        state.currentQ = 0;
+        startCountdown();
+        saveState();
+        showView('quiz');
+      }
+      function backFromSetting() {
+        showModal('Leave setup and return to the test home?', true, function (yes) {
+          if (yes) goHome();
+        });
+      }
+      function goHomeFromQuiz() {
+        showModal('Give up answering and return to the test home? This attempt will NOT be recorded.', true, function (yes) {
+          if (yes) goHome();
+        });
+      }
+
+      window.showView = showView;
+      window.goHome = goHome;
+      window.confirmSetting = confirmSetting;
+      window.backFromSetting = backFromSetting;
+      window.prevQuestion = prevQuestion;
+      window.nextQuestion = nextQuestion;
+      window.submitPaper = submitPaper;
+      window.closeModal = closeModal;
+      window.closeAnalysisModal = closeAnalysisModal;
+      window.showAnalysis = showAnalysis;
+      window.toggleCollect = toggleCollect;
+      window.exportCollected = exportCollected;
+      window.goHomeFromQuiz = goHomeFromQuiz;
+
+      window.onload = function () {
+        renderAll();
+        bindClearRecords();
+      };
+    })();
+  </script>
+</body>
+</html>

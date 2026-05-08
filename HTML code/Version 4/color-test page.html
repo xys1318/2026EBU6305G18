@@ -209,6 +209,13 @@
       background: var(--warn);
       color: #fff;
     }
+    .btn-collect {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .btn-collect:hover {
+      background: #fde68a;
+    }
     .setting-group {
       margin: 28px 0;
       text-align: left;
@@ -417,7 +424,6 @@
       border-color: var(--primary);
       background: var(--primary-light);
     }
-    .option-label input { margin-right: 10px; accent-color: var(--primary); }
     .fill-input {
       width: 100%;
       padding: 14px 16px;
@@ -480,19 +486,30 @@
       font-weight: 600;
       color: var(--secondary-coral);
     }
+
+    /* 收藏按钮视觉强化（已修复） */
     .collect-btn {
       position: absolute;
       top: 16px;
       right: 36px;
       background: none;
       border: none;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
-      color: var(--text-muted);
+      color: #cccccc;
+      transition: all 0.3s ease;
+      user-select: none;
     }
+    /* 已收藏状态：黄色 + 放大 + 发光 + 阴影 */
     .collect-btn.active {
-      color: var(--warn);
+      color: #ffc107;
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 6px rgba(255, 193, 7, 0.6));
     }
+    .collect-btn:hover {
+      opacity: 0.8;
+    }
+
     @media (max-width: 768px) {
       .nav-menu { display: none; }
       .hamburger { display: block; }
@@ -532,10 +549,12 @@
         <div class="home-actions">
           <button type="button" class="btn btn-primary" onclick="showView('setting')">Configure &amp; start</button>
           <button type="button" class="btn btn-secondary" onclick="showView('review')">Test review</button>
+          <button type="button" class="btn btn-collect" onclick="showView('collection')">My collection</button>
           <button type="button" class="btn btn-warn" onclick="exportCollected()">Export collected</button>
         </div>
       </div>
     </div>
+
     <div id="setting" class="view">
       <div class="module">
         <h2 class="panel-title">Test setup</h2>
@@ -562,6 +581,7 @@
         </div>
       </div>
     </div>
+
     <div id="quiz" class="view">
       <div class="module">
         <div class="timer-wrap">Remaining time: <span id="countdown">30:00</span></div>
@@ -580,6 +600,7 @@
         </div>
       </div>
     </div>
+
     <div id="score" class="view">
       <div class="module">
         <h2 class="panel-title">Results</h2>
@@ -591,6 +612,7 @@
         </div>
       </div>
     </div>
+
     <div id="review" class="view">
       <div class="module">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -604,7 +626,20 @@
         </div>
       </div>
     </div>
+
+    <div id="collection" class="view">
+      <div class="module">
+        <h2 class="panel-title">My Collected Questions</h2>
+        <p class="panel-sub">All questions you starred are here.</p>
+        <div id="collection-list" style="margin-top:20px;"></div>
+        <div class="btns" style="margin-top:30px;">
+          <button type="button" class="btn btn-secondary" onclick="goHome()">Back</button>
+          <button type="button" class="btn btn-warn" onclick="exportCollected()">Export all</button>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div id="timeUpModal">
     <div class="time-up-box">Time is up</div>
   </div>
@@ -625,6 +660,7 @@
       <p class="footer-text">© 2026 Colour Lab · Test aligned with Learning modules &amp; Game lab</p>
     </div>
   </footer>
+
   <script>
     (function () {
       let testRecords = [];
@@ -655,27 +691,67 @@
       let totalSeconds = 30 * 60;
       let countdownInterval = null;
       let timerSubmitted = false;
+      let warnedTimes = new Set();
+
+      function playSound(freq = 800, dur = 150) {
+        try {
+          const audio = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = audio.createOscillator();
+          const gain = audio.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.value = 0.3;
+          osc.connect(gain);
+          gain.connect(audio.destination);
+          osc.start();
+          setTimeout(() => {
+            osc.stop();
+            audio.close();
+          }, dur);
+        } catch (e) {}
+      }
 
       function startCountdown() {
         if (countdownInterval) clearInterval(countdownInterval);
         totalSeconds = 30 * 60;
         timerSubmitted = false;
+        warnedTimes.clear();
         updateTimerDisplay();
         countdownInterval = setInterval(() => {
           totalSeconds--;
           updateTimerDisplay();
+          checkTimeWarnings();
           if (totalSeconds <= 0 && !timerSubmitted) {
             clearInterval(countdownInterval);
             triggerTimeUp();
           }
         }, 1000);
       }
+
+      function checkTimeWarnings() {
+        const warnings = [900, 600, 300, 60, 10];
+        warnings.forEach(sec => {
+          if (totalSeconds === sec && !warnedTimes.has(sec)) {
+            warnedTimes.add(sec);
+            playSound(900, 200);
+            let label;
+            if (sec === 900) label = '15 minutes left';
+            else if (sec === 600) label = '10 minutes left';
+            else if (sec === 300) label = '5 minutes left';
+            else if (sec === 60) label = '1 minute left';
+            else if (sec === 10) label = '10 seconds left';
+            showModal(label, false);
+          }
+        });
+      }
+
       function updateTimerDisplay() {
         const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
         const s = (totalSeconds % 60).toString().padStart(2, '0');
         const el = document.getElementById('countdown');
         if (el) el.textContent = `${m}:${s}`;
       }
+
       function triggerTimeUp() {
         if (timerSubmitted) return;
         timerSubmitted = true;
@@ -688,6 +764,7 @@
           }
         };
       }
+
       function bindClearRecords() {
         const btn = document.getElementById('clearRecordsBtn');
         if (!btn) return;
@@ -701,6 +778,7 @@
           });
         };
       }
+
       const questionBank = {
         mcq: [
           { title: 'The human retina uses three cone types mainly sensitive to which idea?', options: ['Long / medium / short wavelength regions (often called L, M, S)', 'CMY ink densities', 'YCbCr subsampling ratios', 'Printer DPI only'], answer: 'Long / medium / short wavelength regions (often called L, M, S)', analysis: 'Learning §1: trichromacy — three receptor types map to roughly red, green, and blue regions of the spectrum.', scopes: ['learning', 'both'] },
@@ -765,116 +843,134 @@
           { title: 'The “Hex Sprint” game tests reading ______ codes and picking swatches.', answer: 'hex', analysis: 'Game §3 title.', scopes: ['games', 'both'] }
         ]
       };
+
       function shuffle(arr) {
         const a = arr.slice();
         for (let i = a.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          const t = a[i];
-          a[i] = a[j];
-          a[j] = t;
+          [a[i], a[j]] = [a[j], a[i]];
         }
         return a;
       }
+
       function filterByScope(items, scope) {
         if (scope === 'all') return items.slice();
-        return items.filter(function (q) {
-          return q.scopes.indexOf(scope) !== -1 || q.scopes.indexOf('both') !== -1;
-        });
+        return items.filter(q => q.scopes.includes(scope) || q.scopes.includes('both'));
       }
+
       function normalizeFill(s) {
-        return String(s || '')
-          .trim()
-          .toLowerCase()
-          .replace(/\s+/g, ' ')
-          .replace(/^#/, '');
+        return String(s || '').trim().toLowerCase().replace(/\s+/g, ' ').replace(/^#/, '');
       }
+
       function answersMatch(q, userRaw) {
         const user = q.type === 'fill' ? normalizeFill(userRaw) : String(userRaw || '').trim();
         const ans = q.type === 'fill' ? normalizeFill(q.answer) : String(q.answer).trim();
-        if (q.type === 'fill') return user === ans;
         return user === ans;
       }
+
       function generateQuestions(selectedTypes, scope) {
-        const order = ['mcq', 'tf', 'fill'].filter(function (t) { return selectedTypes.indexOf(t) !== -1; });
+        const types = shuffle([...selectedTypes]);
         state.questions = [];
-        const usedTitles = {};
-        order.forEach(function (t) {
-          let pool = filterByScope(questionBank[t], scope);
-          if (pool.length === 0) pool = questionBank[t].slice();
-          shuffle(pool).forEach(function (q) {
-            if (state.questions.length >= 10) return;
-            if (usedTitles[q.title]) return;
-            usedTitles[q.title] = 1;
+        const used = new Set();
+        let counts = {};
+
+        if (types.length === 1) {
+          counts[types[0]] = 10;
+        } else if (types.length === 2) {
+          counts[types[0]] = 5;
+          counts[types[1]] = 5;
+        } else if (types.length === 3) {
+          counts[types[0]] = 3;
+          counts[types[1]] = 3;
+          counts[types[2]] = 4;
+        }
+
+        types.forEach(t => {
+          const need = counts[t] || 0;
+          let pool = shuffle(filterByScope(questionBank[t] || [], scope));
+          let added = 0;
+          for (let q of pool) {
+            if (added >= need || state.questions.length >= 10) break;
+            if (used.has(q.title)) continue;
+            used.add(q.title);
             state.questions.push({
               id: state.questions.length + 1,
               type: t,
               title: q.title,
-              options: q.options ? q.options.slice() : [],
+              options: q.options ? [...q.options] : [],
               answer: q.answer,
               userAnswer: null,
               analysis: q.analysis,
               point: (t === 'mcq' || t === 'tf') ? 1 : 3
             });
-          });
+            added++;
+          }
         });
-        if (state.questions.length < 10) {
-          const fillerTypes = shuffle(order);
-          fillerTypes.forEach(function (t) {
-            const pool = shuffle(questionBank[t].slice());
-            pool.forEach(function (q) {
-              if (state.questions.length >= 10) return;
-              if (usedTitles[q.title]) return;
-              usedTitles[q.title] = 1;
-              state.questions.push({
-                id: state.questions.length + 1,
-                type: t,
-                title: q.title,
-                options: q.options ? q.options.slice() : [],
-                answer: q.answer,
-                userAnswer: null,
-                analysis: q.analysis,
-                point: (t === 'mcq' || t === 'tf') ? 1 : 3
-              });
+
+        while (state.questions.length < 10) {
+          const t = types[Math.floor(Math.random() * types.length)];
+          const pool = shuffle(filterByScope(questionBank[t] || [], scope));
+          for (let q of pool) {
+            if (used.has(q.title)) continue;
+            used.add(q.title);
+            state.questions.push({
+              id: state.questions.length + 1,
+              type: t,
+              title: q.title,
+              options: q.options ? [...q.options] : [],
+              answer: q.answer,
+              userAnswer: null,
+              analysis: q.analysis,
+              point: (t === 'mcq' || t === 'tf') ? 1 : 3
             });
-          });
+            break;
+          }
         }
       }
+
       function saveState() {
-        try {
-          localStorage.setItem('testState', JSON.stringify(state));
-        } catch (e) {}
+        try { localStorage.setItem('testState', JSON.stringify(state)); } catch (e) {}
       }
       function saveCollected() {
         localStorage.setItem('collectedQuestions', JSON.stringify(collectedQuestions));
       }
+
+      // 收藏按钮状态同步（修复关键）
+      function updateCollectButtonUI() {
+        const btn = document.querySelector('.collect-btn');
+        if (!btn || !state.questions[state.currentQ]) return;
+        const q = state.questions[state.currentQ];
+        const isCollected = collectedQuestions.some(x => x.title === q.title);
+        if (isCollected) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      }
+
       function toggleCollect() {
         const q = state.questions[state.currentQ];
         if (!q) return;
-        const idx = collectedQuestions.findIndex(item => item.title === q.title);
-        const btn = document.querySelector('.collect-btn');
+        const idx = collectedQuestions.findIndex(x => x.title === q.title);
         if (idx === -1) {
           collectedQuestions.push(JSON.parse(JSON.stringify(q)));
-          btn.classList.add('active');
           showModal('Added to collection', false);
         } else {
           collectedQuestions.splice(idx, 1);
-          btn.classList.remove('active');
           showModal('Removed from collection', false);
         }
         saveCollected();
+        updateCollectButtonUI(); // 立即刷新按钮样式
       }
+
       function exportCollected() {
         if (collectedQuestions.length === 0) {
           showModal('No collected questions', false);
           return;
         }
-        let text = 'Colour Lab - Collected Questions\n';
-        text += '===================================\n\n';
+        let text = 'Colour Lab - Collected Questions\n===================================\n\n';
         collectedQuestions.forEach((q, i) => {
-          text += `Q${i+1}: ${q.title}\n`;
-          text += `Type: ${q.type.toUpperCase()}\n`;
-          text += `Answer: ${q.answer}\n`;
-          text += `Analysis: ${q.analysis}\n\n`;
+          text += `Q${i+1}: ${q.title}\nType: ${q.type.toUpperCase()}\nAnswer: ${q.answer}\nAnalysis: ${q.analysis}\n\n`;
         });
         const blob = new Blob([text], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
@@ -884,6 +980,7 @@
         a.click();
         URL.revokeObjectURL(url);
       }
+
       function goHome() {
         state.currentView = 'home';
         state.currentQ = 0;
@@ -892,73 +989,68 @@
         saveState();
         renderAll();
       }
+
       function showView(id) {
         state.currentView = id;
-        if (id === 'review') {
-          loadReview();
-          bindClearRecords();
-        }
+        if (id === 'review') loadReview();
+        if (id === 'collection') loadCollection();
         saveState();
         renderAll();
       }
+
       function updateProgress() {
         const el = document.getElementById('progressFill');
         if (!el || !state.questions.length) return;
-        const pct = ((state.currentQ + 1) / state.questions.length) * 100;
-        el.style.width = pct + '%';
+        el.style.width = ((state.currentQ + 1) / state.questions.length * 100) + '%';
       }
+
       function renderAll() {
-        document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         const panel = document.getElementById(state.currentView);
         if (panel) panel.classList.add('active');
-        if (state.currentView === 'quiz' && state.questions.length) {
-          renderQuestion();
-        }
+        if (state.currentView === 'quiz' && state.questions.length) renderQuestion();
       }
+
       function checkCurrentAnswered() {
         const q = state.questions[state.currentQ];
         if (!q) return true;
         saveAnswer();
         return !!q.userAnswer;
       }
+
       function renderQuestion() {
         const q = state.questions[state.currentQ];
         if (!q) return;
-        let unansweredDot = '';
-        if (!q.userAnswer) {
-          unansweredDot = '<div class="unanswered-dot"></div>';
-        }
-        const isCollected = collectedQuestions.some(item => item.title === q.title);
-        const collectBtn = `<button class="collect-btn ${isCollected ? 'active' : ''}" onclick="toggleCollect()">⭐</button>`;
-        let html = unansweredDot + collectBtn + '<div class="tag-line">' + q.type.toUpperCase() + '</div><h3>Q' + (state.currentQ + 1) + ': ' + q.title + '</h3>';
+        const unanswered = q.userAnswer ? '' : '<div class="unanswered-dot"></div>';
+        const collectBtn = `<button class="collect-btn" onclick="toggleCollect()">⭐</button>`;
+        let html = unanswered + collectBtn + `<div class="tag-line">${q.type.toUpperCase()}</div><h3>Q${state.currentQ+1}: ${q.title}</h3>`;
         if (q.type === 'mcq') {
-          q.options.forEach(function (o) {
+          q.options.forEach(o => {
             const checked = q.userAnswer === o ? ' checked' : '';
-            html += '<label class="option-label"><input type="radio" name="qa" value="' + escapeAttr(o) + '"' + checked + '> ' + escapeHtml(o) + '</label>';
+            html += `<label class="option-label"><input type="radio" name="qa" value="${escapeAttr(o)}"${checked}> ${escapeHtml(o)}</label>`;
           });
         } else if (q.type === 'tf') {
-          html += '<label class="option-label"><input type="radio" name="qa" value="True"' + (q.userAnswer === 'True' ? ' checked' : '') + '> True</label>';
-          html += '<label class="option-label"><input type="radio" name="qa" value="False"' + (q.userAnswer === 'False' ? ' checked' : '') + '> False</label>';
+          html += `<label class="option-label"><input type="radio" name="qa" value="True" ${q.userAnswer==='True'?'checked':''}> True</label>`;
+          html += `<label class="option-label"><input type="radio" name="qa" value="False" ${q.userAnswer==='False'?'checked':''}> False</label>`;
         } else if (q.type === 'fill') {
-          const v = q.userAnswer ? escapeAttr(q.userAnswer) : '';
-          html += '<p style="font-size:14px;color:var(--text-muted);margin-top:8px;">Short phrase — spelling can be relaxed for numbers/hex.</p>';
-          html += '<input type="text" class="fill-input" value="' + v + '"/>';
+          html += `<p style="font-size:14px;color:var(--text-muted);margin-top:8px;">Short phrase — spelling can be relaxed for numbers/hex.</p>`;
+          html += `<input type="text" class="fill-input" value="${escapeAttr(q.userAnswer||'')}"/>`;
         }
         document.getElementById('question-container').innerHTML = html;
-        document.getElementById('q-index').textContent = 'Question ' + (state.currentQ + 1) + ' / 10';
+        document.getElementById('q-index').textContent = `Question ${state.currentQ+1} / 10`;
         document.getElementById('next-btn').style.display = state.currentQ < 9 ? 'inline-flex' : 'none';
         document.getElementById('submit-btn').style.display = state.currentQ === 9 ? 'inline-flex' : 'none';
         updateProgress();
+        setTimeout(updateCollectButtonUI, 10); // 渲染后同步收藏按钮状态
       }
+
       function escapeHtml(s) {
-        return String(s)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/"/g, '&quot;');
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
       }
       function escapeAttr(s) {
-        return escapeHtml(s).replace(/'/g, '&#39;');
+        return escapeHtml(s).replace(/'/g,'&#39;');
       }
+
       function saveAnswer() {
         const q = state.questions[state.currentQ];
         if (!q) return;
@@ -971,6 +1063,7 @@
         }
         saveState();
       }
+
       function prevQuestion() {
         saveAnswer();
         if (state.currentQ === 0) {
@@ -981,8 +1074,10 @@
         saveState();
         renderQuestion();
       }
+
       function nextQuestion() {
         saveAnswer();
+        playSound(600, 100);
         if (checkCurrentAnswered()) {
           if (state.currentQ < 9) {
             state.currentQ++;
@@ -1001,116 +1096,98 @@
           }
         });
       }
+
       let modalCallback = null;
       function closeModal() {
-        var m = document.getElementById('modal');
-        if (m) {
-          m.style.display = 'none';
-          m.onclick = null;
-        }
+        const m = document.getElementById('modal');
+        if (m) { m.style.display = 'none'; m.onclick = null; }
         modalCallback = null;
       }
       function closeAnalysisModal() {
         document.getElementById('analysis-modal').style.display = 'none';
       }
+
       function showModal(text, confirmMode, onResult) {
         const m = document.getElementById('modal');
         const t = document.getElementById('modal-text');
         modalCallback = onResult || null;
         m.onclick = null;
-        
         if (confirmMode) {
-          t.innerHTML = `
-            <p style="text-align:center;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">${escapeHtml(text)}</p>
+          t.innerHTML = `<p style="text-align:center;color:var(--text-muted);margin-bottom:20px;line-height:1.6;">${escapeHtml(text)}</p>
             <div class="modal-btns">
               <button type="button" class="btn btn-secondary" id="modal-no">Cancel</button>
               <button type="button" class="btn btn-primary" id="modal-yes">Confirm</button>
-            </div>
-          `;
+            </div>`;
           m.style.display = 'flex';
-          document.getElementById('modal-yes').onclick = function () {
-            const cb = modalCallback;
-            closeModal();
-            if (cb) cb(true);
-          };
-          document.getElementById('modal-no').onclick = function () {
-            const cb = modalCallback;
-            closeModal();
-            if (cb) cb(false);
-          };
+          document.getElementById('modal-yes').onclick = () => { const cb=modalCallback; closeModal(); cb&&cb(true); };
+          document.getElementById('modal-no').onclick = () => { const cb=modalCallback; closeModal(); cb&&cb(false); };
         } else {
-          t.innerHTML = '<p style="color:var(--text-muted);">' + escapeHtml(text) + '</p>' +
-            '<div class="modal-btns"><button type="button" class="btn btn-primary" onclick="closeModal()">OK</button></div>';
+          t.innerHTML = `<p style="color:var(--text-muted);">${escapeHtml(text)}</p>
+            <div class="modal-btns"><button type="button" class="btn btn-primary" onclick="closeModal()">OK</button></div>`;
           m.style.display = 'flex';
-          m.onclick = function (e) {
-            if (e.target === m) closeModal();
-          };
+          m.onclick = e => e.target===m && closeModal();
         }
       }
+
       function checkAllAnswered() {
         saveAnswer();
-        const empty = state.questions.findIndex(q => !q.userAnswer);
-        return empty === -1;
+        return !state.questions.some(q => !q.userAnswer);
       }
+
       function submitPaper() {
         saveAnswer();
         if (countdownInterval) clearInterval(countdownInterval);
         const allAnswered = checkAllAnswered();
         const msg = allAnswered ? 'Submit all 10 answers?' : 'Some questions are incomplete. Submit anyway?';
-        showModal(msg, true, function (ok) {
+        showModal(msg, true, ok => {
           if (!ok) return;
-          let score = 0;
-          let total = 0;
+          let score = 0, total = 0;
           const wrongs = [];
-          state.questions.forEach(function (q, i) {
+          state.questions.forEach((q, i) => {
             total += q.point;
-            if (answersMatch(q, q.userAnswer)) {
-              score += q.point;
-            } else {
-              wrongs.push(i + 1);
-            }
+            if (answersMatch(q, q.userAnswer)) score += q.point;
+            else wrongs.push(i+1);
           });
           testRecords.unshift({
             time: new Date().toLocaleString(),
-            score: score + '/' + total,
+            score: `${score}/${total}`,
             questions: JSON.parse(JSON.stringify(state.questions))
           });
-          try {
-            localStorage.setItem('testRecords', JSON.stringify(testRecords));
-          } catch (e) {}
-          document.getElementById('final-score').textContent = 'Score: ' + score + ' / ' + total;
+          localStorage.setItem('testRecords', JSON.stringify(testRecords));
+          document.getElementById('final-score').textContent = `Score: ${score} / ${total}`;
           const wl = document.getElementById('wrong-list');
           wl.innerHTML = '';
           if (wrongs.length === 0) {
             wl.innerHTML = '<p style="color:var(--success);font-weight:600;">No misses — great job.</p>';
           } else {
             wl.innerHTML = '<p style="font-size:14px;color:var(--text-muted);margin-bottom:10px;">Review wrong items:</p>';
-            wrongs.forEach(function (n) {
-              wl.innerHTML += '<span class="wrong-num" data-qi="' + (n - 1) + '">' + n + '</span>';
+            wrongs.forEach(n => {
+              wl.innerHTML += `<span class="wrong-num" data-qi="${n-1}">${n}</span>`;
             });
-            wl.querySelectorAll('.wrong-num').forEach(function (span) {
-              span.onclick = function () {
-                showAnalysis(Number(span.getAttribute('data-qi')));
-              };
+            wl.querySelectorAll('.wrong-num').forEach(span => {
+              span.onclick = () => showAnalysis(+span.dataset.qi);
             });
           }
           showView('score');
         });
       }
+
       function showAnalysis(idx) {
         const q = state.questions[idx] || (state.lastReviewQuestions && state.lastReviewQuestions[idx]);
         if (!q) return;
         document.getElementById('analysis-content').innerHTML =
-          '<h3 style="margin-bottom:12px;font-size:18px;">Q' + (idx + 1) + '</h3>' +
-          '<p style="color:var(--text-muted);margin-bottom:10px;">' + escapeHtml(q.title) + '</p>' +
-          '<p><strong>Yours:</strong> ' + escapeHtml(q.userAnswer == null ? '—' : String(q.userAnswer)) + '</p>' +
-          '<p><strong>Correct:</strong> ' + escapeHtml(String(q.answer)) + '</p>' +
-          '<p style="margin-top:12px;color:var(--primary-dark);font-weight:500;">' + escapeHtml(q.analysis) + '</p>';
+          `<h3 style="margin-bottom:12px;font-size:18px;">Q${idx+1}</h3>
+          <p style="color:var(--text-muted);margin-bottom:10px;">${escapeHtml(q.title)}</p>
+          <p><strong>Yours:</strong> ${escapeHtml(q.userAnswer ?? '—')}</p>
+          <p><strong>Correct:</strong> ${escapeHtml(q.answer)}</p>
+          <p style="margin-top:12px;color:var(--primary-dark);font-weight:500;">${escapeHtml(q.analysis)}</p>`;
         document.getElementById('analysis-modal').style.display = 'flex';
       }
-      document.getElementById('analysis-modal').addEventListener('click', function (e) {
+
+      document.getElementById('analysis-modal').addEventListener('click', e => {
         if (e.target.id === 'analysis-modal') closeAnalysisModal();
       });
+
       function loadReview() {
         const list = document.getElementById('review-list');
         list.innerHTML = '';
@@ -1118,37 +1195,60 @@
           list.innerHTML = '<p style="color:var(--text-muted);">No saved attempts yet.</p>';
           return;
         }
-        testRecords.forEach(function (rec, i) {
+        testRecords.forEach((rec, i) => {
           const item = document.createElement('div');
           item.className = 'review-item';
-          item.innerHTML =
-            '<div class="review-header">' +
-            '<span>Attempt ' + (i + 1) + '</span><span>' + escapeHtml(rec.time) + '</span><span>Score: ' + escapeHtml(rec.score) + '</span>' +
-            '<button type="button" class="btn btn-ghost" style="padding:8px 14px;font-size:13px;">▼</button></div>' +
-            '<div class="review-body"></div>';
+          item.innerHTML = `<div class="review-header">
+            <span>Attempt ${i+1}</span><span>${escapeHtml(rec.time)}</span><span>Score: ${escapeHtml(rec.score)}</span>
+            <button type="button" class="btn btn-ghost" style="padding:8px 14px;font-size:13px;">▼</button></div>
+            <div class="review-body"></div>`;
           const body = item.querySelector('.review-body');
           const qs = rec.questions || [];
-          body.innerHTML = qs.map(function (q, j) {
+          body.innerHTML = qs.map((q, j) => {
             const ok = answersMatch(q, q.userAnswer);
-            return '<div class="q-item ' + (ok ? 'correct' : 'wrong') + '" data-qj="' + j + '">Q' + (j + 1) + ': ' + (ok ? 'Correct' : 'Incorrect') + '</div>';
+            return `<div class="q-item ${ok?'correct':'wrong'}" data-qj="${j}">Q${j+1}: ${ok?'Correct':'Incorrect'}</div>`;
           }).join('');
-          body.querySelectorAll('.q-item').forEach(function (row) {
-            row.onclick = function () {
-              state.lastReviewQuestions = qs;
-              showAnalysis(Number(row.getAttribute('data-qj')));
-            };
+          body.querySelectorAll('.q-item').forEach(row => {
+            row.onclick = () => { state.lastReviewQuestions = qs; showAnalysis(+row.dataset.qj); };
           });
-          item.querySelector('.review-header button').onclick = function () {
-            this.parentElement.nextElementSibling.classList.toggle('show');
+          item.querySelector('.review-header button').onclick = () => {
+            item.querySelector('.review-body').classList.toggle('show');
           };
           list.appendChild(item);
         });
       }
+
+      function loadCollection() {
+        const list = document.getElementById('collection-list');
+        list.innerHTML = '';
+        if (collectedQuestions.length === 0) {
+          list.innerHTML = '<p style="color:var(--text-muted);">No collected questions yet.</p>';
+          return;
+        }
+        collectedQuestions.forEach((q, idx) => {
+          const div = document.createElement('div');
+          div.className = 'review-item';
+          div.innerHTML = `<div class="review-header">
+            <span>Q${idx+1} (${q.type.toUpperCase()})</span>
+            <button class="btn btn-ghost" style="padding:6px 10px;font-size:12px;">Show</button>
+          </div>
+          <div class="review-body">
+            <p style="margin:8px 0;"><strong>Question:</strong> ${escapeHtml(q.title)}</p>
+            <p style="margin:8px 0;"><strong>Answer:</strong> ${escapeHtml(q.answer)}</p>
+            <p style="margin:8px 0;color:var(--primary-dark);"><strong>Analysis:</strong> ${escapeHtml(q.analysis)}</p>
+          </div>`;
+          div.querySelector('.review-header button').onclick = () => {
+            div.querySelector('.review-body').classList.toggle('show');
+          };
+          list.appendChild(div);
+        });
+      }
+
       function confirmSetting() {
         const scopeEl = document.querySelector('input[name="scope"]:checked');
-        const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(function (t) { return t.value; });
+        const types = Array.from(document.querySelectorAll('input[name="type"]:checked')).map(t => t.value);
         let ok = true;
-        document.querySelectorAll('.setting-group').forEach(function (g) { g.classList.remove('highlight'); });
+        document.querySelectorAll('.setting-group').forEach(g => g.classList.remove('highlight'));
         if (!scopeEl) ok = false;
         if (types.length === 0) {
           document.getElementById('type-group').classList.add('highlight');
@@ -1164,15 +1264,12 @@
         saveState();
         showView('quiz');
       }
+
       function backFromSetting() {
-        showModal('Leave setup and return to the test home?', true, function (yes) {
-          if (yes) goHome();
-        });
+        showModal('Leave setup and return to the test home?', true, yes => yes && goHome());
       }
       function goHomeFromQuiz() {
-        showModal('Give up answering and return to the test home? This attempt will NOT be recorded.', true, function (yes) {
-          if (yes) goHome();
-        });
+        showModal('Give up answering and return to the test home? This attempt will NOT be recorded.', true, yes => yes && goHome());
       }
 
       window.showView = showView;

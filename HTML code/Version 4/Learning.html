@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning | Color Encoding - Colour Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --primary-light: #e8f0fe;
+      --secondary-purple: #764ba2;
+      --secondary-coral: #ff6b6b;
+      --bg-light: #f8f9fc;
+      --bg-dark: #0f0f1a;
+      --text-dark: #1a1a2e;
+      --text-muted: #6b7280;
+      --text-light: #9ca3af;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.1);
+      --radius-base: 12px;
+      --radius-small: 8px;
+      --radius-pill: 50px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navbar - Frosted Glass */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow-soft);
+      z-index: 1000;
+      padding: 16px 0;
+      transition: var(--transition);
+    }
+
+    .navbar.scrolled {
+      padding: 10px 0;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: logoSpin 8s linear infinite;
+    }
+
+    @keyframes logoSpin {
+      from { filter: hue-rotate(0deg); }
+      to { filter: hue-rotate(360deg); }
+    }
+
+    .logo-icon::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      padding: 8px 18px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-radius: 50px;
+      transition: var(--transition);
+    }
+
+    .nav-menu a.active {
+      color: var(--primary);
+      font-weight: 600;
+      background: var(--primary-light);
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: var(--text-dark);
+    }
+
+    /* Nav Actions - Language & Font Controls */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Language Switcher */
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--bg-light);
+      border-radius: 50px;
+      padding: 2px;
+    }
+
+    .lang-btn {
+      padding: 6px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .lang-btn.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* Font Size Control */
+    .font-controls-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-light);
+      border-radius: 50px;
+      padding: 2px;
+    }
+
+    .font-btn-nav {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-btn-nav:hover {
+      color: var(--primary);
+    }
+
+    .font-btn-nav.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      margin-top: 120px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 60px 0;
+      position: relative;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .color-wheel {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(red, orange, yellow, lime, cyan, blue, magenta, red);
+      margin: 0 auto;
+      animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 40px;
+      margin-bottom: 80px;
+    }
+
+    /* Sidebar - Catalog */
+    .sidebar {
+      position: sticky;
+      top: 120px;
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+      height: fit-content;
+      transition: var(--transition);
+    }
+
+    .sidebar:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-4px);
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .catalog {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .catalog a {
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: var(--radius-small);
+      transition: var(--transition);
+      display: block;
+    }
+
+    .catalog a:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .catalog a.active {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    /* Content Section */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .module {
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 24px 36px;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+      scroll-margin-top: 140px;
+      margin-bottom: 20px;
+    }
+
+    .module:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .module-header {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .module-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .module-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .expand-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .expand-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.1);
+    }
+
+    .expand-btn.active {
+      transform: rotate(45deg);
+    }
+
+    .module-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-top: 0;
+    }
+
+    .module-content.active {
+      max-height: 2000px;
+      padding-top: 20px;
+      transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .module-text {
+      font-size: 16px;
+      color: var(--text-dark);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+
+    .module-text:first-of-type {
+      margin-top: 8px;
+    }
+
+    .module-list {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .module-list li {
+      font-size: 16px;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      line-height: 1.6;
+      padding: 2px 0;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .color-card {
+      height: 80px;
+      border-radius: var(--radius-small);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 14px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .info-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: var(--radius-small);
+      margin: 20px 0;
+    }
+
+    .info-box p {
+      font-size: 15px;
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    /* Font Control */
+    .font-btn.active {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+    }
+
+    .font-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .font-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .font-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-pill);
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .font-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      box-shadow: var(--shadow-hover);
+      z-index: 999;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      background: var(--primary-dark);
+      transform: translateY(-4px);
+    }
+
+    /* Progress Indicator */
+    .progress-container {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      z-index: 999;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary-purple));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Catalog Actions */
+    .catalog-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .catalog-action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-small);
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--bg-light);
+      color: var(--text-muted);
+    }
+
+    .catalog-action-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    /* Module Completion */
+    .module.completed .module-title::after {
+      content: '✓';
+      margin-left: 12px;
+      color: var(--primary);
+      font-size: 20px;
+    }
+
+    .catalog a.completed {
+      position: relative;
+    }
+
+    .catalog a.completed::before {
+      content: '✓';
+      position: absolute;
+      left: -4px;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    /* Annotation Toolbar */
+    .annotation-toolbar {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 16px 8px;
+      box-shadow: var(--shadow-hover);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      border: 1px solid var(--border);
+    }
+
+    .toolbar-tooltip {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 4px 8px;
+      background: var(--bg-light);
+      border-radius: var(--radius-small);
+      margin-bottom: 4px;
+    }
+
+    .annotation-toolbar.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .annotation-toolbar h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .tool-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-small);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .tool-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .tool-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .tool-btn.highlight-yellow { background: #fef08a; }
+    .tool-btn.highlight-green { background: #bbf7d0; }
+    .tool-btn.highlight-blue { background: #bfdbfe; }
+    .tool-btn.highlight-pink { background: #fbcfe8; }
+    .tool-btn.pen-red { background: #fca5a5; }
+    .tool-btn.pen-blue { background: #93c5fd; }
+
+    .tool-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    /* Highlighted text styles */
+    .highlight-yellow { background-color: #fef08a !important; }
+    .highlight-green { background-color: #bbf7d0 !important; }
+    .highlight-blue { background-color: #bfdbfe !important; }
+    .highlight-pink { background-color: #fbcfe8 !important; }
+
+    .underline-red {
+      border-bottom: 2px solid red;
+      text-decoration: none;
+      padding-bottom: 1px;
+    }
+    .underline-blue {
+      border-bottom: 2px solid blue;
+      text-decoration: none;
+      padding-bottom: 1px;
+    }
+
+    /* Completion Popup */
+    .completion-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .completion-popup.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .popup-content {
+      background: var(--white);
+      border-radius: var(--radius-base);
+      padding: 48px;
+      text-align: center;
+      max-width: 480px;
+      transform: scale(0.8);
+      transition: var(--transition);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .completion-popup.visible .popup-content {
+      transform: scale(1);
+    }
+
+    .popup-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 40px;
+      color: var(--white);
+    }
+
+    .popup-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .popup-text {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .popup-btn {
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .popup-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-dark);
+      padding: 60px 24px;
+      color: var(--white);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+      }
+      .hero-title {
+        font-size: 44px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .hero-title {
+        font-size: 36px;
+      }
+      .color-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .module {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .color-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 28px;
+      }
+      .module-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">
+        <span class="logo-icon"></span>
+        Colour Lab
+      </a>
+      <ul class="nav-menu">
+        <li><a href="homepage.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="Learning.html" class="active" data-i18n="nav.learning">Learning</a></li>
+        <li><a href="Game.html" data-i18n="nav.game">Game</a></li>
+        <li><a href="color-test page.html" data-i18n="nav.test">Test</a></li>
+        <li><a href="community page.html" data-i18n="nav.community">Community</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" id="langSwitcher">
+          <button class="lang-btn active" data-lang="en" onclick="switchLang('en')">EN</button>
+          <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中文</button>
+        </div>
+        <!-- Font Size Control -->
+        <div class="font-controls-nav">
+          <button class="font-btn-nav" data-font="decrease" onclick="adjustFontSize(-2)">A-</button>
+          <button class="font-btn-nav active" data-font="default" onclick="adjustFontSize(0)">A</button>
+          <button class="font-btn-nav" data-font="increase" onclick="adjustFontSize(2)">A+</button>
+        </div>
+      </div>
+      <button class="hamburger">☰</button>
+    </div>
+  </nav>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" data-i18n="breadcrumb">Home > Learning > Color Encoding</div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="section-label" data-i18n="hero.label">Comprehensive Learning Module</div>
+      <h1 class="hero-title" data-i18n="hero.title">Color Encoding</h1>
+      <p class="hero-desc" data-i18n="hero.desc">Master the core principles, mathematical models, and industrial standards of digital color encoding for images, video, and multimedia systems.</p>
+      <div class="color-wheel"></div>
+    </section>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Sidebar Catalog -->
+      <aside class="sidebar">
+        <h3 class="sidebar-title" data-i18n="sidebar.title">Learning Catalog</h3>
+        <div class="catalog-actions">
+          <button class="catalog-action-btn" id="expandAllBtn" data-i18n="sidebar.expand">Expand All</button>
+          <button class="catalog-action-btn" id="collapseAllBtn" data-i18n="sidebar.collapse">Collapse All</button>
+        </div>
+        <ul class="catalog">
+          <li><a href="#module1" data-i18n="catalog.module1">1. Color Vision Basics</a></li>
+          <li><a href="#module2" data-i18n="catalog.module2">2. RGB Additive Encoding</a></li>
+          <li><a href="#module3" data-i18n="catalog.module3">3. CMYK Subtractive Encoding</a></li>
+          <li><a href="#module4" data-i18n="catalog.module4">4. HSV Perceptual Encoding</a></li>
+          <li><a href="#module5" data-i18n="catalog.module5">5. YUV/YCbCr Encoding</a></li>
+          <li><a href="#module6" data-i18n="catalog.module6">6. Advanced Encoding</a></li>
+        </ul>
+      </aside>
+
+      <!-- Content -->
+      <main class="content">
+        <!-- Module 1 -->
+        <section id="module1" class="module">
+          <div class="module-header">
+            <h2 class="module-title" data-i18n="module1.title">1. Color Vision & Fundamental Properties</h2>
+            <p class="module-subtitle" data-i18n="module1.subtitle">The biological and physical basis of digital color encoding</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text" data-i18n="module1.text1">Color is not an inherent property of objects—it is a perceptual response to visible light wavelengths (400–700 nm) detected by the human eye. The retina contains three types of cone cells sensitive to long (red), medium (green), and short (blue) wavelengths, forming the Tristimulus Theory of Color Vision.</p>
+            <ul class="module-list">
+              <li data-i18n="module1.list1"><strong>Hue</strong>: Dominant wavelength, defines the color name (red, blue, green).</li>
+              <li data-i18n="module1.list2"><strong>Saturation</strong>: Purity of a color; 100% = no white light mixture, 0% = grayscale.</li>
+              <li data-i18n="module1.list3"><strong>Brightness/Value</strong>: Perceived light intensity emitted or reflected by a surface.</li>
+              <li data-i18n="module1.list4"><strong>Metamers</strong>: Different light spectra that produce identical color perception—critical for encoding.</li>
+              <li data-i18n="module1.list5"><strong>Cone Response Curves</strong>: Scientific measurement of how human cone cells respond to different wavelengths.</li>
+              <li data-i18n="module1.list6"><strong>Color Constancy</strong>: The ability to perceive consistent colors under different lighting conditions.</li>
+            </ul>
+            <div class="info-box">
+              <p data-i18n="module1.info">Color encoding translates human perception into numerical values that computers, screens, and printers can interpret and reproduce accurately. The CIE 1931 color space was the first standardized model based on human color perception.</p>
+            </div>
+            <p class="module-text" data-i18n="module1.text2">The human eye can distinguish approximately 10 million different colors, while digital systems must encode this vast range using finite numerical values. This encoding process involves sampling the continuous spectrum of visible light into discrete values that can be stored and transmitted.</p>
+          </div>
+        </section>
+
+        <!-- Module 2 -->
+        <section id="module2" class="module">
+          <div class="module-header">
+            <h2 class="module-title" data-i18n="module2.title">2. RGB Additive Color Encoding</h2>
+            <p class="module-subtitle" data-i18n="module2.subtitle">The universal standard for digital displays and screens</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text" data-i18n="module2.text1">RGB is an additive model where Red, Green, and Blue light are combined to create all colors. It is the foundation of all digital display systems (monitors, phones, TVs).</p>
+            <ul class="module-list">
+              <li data-i18n="module2.list1">Encoding format: (R, G, B) with 0–255 per channel (8-bit per channel, 24-bit total color depth).</li>
+              <li data-i18n="module2.list2">(0, 0, 0) = Black; (255, 255, 255) = White; (255, 0, 0) = Pure Red.</li>
+              <li data-i18n="module2.list3">Color depth: 8-bit = 16.7 million colors; 10-bit = 1.07 billion colors for professional use.</li>
+              <li data-i18n="module2.list4">Grayscale conversion: L = 0.299R + 0.587G + 0.114B (standard luminance formula).</li>
+              <li data-i18n="module2.list5">Gamma correction: Non-linear encoding to match human perception of brightness.</li>
+              <li data-i18n="module2.list6">Color gamuts: sRGB (standard), Adobe RGB (wider), DCI-P3 (cinema), Rec. 2020 (UHD).</li>
+            </ul>
+            <div class="color-grid">
+              <div class="color-card" style="background: rgb(255,0,0);">RGB(255,0,0)</div>
+              <div class="color-card" style="background: rgb(0,255,0);">RGB(0,255,0)</div>
+              <div class="color-card" style="background: rgb(0,0,255);">RGB(0,0,255)</div>
+              <div class="color-card" style="background: rgb(255,255,255); color:#000;">RGB(255,255,255)</div>
+              <div class="color-card" style="background: rgb(255,255,0); color:#000;">RGB(255,255,0)</div>
+              <div class="color-card" style="background: rgb(0,255,255); color:#000;">RGB(0,255,255)</div>
+              <div class="color-card" style="background: rgb(255,0,255);">RGB(255,0,255)</div>
+              <div class="color-card" style="background: rgb(128,128,128); color:#fff;">RGB(128,128,128)</div>
+            </div>
+            <div class="info-box">
+              <p data-i18n="module2.info">RGB encoding is used in all digital displays because it directly corresponds to how LCD, OLED, and LED screens generate light. Each pixel contains red, green, and blue sub-pixels that combine to create the perceived color.</p>
+            </div>
+            <p class="module-text" data-i18n="module2.text2">Modern displays use advanced RGB techniques like quantum dots and HDR to extend the color gamut and dynamic range, providing more realistic and vibrant images. Professional workflows often use 10-bit or higher color depth to preserve quality during editing and post-production.</p>
+          </div>
+        </section>
+
+        <!-- Module 3 -->
+        <section id="module3" class="module">
+          <div class="module-header">
+            <h2 class="module-title" data-i18n="module3.title">3. CMYK Subtractive Color Encoding</h2>
+            <p class="module-subtitle" data-i18n="module3.subtitle">Industrial standard for printing and physical media</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text" data-i18n="module3.text1">CMYK is a subtractive model used for printing, where inks absorb light instead of emitting it. Cyan, Magenta, and Yellow are the primary subtractive colors, and Black (Key/K) is added to produce true black.</p>
+            <ul class="module-list">
+              <li data-i18n="module3.list1">Encoding logic: C = 1 - R, M = 1 - G, Y = 1 - B (in normalized values).</li>
+              <li data-i18n="module3.list2">K channel: Eliminates muddy dark grays and saves ink in printing systems.</li>
+              <li data-i18n="module3.list3">Used for: Books, posters, packaging, and all physical printed color media.</li>
+              <li data-i18n="module3.list4">RGB→CMYK conversion requires gamut mapping for accurate color reproduction.</li>
+              <li data-i18n="module3.list5">Printing resolution: DPI (dots per inch) determines print quality and color accuracy.</li>
+              <li data-i18n="module3.list6">Spot colors: Special inks used for corporate logos and specific color requirements.</li>
+            </ul>
+            <div class="color-grid">
+              <div class="color-card" style="background: cyan;">Cyan</div>
+              <div class="color-card" style="background: magenta;">Magenta</div>
+              <div class="color-card" style="background: yellow;">Yellow</div>
+              <div class="color-card" style="background: black;">Black</div>
+            </div>
+            <div class="info-box">
+              <p data-i18n="module3.info">CMYK has a smaller color gamut than RGB—some bright digital colors cannot be printed accurately. This is why professional designers use color management systems to ensure consistent results across devices.</p>
+            </div>
+            <p class="module-text" data-i18n="module3.text2">Modern printing technologies like offset lithography, digital printing, and flexography all use CMYK encoding. The K channel is particularly important for text and fine details, as it provides crisp, clean black reproduction that would be difficult to achieve with just cyan, magenta, and yellow inks.</p>
+          </div>
+        </section>
+
+        <!-- Module 4 -->
+        <section id="module4" class="module">
+          <div class="module-header">
+            <h2 class="module-title" data-i18n="module4.title">4. HSV Perceptual Color Encoding</h2>
+            <p class="module-subtitle" data-i18n="module4.subtitle">Human-centered encoding for design and editing</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text" data-i18n="module4.text1">HSV (Hue, Saturation, Value) is a perceptual model that matches how humans naturally select and adjust colors, widely used in design software (Photoshop, Figma).</p>
+            <ul class="module-list">
+              <li data-i18n="module4.list1">Hue: 0°–360° on a color wheel (0°=red, 120°=green, 240°=blue).</li>
+              <li data-i18n="module4.list2">Saturation: 0%–100% (color purity, 0% = grayscale).</li>
+              <li data-i18n="module4.list3">Value: 0%–100% (brightness, 0% = black).</li>
+              <li data-i18n="module4.list4">Intuitive for artists: Adjust hue for color, saturation for vibrancy, value for lightness.</li>
+              <li data-i18n="module4.list5">Color harmonies: Easily create complementary, analogous, and triadic color schemes.</li>
+              <li data-i18n="module4.list6">Color selection: Simplifies the process of choosing colors that work well together.</li>
+            </ul>
+            <div class="info-box">
+              <p data-i18n="module4.info">HSV is particularly useful for UI/UX design, digital art, and any context where designers need to make intuitive color decisions without dealing with the technical complexities of RGB values.</p>
+            </div>
+            <p class="module-text" data-i18n="module4.text2">HSV is often visualized as a color wheel with saturation and value as axes, making it easy to understand color relationships. This model is also known as HSB (Hue, Saturation, Brightness) in some software applications, though the underlying principles are identical.</p>
+          </div>
+        </section>
+
+        <!-- Module 5 -->
+        <section id="module5" class="module">
+          <div class="module-header">
+            <h2 class="module-title" data-i18n="module5.title">5. YUV/YCbCr Encoding</h2>
+            <p class="module-subtitle" data-i18n="module5.subtitle">Efficient encoding for image & video compression</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text" data-i18n="module5.text1">YUV/YCbCr separates luminance (brightness) and chrominance (color) to enable efficient multimedia compression. Human eyes are far more sensitive to brightness than color, allowing chrominance data to be reduced.</p>
+            <ul class="module-list">
+              <li data-i18n="module5.list1">Y: Luminance (brightness signal, full resolution).</li>
+              <li data-i18n="module5.list2">U/Cb, V/Cr: Chrominance (color difference signals, reduced resolution).</li>
+              <li data-i18n="module5.list3">YCbCr is the digital version used in JPEG, PNG, MPEG, and all video compression standards.</li>
+              <li data-i18n="module5.list4">RGB→YCbCr conversion uses standardized matrix formulas for digital media.</li>
+              <li data-i18n="module5.list5">Chroma subsampling: 4:2:0, 4:2:2, 4:4:4 ratios determine color resolution.</li>
+              <li data-i18n="module5.list6">Compression efficiency: Up to 50% file size reduction with minimal quality loss.</li>
+            </ul>
+            <div class="info-box">
+              <p data-i18n="module5.info">YCbCr encoding is the reason image/video compression can reduce file size with minimal visible quality loss. The human eye's reduced sensitivity to color detail allows for aggressive chrominance compression.</p>
+            </div>
+            <p class="module-text" data-i18n="module5.text2">Modern video codecs like H.264, H.265, and AV1 rely heavily on YCbCr encoding for efficient compression. Chroma subsampling (4:2:0) is the standard for most video content, providing a good balance between quality and file size. Professional workflows often use 4:2:2 or 4:4:4 for higher quality requirements.</p>
+          </div>
+        </section>
+
+        <!-- Module 6 -->
+        <section id="module6" class="module">
+          <div class="module-header">
+            <h2 class="module-title" data-i18n="module6.title">6. Advanced Color Encoding</h2>
+            <p class="module-subtitle" data-i18n="module6.subtitle">Professional gamuts, high dynamic range & industry standards</p>
+            <button class="expand-btn">+</button>
+          </div>
+          <div class="module-content">
+            <p class="module-text" data-i18n="module6.text1">Modern systems use extended color encoding for professional workflows, high dynamic range (HDR), and cross-device consistency.</p>
+            <ul class="module-list">
+              <li data-i18n="module6.list1">CIE XYZ/CIELAB: Device-independent encoding for professional color management.</li>
+              <li data-i18n="module6.list2">HDR Encoding: Rec. 2020 gamut & 10–12 bit depth for high-brightness displays.</li>
+              <li data-i18n="module6.list3">Color Gamut: The range of colors a device can reproduce (sRGB, Adobe RGB, DCI-P3).</li>
+              <li data-i18n="module6.list4">Metadata: Embedded encoding data to ensure consistent color across screens and printers.</li>
+              <li data-i18n="module6.list5">Wide Color Gamut (WCG): Extended color spaces for more vibrant, realistic colors.</li>
+              <li data-i18n="module6.list6">Color Management Systems (CMS): Ensure consistent color reproduction across devices.</li>
+              <li data-i18n="module6.list7">ICC Profiles: Standardized color profiles for different devices and workflows.</li>
+            </ul>
+            <div class="info-box">
+              <p data-i18n="module6.info">Professional color encoding is essential for industries like filmmaking, photography, and graphic design where color accuracy and consistency are critical.</p>
+            </div>
+            <p class="module-text" data-i18n="module6.text2">HDR10 and Dolby Vision are popular HDR encoding standards that provide higher brightness levels and more detailed color information. These technologies are becoming increasingly important in streaming services, gaming, and home theater systems.</p>
+            <p class="module-text" data-i18n="module6.text3">Understanding advanced color encoding principles is crucial for modern multimedia professionals, as it enables them to create content that looks consistent and visually appealing across a wide range of devices and display technologies.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTopBtn">↑</button>
+
+  <!-- Annotation Toolbar -->
+  <div class="annotation-toolbar" id="annotationToolbar">
+    <div class="toolbar-tooltip" data-i18n="toolbar.hint">Select text to annotate</div>
+    <h4 data-i18n="toolbar.highlight">Highlight</h4>
+    <button class="tool-btn highlight-yellow active" data-tool="highlight-yellow" title="Yellow Highlight">🖍</button>
+    <button class="tool-btn highlight-green" data-tool="highlight-green" title="Green Highlight">🖍</button>
+    <button class="tool-btn highlight-blue" data-tool="highlight-blue" title="Blue Highlight">🖍</button>
+    <button class="tool-btn highlight-pink" data-tool="highlight-pink" title="Pink Highlight">🖍</button>
+    <div class="tool-divider"></div>
+    <h4 data-i18n="toolbar.underline">Underline</h4>
+    <button class="tool-btn pen-red" data-tool="underline-red" title="Red Underline">—</button>
+    <button class="tool-btn pen-blue" data-tool="underline-blue" title="Blue Underline">—</button>
+    <div class="tool-divider"></div>
+    <button class="tool-btn eraser-btn" data-tool="eraser" title="Eraser">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 20H9L3.5 14.5a2.12 2.12 0 0 1 0-3l9-9a2.12 2.12 0 0 1 3 0l5 5a2.12 2.12 0 0 1 0 3L13 18"></path>
+        <path d="M6.5 17.5l4-4"></path>
+      </svg>
+    </button>
+    <button class="tool-btn" data-tool="clear" title="Clear All">✕</button>
+  </div>
+
+  <!-- Completion Popup -->
+  <div class="completion-popup" id="completionPopup">
+    <div class="popup-content">
+      <div class="popup-icon">✓</div>
+      <h2 class="popup-title">Congratulations!</h2>
+      <p class="popup-text">You have completed all 6 learning modules on Color Encoding. You now have a solid understanding of RGB, CMYK, HSV, YUV/YCbCr, and advanced color encoding concepts.</p>
+      <button class="popup-btn" id="closePopupBtn">Continue Learning</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="logo" style="color:var(--white);">Colour Lab</div>
+      <p class="footer-text">© 2026 Colour Lab | EBU6305 Interactive Media Design | Inclusive & Accessible Design</p>
+    </div>
+  </footer>
+
+  <script>
+    // Font size adjustment functionality
+    // 字体大小调节功能
+    const fontButtonsNav = document.querySelectorAll('.font-btn-nav');
+    let currentFontSize = 16;
+    let currentFontLevel = 'A';
+
+    function adjustFontSize(delta) {
+      if (delta === 0) {
+        currentFontSize = 16;
+        currentFontLevel = 'A';
+      } else {
+        const newSize = currentFontSize + delta;
+        if (newSize >= 12 && newSize <= 24) {
+          currentFontSize = newSize;
+          currentFontLevel = delta > 0 ? 'A+' : 'A-';
+        }
+      }
+
+      document.querySelectorAll('.module-text, .module-list li').forEach(element => {
+        element.style.fontSize = currentFontSize + 'px';
+      });
+
+      fontButtonsNav.forEach(btn => btn.classList.remove('active'));
+      if (currentFontLevel === 'A-') {
+        fontButtonsNav[0].classList.add('active');
+      } else if (currentFontLevel === 'A+') {
+        fontButtonsNav[2].classList.add('active');
+      } else {
+        fontButtonsNav[1].classList.add('active');
+      }
+
+      localStorage.setItem('fontSize', currentFontSize);
+      localStorage.setItem('fontLevel', currentFontLevel);
+    }
+
+    // I18N Dictionary - 双语词典
+    const I18N = {
+      en: {
+        'nav.home': 'Home',
+        'nav.learning': 'Learning',
+        'nav.game': 'Game',
+        'nav.test': 'Test',
+        'nav.community': 'Community',
+        'breadcrumb': 'Home > Learning > Color Encoding',
+        'hero.label': 'Comprehensive Learning Module',
+        'hero.title': 'Color Encoding',
+        'hero.desc': 'Master the core principles, mathematical models, and industrial standards of digital color encoding for images, video, and multimedia systems.',
+        'sidebar.title': 'Learning Catalog',
+        'sidebar.expand': 'Expand All',
+        'sidebar.collapse': 'Collapse All',
+        'catalog.module1': '1. Color Vision Basics',
+        'catalog.module2': '2. RGB Additive Encoding',
+        'catalog.module3': '3. CMYK Subtractive Encoding',
+        'catalog.module4': '4. HSV Perceptual Encoding',
+        'catalog.module5': '5. YUV/YCbCr Encoding',
+        'catalog.module6': '6. Advanced Encoding',
+        'toolbar.hint': 'Select text to annotate',
+        'toolbar.highlight': 'Highlight',
+        'toolbar.underline': 'Underline',
+        'module1.title': '1. Color Vision & Fundamental Properties',
+        'module1.subtitle': 'The biological and physical basis of digital color encoding',
+        'module1.text1': 'Color is not an inherent property of objects—it is a perceptual response to visible light wavelengths (400–700 nm) detected by the human eye. The retina contains three types of cone cells sensitive to long (red), medium (green), and short (blue) wavelengths, forming the Tristimulus Theory of Color Vision.',
+        'module1.list1': '<strong>Hue</strong>: Dominant wavelength, defines the color name (red, blue, green).',
+        'module1.list2': '<strong>Saturation</strong>: Purity of a color; 100% = no white light mixture, 0% = grayscale.',
+        'module1.list3': '<strong>Brightness/Value</strong>: Perceived light intensity emitted or reflected by a surface.',
+        'module1.list4': '<strong>Metamers</strong>: Different light spectra that produce identical color perception—critical for encoding.',
+        'module1.list5': '<strong>Cone Response Curves</strong>: Scientific measurement of how human cone cells respond to different wavelengths.',
+        'module1.list6': '<strong>Color Constancy</strong>: The ability to perceive consistent colors under different lighting conditions.',
+        'module1.info': 'Color encoding translates human perception into numerical values that computers, screens, and printers can interpret and reproduce accurately. The CIE 1931 color space was the first standardized model based on human color perception.',
+        'module1.text2': 'The human eye can distinguish approximately 10 million different colors, while digital systems must encode this vast range using finite numerical values. This encoding process involves sampling the continuous spectrum of visible light into discrete values that can be stored and transmitted.',
+        'module2.title': '2. RGB Additive Color Encoding',
+        'module2.subtitle': 'The universal standard for digital displays and screens',
+        'module2.text1': 'RGB is an additive model where Red, Green, and Blue light are combined to create all colors. It is the foundation of all digital display systems (monitors, phones, TVs).',
+        'module2.list1': 'Encoding format: (R, G, B) with 0–255 per channel (8-bit per channel, 24-bit total color depth).',
+        'module2.list2': '(0, 0, 0) = Black; (255, 255, 255) = White; (255, 0, 0) = Pure Red.',
+        'module2.list3': 'Color depth: 8-bit = 16.7 million colors; 10-bit = 1.07 billion colors for professional use.',
+        'module2.list4': 'Grayscale conversion: L = 0.299R + 0.587G + 0.114B (standard luminance formula).',
+        'module2.list5': 'Gamma correction: Non-linear encoding to match human perception of brightness.',
+        'module2.list6': 'Color gamuts: sRGB (standard), Adobe RGB (wider), DCI-P3 (cinema), Rec. 2020 (UHD).',
+        'module2.info': 'RGB encoding is used in all digital displays because it directly corresponds to how LCD, OLED, and LED screens generate light. Each pixel contains red, green, and blue sub-pixels that combine to create the perceived color.',
+        'module2.text2': 'Modern displays use advanced RGB techniques like quantum dots and HDR to extend the color gamut and dynamic range, providing more realistic and vibrant images. Professional workflows often use 10-bit or higher color depth to preserve quality during editing and post-production.',
+        'module3.title': '3. CMYK Subtractive Color Encoding',
+        'module3.subtitle': 'Industrial standard for printing and physical media',
+        'module3.text1': 'CMYK is a subtractive model used for printing, where inks absorb light instead of emitting it. Cyan, Magenta, and Yellow are the primary subtractive colors, and Black (Key/K) is added to produce true black.',
+        'module3.list1': 'Encoding logic: C = 1 - R, M = 1 - G, Y = 1 - B (in normalized values).',
+        'module3.list2': 'K channel: Eliminates muddy dark grays and saves ink in printing systems.',
+        'module3.list3': 'Used for: Books, posters, packaging, and all physical printed color media.',
+        'module3.list4': 'RGB→CMYK conversion requires gamut mapping for accurate color reproduction.',
+        'module3.list5': 'Printing resolution: DPI (dots per inch) determines print quality and color accuracy.',
+        'module3.list6': 'Spot colors: Special inks used for corporate logos and specific color requirements.',
+        'module3.info': 'CMYK has a smaller color gamut than RGB—some bright digital colors cannot be printed accurately. This is why professional designers use color management systems to ensure consistent results across devices.',
+        'module3.text2': 'Modern printing technologies like offset lithography, digital printing, and flexography all use CMYK encoding. The K channel is particularly important for text and fine details, as it provides crisp, clean black reproduction that would be difficult to achieve with just cyan, magenta, and yellow inks.',
+        'module4.title': '4. HSV Perceptual Color Encoding',
+        'module4.subtitle': 'Human-centered encoding for design and editing',
+        'module4.text1': 'HSV (Hue, Saturation, Value) is a perceptual model that matches how humans naturally select and adjust colors, widely used in design software (Photoshop, Figma).',
+        'module4.list1': 'Hue: 0°–360° on a color wheel (0°=red, 120°=green, 240°=blue).',
+        'module4.list2': 'Saturation: 0%–100% (color purity, 0% = grayscale).',
+        'module4.list3': 'Value: 0%–100% (brightness, 0% = black).',
+        'module4.list4': 'Intuitive for artists: Adjust hue for color, saturation for vibrancy, value for lightness.',
+        'module4.list5': 'Color harmonies: Easily create complementary, analogous, and triadic color schemes.',
+        'module4.list6': 'Color selection: Simplifies the process of choosing colors that work well together.',
+        'module4.info': 'HSV is particularly useful for UI/UX design, digital art, and any context where designers need to make intuitive color decisions without dealing with the technical complexities of RGB values.',
+        'module4.text2': 'HSV is often visualized as a color wheel with saturation and value as axes, making it easy to understand color relationships. This model is also known as HSB (Hue, Saturation, Brightness) in some software applications, though the underlying principles are identical.',
+        'module5.title': '5. YUV/YCbCr Encoding',
+        'module5.subtitle': 'Efficient encoding for image & video compression',
+        'module5.text1': 'YUV/YCbCr separates luminance (brightness) and chrominance (color) to enable efficient multimedia compression. Human eyes are far more sensitive to brightness than color, allowing chrominance data to be reduced.',
+        'module5.list1': 'Y: Luminance (brightness signal, full resolution).',
+        'module5.list2': 'U/Cb, V/Cr: Chrominance (color difference signals, reduced resolution).',
+        'module5.list3': 'YCbCr is the digital version used in JPEG, PNG, MPEG, and all video compression standards.',
+        'module5.list4': 'RGB→YCbCr conversion uses standardized matrix formulas for digital media.',
+        'module5.list5': 'Chroma subsampling: 4:2:0, 4:2:2, 4:4:4 ratios determine color resolution.',
+        'module5.list6': 'Compression efficiency: Up to 50% file size reduction with minimal quality loss.',
+        'module5.info': 'YCbCr encoding is the reason image/video compression can reduce file size with minimal visible quality loss. The human eye\'s reduced sensitivity to color detail allows for aggressive chrominance compression.',
+        'module5.text2': 'Modern video codecs like H.264, H.265, and AV1 rely heavily on YCbCr encoding for efficient compression. Chroma subsampling (4:2:0) is the standard for most video content, providing a good balance between quality and file size. Professional workflows often use 4:2:2 or 4:4:4 for higher quality requirements.',
+        'module6.title': '6. Advanced Color Encoding',
+        'module6.subtitle': 'Professional gamuts, high dynamic range & industry standards',
+        'module6.text1': 'Modern systems use extended color encoding for professional workflows, high dynamic range (HDR), and cross-device consistency.',
+        'module6.list1': 'CIE XYZ/CIELAB: Device-independent encoding for professional color management.',
+        'module6.list2': 'HDR Encoding: Rec. 2020 gamut & 10–12 bit depth for high-brightness displays.',
+        'module6.list3': 'Color Gamut: The range of colors a device can reproduce (sRGB, Adobe RGB, DCI-P3).',
+        'module6.list4': 'Metadata: Embedded encoding data to ensure consistent color across screens and printers.',
+        'module6.list5': 'Wide Color Gamut (WCG): Extended color spaces for more vibrant, realistic colors.',
+        'module6.list6': 'Color Management Systems (CMS): Ensure consistent color reproduction across devices.',
+        'module6.list7': 'ICC Profiles: Standardized color profiles for different devices and workflows.',
+        'module6.info': 'Professional color encoding is essential for industries like filmmaking, photography, and graphic design where color accuracy and consistency are critical.',
+        'module6.text2': 'HDR10 and Dolby Vision are popular HDR encoding standards that provide higher brightness levels and more detailed color information. These technologies are becoming increasingly important in streaming services, gaming, and home theater systems.',
+        'module6.text3': 'Understanding advanced color encoding principles is crucial for modern multimedia professionals, as it enables them to create content that looks consistent and visually appealing across a wide range of devices and display technologies.'
+      },
+      zh: {
+        'nav.home': '首页',
+        'nav.learning': '学习',
+        'nav.game': '游戏',
+        'nav.test': '测试',
+        'nav.community': '社区',
+        'breadcrumb': '首页 > 学习 > 颜色编码',
+        'hero.label': '综合学习模块',
+        'hero.title': '颜色编码',
+        'hero.desc': '掌握数字颜色编码的核心原理、数学模型和工业标准，适用于图像、视频和多媒体系统。',
+        'sidebar.title': '学习目录',
+        'sidebar.expand': '展开全部',
+        'sidebar.collapse': '收起全部',
+        'catalog.module1': '1. 颜色视觉基础',
+        'catalog.module2': '2. RGB 加法编码',
+        'catalog.module3': '3. CMYK 减法编码',
+        'catalog.module4': '4. HSV 感知编码',
+        'catalog.module5': '5. YUV/YCbCr 编码',
+        'catalog.module6': '6. 高级编码',
+        'toolbar.hint': '选择文本进行标注',
+        'toolbar.highlight': '高亮',
+        'toolbar.underline': '下划线',
+        'module1.title': '1. 颜色视觉与基本属性',
+        'module1.subtitle': '数字颜色编码的生物和物理基础',
+        'module1.text1': '颜色不是物体的固有属性——它是人眼对可见光波长（400-700纳米）的感知反应。视网膜包含三种锥体细胞，分别对长波（红色）、中波（绿色）和短波（蓝色）敏感，形成了颜色视觉的三刺激理论。',
+        'module1.list1': '<strong>色相</strong>: 主导波长，定义颜色名称（红、蓝、绿）。',
+        'module1.list2': '<strong>饱和度</strong>: 颜色纯度；100% = 无白光混合，0% = 灰度。',
+        'module1.list3': '<strong>亮度/明度</strong>: 表面发射或反射的感知光强度。',
+        'module1.list4': '<strong>同色异谱</strong>: 产生相同颜色感知的不同光谱——对编码至关重要。',
+        'module1.list5': '<strong>锥体细胞响应曲线</strong>: 人类锥体细胞对不同波长响应的科学测量。',
+        'module1.list6': '<strong>颜色恒常性</strong>: 在不同光照条件下感知一致颜色的能力。',
+        'module1.info': '颜色编码将人类感知转换为计算机、屏幕和打印机可以准确解释和重现的数值。CIE 1931 色彩空间是第一个基于人类颜色感知的标准化模型。',
+        'module1.text2': '人眼可以区分大约1000万种不同的颜色，而数字系统必须使用有限的数值来编码这个广阔的范围。这个编码过程包括将可见光的连续光谱采样为可以存储和传输的离散值。',
+        'module2.title': '2. RGB 加法颜色编码',
+        'module2.subtitle': '数字显示器的通用标准',
+        'module2.text1': 'RGB是一种加法模型，其中红色、绿色和蓝色光组合产生所有颜色。它是所有数字显示系统（显示器、手机、电视）的基础。',
+        'module2.list1': '编码格式：(R, G, B)，每个通道0-255（每通道8位，总共24位颜色深度）。',
+        'module2.list2': '(0, 0, 0) = 黑色；(255, 255, 255) = 白色；(255, 0, 0) = 纯红色。',
+        'module2.list3': '颜色深度：8位 = 1670万色；10位 = 10.7亿色（专业用途）。',
+        'module2.list4': '灰度转换：L = 0.299R + 0.587G + 0.114B（标准亮度公式）。',
+        'module2.list5': '伽马校正：非线性编码以匹配人类对亮度的感知。',
+        'module2.list6': '色域：sRGB（标准）、Adobe RGB（更广）、DCI-P3（影院）、Rec. 2020（超高清）。',
+        'module2.info': 'RGB编码用于所有数字显示器，因为它直接对应LCD、OLED和LED屏幕产生光的方式。每个像素包含红色、绿色和蓝色子像素，它们组合产生感知颜色。',
+        'module2.text2': '现代显示器使用量子点和HDR等先进RGB技术来扩展色域和动态范围，提供更逼真、更鲜艳的图像。专业工作流程通常使用10位或更高的颜色深度来在编辑和后期制作过程中保持质量。',
+        'module3.title': '3. CMYK 减法颜色编码',
+        'module3.subtitle': '印刷和物理媒体的工业标准',
+        'module3.text1': 'CMYK是用于印刷的减法模型，其中墨水吸收光而不是发射光。青色、品红色和黄色是主要的减法颜色，添加黑色（Key/K）以产生真正的黑色。',
+        'module3.list1': '编码逻辑：C = 1 - R, M = 1 - G, Y = 1 - B（归一化值）。',
+        'module3.list2': 'K通道：消除浑浊的深灰色并节省打印系统中的墨水。',
+        'module3.list3': '用途：书籍、海报、包装和所有物理印刷彩色媒体。',
+        'module3.list4': 'RGB→CMYK转换需要色域映射以实现准确的颜色再现。',
+        'module3.list5': '打印分辨率：DPI（每英寸点数）决定打印质量和颜色准确性。',
+        'module3.list6': '专色：用于企业标志和特定颜色要求的特殊墨水。',
+        'module3.info': 'CMYK的色域比RGB小——一些明亮的数字颜色无法准确打印。这就是为什么专业设计师使用颜色管理系统来确保跨设备的一致结果。',
+        'module3.text2': '现代印刷技术如胶印、数字印刷和柔性版印刷都使用CMYK编码。K通道对于文本和精细细节尤为重要，因为它提供清晰、干净的黑色再现，这仅用青色、品红色和黄色墨水很难实现。',
+        'module4.title': '4. HSV 感知颜色编码',
+        'module4.subtitle': '以人为本的设计和编辑编码',
+        'module4.text1': 'HSV（色相、饱和度、明度）是一种感知模型，符合人类自然选择和调整颜色的方式，广泛用于设计软件（Photoshop、Figma）。',
+        'module4.list1': '色相：色轮上0°–360°（0°=红色，120°=绿色，240°=蓝色）。',
+        'module4.list2': '饱和度：0%–100%（颜色纯度，0% = 灰度）。',
+        'module4.list3': '明度：0%–100%（亮度，0% = 黑色）。',
+        'module4.list4': '艺术家直觉：调整色相改变颜色，调整饱和度改变鲜艳度，调整明度改变亮度。',
+        'module4.list5': '颜色和谐：轻松创建互补色、类似色和三色配色方案。',
+        'module4.list6': '颜色选择：简化选择协调颜色的过程。',
+        'module4.info': 'HSV特别适用于UI/UX设计、数字艺术以及设计师需要做出直觉颜色决策而无需处理RGB值技术复杂性的任何场景。',
+        'module4.text2': 'HSV通常可视化为以饱和度和明度为轴的色轮，易于理解颜色关系。在某些软件应用中，此模型也称为HSB（色相、饱和度、亮度），尽管基本原则相同。',
+        'module5.title': '5. YUV/YCbCr 编码',
+        'module5.subtitle': '高效的图像和视频压缩编码',
+        'module5.text1': 'YUV/YCbCr分离亮度和色度以实现高效的多媒体压缩。人眼对亮度的敏感度远高于颜色，因此可以减少色度数据。',
+        'module5.list1': 'Y：亮度（亮度信号，全分辨率）。',
+        'module5.list2': 'U/Cb, V/Cr：色度（色差信号，降低分辨率）。',
+        'module5.list3': 'YCbCr是用于JPEG、PNG、MPEG和所有视频压缩标准的数字版本。',
+        'module5.list4': 'RGB→YCbCr转换使用标准化矩阵公式进行数字媒体处理。',
+        'module5.list5': '色度子采样：4:2:0、4:2:2、4:4:4比率决定颜色分辨率。',
+        'module5.list6': '压缩效率：最高50%的文件大小减少，质量损失最小。',
+        'module5.info': 'YCbCr编码是图像/视频压缩能够在最小可见质量损失的情况下减小文件大小的原因。人眼对颜色细节的敏感度降低允许进行激进的色度压缩。',
+        'module5.text2': '现代视频编解码器如H.264、H.265和AV1严重依赖YCbCr编码进行高效压缩。色度子采样（4:2:0）是大多数视频内容的标准，在质量和文件大小之间提供良好平衡。专业工作流程通常使用4:2:2或4:4:4以满足更高质量要求。',
+        'module6.title': '6. 高级颜色编码',
+        'module6.subtitle': '专业色域、高动态范围和行业标准',
+        'module6.text1': '现代系统使用扩展颜色编码用于专业工作流程、高动态范围（HDR）和跨设备一致性。',
+        'module6.list1': 'CIE XYZ/CIELAB：用于专业颜色管理的设备无关编码。',
+        'module6.list2': 'HDR编码：Rec. 2020色域和10-12位深度用于高亮度显示器。',
+        'module6.list3': '色域：设备可以再现的颜色范围（sRGB、Adobe RGB、DCI-P3）。',
+        'module6.list4': '元数据：嵌入的编码数据确保跨屏幕和打印机的一致颜色。',
+        'module6.list5': '广色域（WCG）：扩展颜色空间以获得更鲜艳、更逼真的颜色。',
+        'module6.list6': '颜色管理系统（CMS）：确保跨设备的一致颜色再现。',
+        'module6.list7': 'ICC配置文件：用于不同设备和工作流程的标准化颜色配置文件。',
+        'module6.info': '专业颜色编码对于电影制作、摄影和图形设计等行业至关重要，在这些行业中颜色准确性和一致性至关重要。',
+        'module6.text2': 'HDR10和Dolby Vision是流行的HDR编码标准，提供更高的亮度级别和更详细的颜色信息。这些技术在流媒体服务、游戏和家庭影院系统中变得越来越重要。',
+        'module6.text3': '理解高级颜色编码原则对于现代多媒体专业人士至关重要，因为它使他们能够创建在各种设备和显示技术上看起来一致且视觉上吸引人的内容。'
+      }
+    };
+
+    // Language Switching - 语言切换功能
+    let currentLang = localStorage.getItem('learningLang') || 'en';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('learningLang', lang);
+      const dict = I18N[lang] || I18N.en;
+      
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+      document.title = lang === 'zh' ? '色彩编码学习 - 色彩实验室' : 'Color Encoding Learning - Colour Lab';
+      
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.innerHTML = dict[key];
+        }
+      });
+      
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    function switchLang(lang) {
+      if (lang === currentLang) return;
+      applyLang(lang);
+    }
+
+    // Navbar scroll effect - 导航栏滚动效果
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Expandable modules functionality
+    // 可展开模块功能
+    const moduleHeaders = document.querySelectorAll('.module-header');
+    const expandButtons = document.querySelectorAll('.expand-btn');
+    const moduleContents = document.querySelectorAll('.module-content');
+    const catalogItems = document.querySelectorAll('.catalog a');
+
+    function markModuleCompleted(index) {
+      const module = document.querySelectorAll('.module')[index];
+      const catalogLink = catalogItems[index];
+      module.classList.add('completed');
+      catalogLink.classList.add('completed');
+      updateProgress();
+      saveProgress();
+    }
+
+    function toggleModule(index) {
+      const isActive = moduleContents[index].classList.contains('active');
+      moduleContents[index].classList.toggle('active');
+      expandButtons[index].classList.toggle('active');
+      if (!isActive) {
+        markModuleCompleted(index);
+      }
+    }
+
+    moduleHeaders.forEach((header, index) => {
+      header.addEventListener('click', function() {
+        toggleModule(index);
+      });
+    });
+
+    expandButtons.forEach((button, index) => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleModule(index);
+      });
+    });
+
+    // Catalog navigation functionality
+    // 目录导航功能
+    catalogItems.forEach((item, index) => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        catalogItems.forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+
+        moduleContents[index].classList.add('active');
+        expandButtons[index].classList.add('active');
+
+        document.querySelectorAll('.module')[index].scrollIntoView({ behavior: 'smooth' });
+        markModuleCompleted(index);
+      });
+    });
+
+    // Expand/Collapse All functionality
+    const expandAllBtn = document.getElementById('expandAllBtn');
+    const collapseAllBtn = document.getElementById('collapseAllBtn');
+
+    expandAllBtn.addEventListener('click', function() {
+      moduleContents.forEach((content, index) => {
+        content.classList.add('active');
+        expandButtons[index].classList.add('active');
+        markModuleCompleted(index);
+      });
+    });
+
+    collapseAllBtn.addEventListener('click', function() {
+      moduleContents.forEach(content => {
+        content.classList.remove('active');
+      });
+      expandButtons.forEach(btn => {
+        btn.classList.remove('active');
+      });
+    });
+
+    // Progress tracking
+    // 学习进度追踪
+    const progressBar = document.getElementById('progressBar');
+    const totalModules = document.querySelectorAll('.module').length;
+
+    function updateProgress() {
+      const completedModules = document.querySelectorAll('.module.completed').length;
+      const progress = (completedModules / totalModules) * 100;
+      progressBar.style.width = progress + '%';
+    }
+
+    function saveProgress() {
+      const completedIndices = [];
+      document.querySelectorAll('.module.completed').forEach((module, i) => {
+        completedIndices.push(i);
+      });
+      localStorage.setItem('completedModules', JSON.stringify(completedIndices));
+    }
+
+    function loadProgress() {
+      const savedFontSize = localStorage.getItem('fontSize');
+      const savedFontLevel = localStorage.getItem('fontLevel');
+
+      if (savedFontSize) {
+        currentFontSize = parseInt(savedFontSize);
+        currentFontLevel = savedFontLevel || 'A';
+        document.querySelectorAll('.module-text, .module-list li').forEach(element => {
+          element.style.fontSize = currentFontSize + 'px';
+        });
+        fontButtonsNav.forEach(btn => btn.classList.remove('active'));
+        if (currentFontLevel === 'A-') {
+          fontButtonsNav[0].classList.add('active');
+        } else if (currentFontLevel === 'A+') {
+          fontButtonsNav[2].classList.add('active');
+        } else {
+          fontButtonsNav[1].classList.add('active');
+        }
+      }
+
+      const savedCompleted = localStorage.getItem('completedModules');
+      if (savedCompleted) {
+        const completedIndices = JSON.parse(savedCompleted);
+        completedIndices.forEach(index => {
+          const module = document.querySelectorAll('.module')[index];
+          const catalogLink = catalogItems[index];
+          if (module && catalogLink) {
+            module.classList.add('completed');
+            catalogLink.classList.add('completed');
+          }
+        });
+        updateProgress();
+      }
+
+      const savedExpanded = localStorage.getItem('expandedModules');
+      if (savedExpanded) {
+        const expandedIndices = JSON.parse(savedExpanded);
+        expandedIndices.forEach(index => {
+          if (moduleContents[index]) {
+            moduleContents[index].classList.add('active');
+            expandButtons[index].classList.add('active');
+          }
+        });
+      } else {
+        moduleContents[0].classList.add('active');
+        expandButtons[0].classList.add('active');
+      }
+    }
+
+    moduleContents.forEach((content, index) => {
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.attributeName === 'class') {
+            const isActive = content.classList.contains('active');
+            const savedExpanded = JSON.parse(localStorage.getItem('expandedModules') || '[]');
+            if (isActive && !savedExpanded.includes(index)) {
+              savedExpanded.push(index);
+            } else if (!isActive) {
+              const idx = savedExpanded.indexOf(index);
+              if (idx > -1) savedExpanded.splice(idx, 1);
+            }
+            localStorage.setItem('expandedModules', JSON.stringify(savedExpanded));
+          }
+        });
+      });
+      observer.observe(content, { attributes: true });
+    });
+
+    // Back to Top functionality
+    // 返回顶部功能
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 400) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Annotation functionality
+    // 标注功能
+    const annotationToolbar = document.getElementById('annotationToolbar');
+    const toolButtons = document.querySelectorAll('.tool-btn');
+    const contentArea = document.querySelector('.content');
+    let currentTool = 'highlight-yellow';
+    let isAnnotationMode = false;
+
+    const highlightColors = ['highlight-yellow', 'highlight-green', 'highlight-blue', 'highlight-pink'];
+    const underlineColors = ['underline-red', 'underline-blue'];
+
+    toolButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tool = this.dataset.tool;
+
+        if (tool === 'clear') {
+          clearAllAnnotations();
+          return;
+        }
+
+        if (tool === 'eraser') {
+          currentTool = 'eraser';
+          toolButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          return;
+        }
+
+        currentTool = tool;
+        toolButtons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      const selection = window.getSelection();
+      if (selection.isCollapsed || selection.toString().trim() === '') {
+        return;
+      }
+
+      const selectedText = selection.toString().trim();
+      if (!selectedText) return;
+
+      if (highlightColors.includes(currentTool)) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.className = currentTool;
+        span.dataset.annotation = 'true';
+        span.style.borderRadius = '2px';
+        span.style.padding = '0 2px';
+        range.surroundContents(span);
+        saveAnnotations();
+      } else if (underlineColors.includes(currentTool)) {
+        const range = selection.getRangeAt(0);
+        const span = document.createElement('span');
+        span.className = currentTool;
+        span.dataset.annotation = 'true';
+        range.surroundContents(span);
+        saveAnnotations();
+      } else if (currentTool === 'eraser') {
+        const range = selection.getRangeAt(0);
+        const parent = range.commonAncestorContainer.parentElement;
+        if (parent && parent.dataset.annotation === 'true') {
+          const text = document.createTextNode(parent.textContent);
+          parent.parentNode.replaceChild(text, parent);
+          saveAnnotations();
+        }
+      }
+
+      selection.removeAllRanges();
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('tool-btn')) {
+        return;
+      }
+
+      if (e.target.classList.contains('highlight-yellow') ||
+          e.target.classList.contains('highlight-green') ||
+          e.target.classList.contains('highlight-blue') ||
+          e.target.classList.contains('highlight-pink') ||
+          e.target.classList.contains('underline-red') ||
+          e.target.classList.contains('underline-blue')) {
+        if (currentTool === 'eraser') {
+          const annotationEl = e.target;
+          if (annotationEl.dataset.annotation === 'true') {
+            const text = document.createTextNode(annotationEl.textContent);
+            annotationEl.parentNode.replaceChild(text, annotationEl);
+            saveAnnotations();
+          }
+        }
+      }
+    });
+
+    function clearAllAnnotations() {
+      const annotations = contentArea.querySelectorAll('[data-annotation="true"]');
+      annotations.forEach(el => {
+        const text = document.createTextNode(el.textContent);
+        el.parentNode.replaceChild(text, el);
+      });
+      saveAnnotations();
+    }
+
+    function saveAnnotations() {
+      const annotations = [];
+      contentArea.querySelectorAll('[data-annotation="true"]').forEach(el => {
+        annotations.push({
+          class: el.className,
+          text: el.textContent,
+          parent: el.parentNode.className
+        });
+      });
+      localStorage.setItem('annotations', JSON.stringify(annotations));
+    }
+
+    function loadAnnotations() {
+      const saved = localStorage.getItem('annotations');
+      if (saved) {
+        clearAllAnnotations();
+      }
+    }
+
+    // Show toolbar when content is visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          annotationToolbar.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const contentSection = document.querySelector('.content');
+    if (contentSection) {
+      observer.observe(contentSection);
+    }
+
+    // Completion popup
+    // 完成弹窗
+    const completionPopup = document.getElementById('completionPopup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    let popupShown = false;
+
+    function checkCompletion() {
+      if (popupShown) return;
+      const completedModules = document.querySelectorAll('.module.completed').length;
+      if (completedModules === totalModules) {
+        popupShown = true;
+        completionPopup.classList.add('visible');
+        localStorage.setItem('completionShown', 'true');
+      }
+    }
+
+    closePopupBtn.addEventListener('click', function() {
+      completionPopup.classList.remove('visible');
+    });
+
+    completionPopup.addEventListener('click', function(e) {
+      if (e.target === completionPopup) {
+        completionPopup.classList.remove('visible');
+      }
+    });
+
+    // Initialize
+    loadProgress();
+    updateProgress();
+    loadAnnotations();
+    applyLang(currentLang);
+
+    // Check if completion was already shown
+    const alreadyShown = localStorage.getItem('completionShown');
+    if (alreadyShown === 'true') {
+      popupShown = true;
+    }
+
+    // Check completion after each module is marked
+    const originalMarkModuleCompleted = markModuleCompleted;
+    markModuleCompleted = function(index) {
+      originalMarkModuleCompleted(index);
+      checkCompletion();
+    };
+  </script>
+</body>
+</html>
